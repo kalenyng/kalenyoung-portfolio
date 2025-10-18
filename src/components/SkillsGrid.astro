@@ -1,0 +1,67 @@
+---
+const skills = {
+  Frontend: [
+    { name: 'Angular', note: 'Enterprise SPAs & component architecture' },
+    { name: 'React', note: 'Modern hooks & state management' },
+    { name: 'TypeScript', note: 'Type-safe, maintainable code' },
+    { name: 'Tailwind CSS', note: 'Rapid, utility-first styling' },
+    { name: 'Astro', note: 'Content-focused, performant sites' },
+    { name: 'Accessibility', note: 'WCAG-compliant, semantic HTML' },
+  ],
+  'Backend & DB': [
+    { name: 'Supabase', note: 'Postgres, Auth, Realtime, Storage' },
+    { name: 'Node.js', note: 'REST APIs & serverless functions' },
+    { name: 'PostgreSQL', note: 'Relational data modeling' },
+    { name: 'Firebase', note: 'Realtime databases & auth' },
+  ],
+  'Tooling & Workflow': [
+    { name: 'Git & GitHub', note: 'Version control & collaboration' },
+    { name: 'Vercel', note: 'CI/CD & edge deployments' },
+    { name: 'VS Code', note: 'Extensions & productivity' },
+    { name: 'Figma', note: 'Design-to-code workflows' },
+    { name: 'ESLint & Prettier', note: 'Code quality & consistency' },
+  ],
+};
+---
+
+<div class="grid gap-8 md:grid-cols-3" data-stagger>
+  {
+    Object.entries(skills).map(([category, items], catIndex) => (
+      <div 
+        class="card space-y-4 relative overflow-visible" 
+        data-stagger-item
+        data-tilt
+        data-tilt-max="4"
+        data-tilt-scale="1.01"
+      >
+        <h3
+          class="border-b pb-3 font-heading text-xl font-bold"
+          style="color: var(--text-primary); border-color: var(--border);"
+        >
+          {category}
+        </h3>
+        <ul class="space-y-3">
+          {items.map((skill) => (
+            <li class="group">
+              <div class="space-y-1">
+                <div
+                  class="font-medium transition-colors group-hover:text-ember"
+                  style="color: var(--text-primary);"
+                >
+                  {skill.name}
+                </div>
+                <p
+                  class="text-xs opacity-0 transition-opacity group-hover:opacity-100"
+                  style="color: var(--text-muted);"
+                >
+                  {skill.note}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>
+

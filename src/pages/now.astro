@@ -1,0 +1,191 @@
+---
+import Base from '@/layouts/Base.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+
+const lastUpdated = 'October 2024';
+---
+
+<Base
+  title="Now - Kalen Young"
+  description="What I'm working on and focusing on right now."
+>
+  <Nav />
+
+  <main id="main" class="pt-20">
+    <section class="section">
+      <div class="mx-auto max-w-3xl space-y-12">
+        <!-- Header -->
+        <div class="space-y-4 text-center">
+          <h1
+            class="font-heading text-5xl font-bold md:text-6xl"
+            style="color: var(--text-primary);"
+          >
+            What I'm Doing Now
+          </h1>
+          <p class="text-lg" style="color: var(--text-muted);">
+            Last updated: <time datetime="2024-10">{lastUpdated}</time>
+          </p>
+        </div>
+
+        <!-- Content -->
+        <div class="space-y-8">
+          <!-- Current Projects -->
+          <div class="card space-y-4">
+            <h2
+              class="border-b pb-3 font-heading text-2xl font-bold"
+              style="color: var(--text-primary); border-color: var(--border);"
+            >
+              🚀 Current Projects
+            </h2>
+            <ul class="space-y-3" style="color: var(--text-secondary);">
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span
+                  ><strong style="color: var(--text-primary);">Propza</strong> - Adding Stripe
+                  payment integration and push notifications for rent reminders</span
+                >
+              </li>
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span
+                  ><strong style="color: var(--text-primary);">Portfolio Site</strong> - Building
+                  this very site with Astro and documenting the journey</span
+                >
+              </li>
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span
+                  ><strong style="color: var(--text-primary);">Open Source</strong> - Contributing
+                  to Astro docs and community components</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Learning -->
+          <div class="card space-y-4">
+            <h2
+              class="border-b pb-3 font-heading text-2xl font-bold"
+              style="color: var(--text-primary); border-color: var(--border);"
+            >
+              📚 Learning
+            </h2>
+            <ul class="space-y-3" style="color: var(--text-secondary);">
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span
+                  ><strong style="color: var(--text-primary);">Rust</strong> - Exploring systems
+                  programming and WebAssembly</span
+                >
+              </li>
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span
+                  ><strong style="color: var(--text-primary);">Animation</strong> - Deepening my
+                  Motion One skills and experimenting with GSAP</span
+                >
+              </li>
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span
+                  ><strong style="color: var(--text-primary);">Accessibility</strong> - Working
+                  toward IAAP WAS certification</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Reading -->
+          <div class="card space-y-4">
+            <h2
+              class="border-b pb-3 font-heading text-2xl font-bold"
+              style="color: var(--text-primary); border-color: var(--border);"
+            >
+              📖 Reading
+            </h2>
+            <ul class="space-y-3" style="color: var(--text-secondary);">
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span
+                  ><em>"Refactoring UI"</em> by Adam Wathan & Steve Schoger - Practical design tips
+                  for developers</span
+                >
+              </li>
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span
+                  ><em>"A Philosophy of Software Design"</em> by John Ousterhout - Rethinking code
+                  complexity</span
+                >
+              </li>
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span><em>"Project Hail Mary"</em> by Andy Weir - Pure escapism and fun</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Life -->
+          <div class="card space-y-4">
+            <h2
+              class="border-b pb-3 font-heading text-2xl font-bold"
+              style="color: var(--text-primary); border-color: var(--border);"
+            >
+              ⛷️ Life
+            </h2>
+            <ul class="space-y-3" style="color: var(--text-secondary);">
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span>Planning next ski season - eyeing Chamonix and Verbier</span>
+              </li>
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span
+                  >Diving into the London jazz scene - recent favorites: Moses Boyd, Nubya Garcia</span
+                >
+              </li>
+              <li class="flex gap-3">
+                <span class="shrink-0">•</span>
+                <span>Training for a half marathon (reluctantly)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- About the Now Page -->
+        <div class="rounded-lg border p-6 text-center" style="border-color: var(--border);">
+          <p class="text-sm" style="color: var(--text-muted);">
+            This is a <a
+              href="https://nownownow.com/about"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline transition-colors hover:text-ember"
+              style="color: var(--text-secondary);">now page</a
+            >, inspired by Derek Sivers. It's a living document of what I'm focused on right now.
+          </p>
+        </div>
+
+        <!-- Back Home -->
+        <div class="text-center">
+          <a href="/" class="btn-secondary inline-flex" data-magnetic>
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              ></path>
+            </svg>
+            Back Home
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>
+

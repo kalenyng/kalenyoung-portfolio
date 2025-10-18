@@ -1,0 +1,294 @@
+/* Import fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@import './tokens.css';
+@import './3d-effects.css';
+@import './cursor.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Smooth section opacity for reveal animations */
+  section {
+    will-change: opacity, transform;
+  }
+
+  body {
+    @apply bg-paper font-body text-ink antialiased;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading font-semibold tracking-tight;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  p {
+    @apply font-body leading-relaxed;
+  }
+
+  /* Max width for readable text */
+  .prose-text {
+    max-width: 65ch;
+  }
+}
+
+@layer components {
+  /* Focus visible styles for accessibility */
+  .focus-ring {
+    @apply outline-none ring-2 ring-ember ring-offset-2 ring-offset-paper;
+  }
+
+  :focus-visible {
+    @apply focus-ring;
+  }
+
+  /* Skip to content link */
+  .skip-link {
+    @apply fixed left-4 top-4 z-50 -translate-y-20 rounded-lg bg-ember px-4 py-2 font-medium text-white transition-transform;
+  }
+
+  .skip-link:focus {
+    @apply translate-y-0;
+  }
+
+  /* Section wrapper */
+  .section {
+    @apply mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-32;
+  }
+
+  /* Section title with modern styling */
+  .section-title {
+    @apply mb-4 text-xs font-semibold uppercase tracking-widest;
+    color: var(--text-muted);
+  }
+
+  /* Button styles - Polished, professional */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-medium;
+    @apply focus-ring;
+    font-weight: 500;
+    transition: 
+      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn-primary {
+    @apply btn text-white;
+    background-color: var(--accent);
+    box-shadow: 0 2px 4px var(--shadow);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 8px 16px var(--shadow-lg),
+      0 0 12px var(--glow);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px var(--shadow);
+    transition-duration: 0.1s;
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    transform: none;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    @apply btn;
+    border: 1.5px solid var(--border);
+    color: var(--text-primary);
+    background-color: transparent;
+    box-shadow: 0 1px 2px var(--shadow);
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    background-color: var(--bg-elevated);
+    border-color: var(--accent);
+    box-shadow: 0 6px 12px var(--shadow);
+  }
+
+  .btn-secondary:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px var(--shadow);
+    transition-duration: 0.1s;
+  }
+
+  .btn-secondary:disabled {
+    opacity: 0.5;
+    transform: none;
+    cursor: not-allowed;
+  }
+
+  /* Reduced motion fallback */
+  @media (prefers-reduced-motion: reduce) {
+    .btn:hover {
+      transform: none;
+    }
+  }
+
+  /* Card styles - Glassmorphic, modern */
+  .card {
+    @apply rounded-2xl border p-6;
+    background-color: var(--bg-secondary);
+    border-color: var(--border);
+    box-shadow: 0 1px 3px var(--shadow);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    backdrop-filter: blur(8px);
+  }
+
+  .card-hover {
+    @apply card;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+      0 20px 40px var(--shadow-lg),
+      0 0 0 1px var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* Glassmorphic card variant */
+  .card-glass {
+    @apply card;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+  }
+
+  [data-theme='dark'] .card-glass {
+    background-color: rgba(20, 25, 35, 0.7);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-alpine to-ember bg-clip-text text-transparent;
+  }
+
+  /* Modern link styles - underline grows from left */
+  .link-underline {
+    @apply relative;
+    text-decoration: none;
+    transition: color 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .link-underline:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* Consistent hover color */
+  .link-hover:hover {
+    color: var(--accent);
+    transition: color 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Prose styling for markdown content */
+  .prose {
+    @apply max-w-none;
+    color: var(--text-primary);
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3 {
+    color: var(--text-primary);
+  }
+
+  .prose a {
+    color: var(--accent);
+  }
+
+  .prose code {
+    @apply rounded bg-opacity-10 px-1.5 py-0.5 font-code text-sm;
+    background-color: var(--bg-elevated);
+  }
+
+  .prose pre {
+    @apply rounded-lg border;
+    background-color: var(--bg-elevated);
+    border-color: var(--border);
+  }
+}
+
+@layer utilities {
+  /* Custom scrollbar */
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: var(--mist) transparent;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background-color: var(--mist);
+    border-radius: 4px;
+  }
+
+  /* Removed lantern glow for cleaner aesthetic */
+
+  /* 3D Transform support */
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}
+

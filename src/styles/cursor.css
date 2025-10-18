@@ -1,0 +1,131 @@
+/* Custom Cursor Styles */
+
+/* Hide default cursor on desktop */
+@media (min-width: 768px) {
+  body, html {
+    cursor: none;
+  }
+
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+/* Custom cursor container */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity 0.3s ease;
+}
+
+/* Orange glow behind cursor */
+.cursor-glow {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at center, rgba(247, 108, 27, 0.4) 0%, rgba(247, 108, 27, 0.2) 30%, transparent 60%);
+  filter: blur(20px);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Crosshair styles */
+.crosshair {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  mix-blend-mode: difference;
+}
+
+.crosshair-horizontal,
+.crosshair-vertical {
+  position: absolute;
+  background-color: white;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.crosshair-horizontal {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.crosshair-vertical {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+/* Pointer dot */
+.pointer-dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  mix-blend-mode: difference;
+}
+
+.custom-cursor.pointer .pointer-dot {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 12px rgba(247, 108, 27, 0.3);
+}
+
+/* Hidden state */
+.hidden {
+  opacity: 0;
+  transform: scale(0);
+}
+
+/* Show state */
+.crosshair:not(.hidden),
+.pointer-dot:not(.hidden) {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Hover effect on pointer state */
+.custom-cursor.pointer .crosshair {
+  transform: translate(-50%, -50%) scale(1.5);
+}
+
+/* Reduced motion: hide custom cursor */
+@media (prefers-reduced-motion: reduce) {
+  .custom-cursor {
+    display: none;
+  }
+  
+  body {
+    cursor: auto;
+  }
+}
+
+/* Mobile: hide custom cursor */
+@media (max-width: 767px) {
+  .custom-cursor {
+    display: none;
+  }
+  
+  body {
+    cursor: auto;
+  }
+}
+

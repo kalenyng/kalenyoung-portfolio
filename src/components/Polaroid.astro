@@ -1,0 +1,46 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  rotate?: number;
+}
+
+const { src, alt, caption, rotate = 0 } = Astro.props;
+---
+
+<div
+  class="polaroid group inline-block"
+  style={`transform: rotate(${rotate}deg);`}
+>
+  <div
+    class="rounded-lg bg-white p-4 shadow-lg transition-all group-hover:-translate-y-2 group-hover:shadow-xl"
+    style="background-color: var(--bg-secondary);"
+  >
+    <div class="aspect-square overflow-hidden rounded-md">
+      <img
+        src={src}
+        alt={alt}
+        class="h-full w-full object-cover transition-transform group-hover:scale-105"
+        loading="lazy"
+      />
+    </div>
+    {
+      caption && (
+          <p
+            class="mt-4 text-center font-body text-sm"
+            style="color: var(--text-muted);"
+          >
+            {caption}
+          </p>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .polaroid {
+    transition: transform 0.3s ease;
+  }
+</style>
+

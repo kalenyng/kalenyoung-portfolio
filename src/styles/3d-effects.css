@@ -1,0 +1,101 @@
+/* 3D-specific styles and enhancements */
+
+/* Depth layers */
+.depth-layer-1 {
+  transform: translateZ(10px);
+}
+
+.depth-layer-2 {
+  transform: translateZ(20px);
+}
+
+.depth-layer-3 {
+  transform: translateZ(30px);
+}
+
+/* Floating animation for 3D cards */
+@keyframes float-3d {
+  0%, 100% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+  }
+  50% {
+    transform: translateY(-5px) rotateX(-1deg) rotateY(1deg);
+  }
+  75% {
+    transform: translateY(-15px) rotateX(-2deg) rotateY(2deg);
+  }
+}
+
+.float-3d {
+  animation: float-3d 6s ease-in-out infinite;
+}
+
+/* Glow effects for 3D elements */
+.glow-3d {
+  box-shadow: 
+    0 0 20px rgba(247, 108, 27, 0.3),
+    0 0 40px rgba(247, 108, 27, 0.1);
+}
+
+[data-theme='dark'] .glow-3d {
+  box-shadow: 
+    0 0 20px rgba(255, 133, 71, 0.4),
+    0 0 40px rgba(255, 133, 71, 0.2);
+}
+
+/* Perspective containers */
+.perspective-container {
+  perspective: 1200px;
+  perspective-origin: center;
+}
+
+/* 3D card stack effect */
+.card-stack {
+  position: relative;
+}
+
+.card-stack::before,
+.card-stack::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg-secondary);
+  border-radius: inherit;
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.card-stack::before {
+  transform: translateZ(-5px) scale(0.98);
+}
+
+.card-stack::after {
+  transform: translateZ(-10px) scale(0.96);
+}
+
+/* Interactive depth on hover */
+.hover-depth {
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hover-depth:hover {
+  transform: translateZ(20px);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.15),
+    0 0 0 1px var(--accent);
+}
+
+/* Reduced motion fallbacks */
+@media (prefers-reduced-motion: reduce) {
+  .float-3d {
+    animation: none;
+  }
+  
+  .hover-depth:hover {
+    transform: none;
+  }
+}
+

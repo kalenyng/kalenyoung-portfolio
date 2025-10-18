@@ -1,0 +1,142 @@
+---
+import Base from '@/layouts/Base.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import Hero from '@/components/Hero.astro';
+import Section from '@/components/Section.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import SkillsGrid from '@/components/SkillsGrid.astro';
+import Timeline from '@/components/Timeline.astro';
+import BioTimeline from '@/components/BioTimeline';
+import Polaroid from '@/components/Polaroid.astro';
+import ContactPanel from '@/components/ContactPanel.astro';
+import { projects } from '@/data/projects';
+---
+
+<Base
+  title="Kalen Young - Developer & Designer"
+  description="Exploring the frontiers of the web. I build modern, accessible experiences with performance and detail."
+>
+  <Nav />
+
+  <main id="main">
+    <!-- Hero Section -->
+    <Hero />
+
+    <!-- Projects Section -->
+    <Section
+      id="projects"
+      title="Featured Work"
+      subtitle="Recent projects showcasing full-stack development, modern tooling, and user-centered design."
+    >
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3" data-stagger>
+        {
+          projects.map((project) => (
+            <ProjectCard
+              title={project.title}
+              summary={project.summary}
+              tech={project.tech}
+              year={project.year}
+              image={project.image}
+              url={project.url}
+              repo={project.repo}
+              caseStudySlug={project.caseStudy}
+            />
+          ))
+        }
+      </div>
+    </Section>
+
+    <!-- Skills Section -->
+    <Section
+      id="skills"
+      title="Technical Skills"
+      subtitle="Core technologies and frameworks I work with to build modern web applications."
+      class="bg-gradient-to-b from-transparent to-[var(--bg-secondary)]"
+    >
+      <SkillsGrid />
+    </Section>
+
+    <!-- About Section -->
+    <Section
+      id="about"
+      title="About Me"
+      subtitle="From hospitality management to full-stack development."
+      class="relative"
+    >
+      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <!-- Interactive Timeline (Left) -->
+        <div class="space-y-8">
+          <BioTimeline client:load />
+        </div>
+
+        <!-- Static intro + Dynamic bio (Right) -->
+        <div class="space-y-8" data-stagger>
+          {/* Static introduction */}
+          <div class="space-y-6" data-stagger-item>
+            <p class="text-lg leading-relaxed" style="color: var(--text-secondary);">
+              I'm a <strong style="color: var(--text-primary);">self-taught developer</strong> with
+              a background in hospitality and events management. After years of coordinating
+              experiences and solving complex problems in high-pressure environments, I transitioned
+              into building digital products that are both functional and delightful.
+            </p>
+            <p class="text-lg leading-relaxed" style="color: var(--text-secondary);">
+              My focus is on <strong style="color: var(--text-primary);"
+                >modern, accessible web applications</strong
+              > using TypeScript, Angular, React, and Astro. I prioritize user experience,
+              performance, and maintainable code architecture.
+            </p>
+          </div>
+
+          {/* Dynamic bio content - controlled by timeline */}
+          <div id="bio-dynamic-wrapper" data-stagger-item>
+            {/* This gets populated by BioTimeline component */}
+          </div>
+
+          {/* Profile image */}
+          <div class="flex justify-center" data-stagger-item>
+            <Polaroid
+              src="/images/kalen-about.jpg"
+              alt="Kalen Young"
+              caption="Developer, designer, problem solver"
+              rotate={-2}
+            />
+          </div>
+
+          {/* Call to action */}
+          <div data-stagger-item>
+            <a href="/cv.pdf" class="btn-primary inline-flex" data-magnetic>
+              Download CV
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <!-- Contact Section -->
+    <Section
+      id="contact"
+      title="Let's Connect"
+      subtitle="Ready to start your next project?"
+      class="bg-gradient-to-b from-transparent to-[var(--bg-elevated)]"
+    >
+      <ContactPanel />
+    </Section>
+  </main>
+
+  <Footer />
+</Base>
+

@@ -1,0 +1,80 @@
+---
+const milestones = [
+  {
+    year: '2024',
+    title: 'Full-Stack Development',
+    description: 'Building production SaaS applications with Angular, Supabase, and modern TypeScript',
+  },
+  {
+    year: '2022',
+    title: 'Career Transition',
+    description: 'Self-taught web development, specializing in TypeScript and component-based architectures',
+  },
+  {
+    year: '2015–2021',
+    title: 'Hospitality Management',
+    description: 'Operations leadership, client relations, and high-pressure problem-solving',
+  },
+];
+---
+
+<div class="relative space-y-8" data-stagger>
+  <!-- Vertical line -->
+  <div
+    class="absolute left-4 top-0 h-full w-0.5 md:left-1/2"
+    style="background-color: var(--border);"
+  >
+  </div>
+
+  {
+    milestones.map((milestone, index) => (
+      <div
+        class="relative flex items-start gap-8 md:gap-12"
+        data-stagger-item
+      >
+        {/* Dot */}
+        <div
+          class={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+            index === 0 ? 'bg-ember' : ''
+          }`}
+          style={
+            index === 0 ? 'background-color: var(--ember);' : 'background-color: var(--bg-elevated); border: 2px solid var(--border);'
+          }
+        >
+          {index === 0 && (
+            <div
+              class="h-3 w-3 rounded-full"
+              style="background-color: white;"
+            />
+          )}
+        </div>
+
+        {/* Content */}
+        <div class="flex-1 pb-8">
+          <div
+            class="card space-y-2"
+          >
+            <div class="flex items-center gap-3">
+              <span
+                class="rounded-full px-3 py-1 text-xs font-bold"
+                style="background-color: var(--bg-elevated); color: var(--ember);"
+              >
+                {milestone.year}
+              </span>
+            </div>
+            <h3
+              class="font-heading text-xl font-bold"
+              style="color: var(--text-primary);"
+            >
+              {milestone.title}
+            </h3>
+            <p style="color: var(--text-secondary);">
+              {milestone.description}
+            </p>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+

@@ -1,0 +1,77 @@
+/* Theme tokens - Adventure Expedition palette */
+
+:root,
+[data-theme='light'] {
+  /* Core colors */
+  --ink: #0a0e16;
+  --alpine: #1e3a34;
+  --mist: #a8b4b0;
+  --ember: #f76c1b;
+  --paper: #f9f9f9;
+
+  /* Semantic tokens */
+  --bg-primary: var(--paper);
+  --bg-secondary: #ffffff;
+  --bg-elevated: #ffffff;
+  --text-primary: var(--ink);
+  --text-secondary: var(--alpine);
+  --text-muted: var(--mist);
+  --accent: var(--ember);
+  --border: rgba(30, 58, 52, 0.08);
+  --shadow: rgba(10, 14, 22, 0.04);
+  --shadow-lg: rgba(10, 14, 22, 0.1);
+  --glow: rgba(247, 108, 27, 0.15);
+
+  /* Hero gradient - Clean, professional */
+  --hero-sky-start: #fafbfc;
+  --hero-sky-end: #f0f2f5;
+  --hero-mountain: var(--alpine);
+
+  /* Interactive states */
+  --focus-ring: var(--ember);
+  --hover-lift: rgba(247, 108, 27, 0.08);
+}
+
+[data-theme='dark'] {
+  /* Core colors (adjusted for dark) */
+  --ink: #f9f9f9;
+  --alpine: #8bb4a6;
+  --mist: #7a8682;
+  --ember: #ff8547;
+  --paper: #0a0e16;
+
+  /* Semantic tokens */
+  --bg-primary: #0a0e16;
+  --bg-secondary: #141923;
+  --bg-elevated: #1d2430;
+  --text-primary: var(--ink);
+  --text-secondary: var(--alpine);
+  --text-muted: var(--mist);
+  --accent: var(--ember);
+  --border: rgba(122, 169, 154, 0.12);
+  --shadow: rgba(0, 0, 0, 0.2);
+  --shadow-lg: rgba(0, 0, 0, 0.4);
+  --glow: rgba(255, 133, 71, 0.2);
+
+  /* Hero gradient - Deep, modern navy */
+  --hero-sky-start: #0a0d15;
+  --hero-sky-end: #1a1d2e;
+  --hero-mountain: #1e3238;
+
+  /* Interactive states */
+  --focus-ring: var(--ember);
+  --hover-lift: rgba(255, 133, 71, 0.12);
+}
+
+/* Smooth theme transitions */
+:root {
+  color-scheme: light dark;
+}
+
+[data-theme] {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
