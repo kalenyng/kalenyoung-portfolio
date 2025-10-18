@@ -1,7 +1,7 @@
 ---
 title: 'Propza - Property Management SaaS'
 summary: 'A comprehensive property management platform for landlords and tenants, built with Angular and Supabase.'
-date: 2024-10-01
+date: 2025
 cover: '/images/propza-cover.jpg'
 tags: ['SaaS', 'Full-Stack', 'Real-time']
 tech: ['Angular 19', 'Supabase', 'Tailwind CSS', 'TypeScript', 'Vercel']

@@ -1,7 +1,7 @@
 ---
 title: 'Wedding Website'
 summary: 'A real wedding website built to handle guest RSVPs, dietary preferences, and photo galleries — combining elegant design, real-time updates, and secure data handling.'
-date: 2023-07-15
+date: 2025
 cover: '/images/wedding-cover.jpg'
 tags: ['Full-Stack', 'Angular', 'Cloudinary']
 tech: ['Angular', 'Supabase', 'Cloudinary', 'Tailwind CSS', 'TypeScript']

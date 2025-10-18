@@ -18,13 +18,7 @@ interface Props {
 
 const { study } = Astro.props;
 const { Content } = await study.render();
-const { title, summary, date, cover, tags, tech, url, repo, isPrivate } = study.data;
-
-const formattedDate = new Date(date).toLocaleDateString('en-GB', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-});
+const { title, summary, cover, tags, tech, url, repo, isPrivate } = study.data;
 ---
 
 <Base title={`${title} - Kalen Young`} description={summary} image={cover} article={true}>
@@ -52,21 +46,17 @@ const formattedDate = new Date(date).toLocaleDateString('en-GB', {
         </h1>
 
         <!-- Meta -->
-        <div class="flex flex-wrap items-center gap-4 text-sm" style="color: var(--text-muted);">
-          <time datetime={date.toISOString()}>{formattedDate}</time>
-          <span>•</span>
-          <div class="flex flex-wrap gap-2">
-            {
-              tags.map((tag) => (
-                <span
-                  class="rounded-full px-3 py-1 text-xs font-medium"
-                  style="background-color: var(--bg-elevated); color: var(--text-secondary);"
-                >
-                  {tag}
-                </span>
-              ))
-            }
-          </div>
+        <div class="flex flex-wrap gap-2">
+          {
+            tags.map((tag) => (
+              <span
+                class="rounded-full px-3 py-1 text-xs font-medium"
+                style="background-color: var(--bg-elevated); color: var(--text-secondary);"
+              >
+                {tag}
+              </span>
+            ))
+          }
         </div>
 
         <!-- Summary -->

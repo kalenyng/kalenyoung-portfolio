@@ -14,29 +14,30 @@ export default function BioTimeline() {
     // Check reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (prefersReducedMotion) {
-      setActivePeriodId(id);
-    } else {
+    // Update state immediately for instant visual feedback on cards
+    setActivePeriodId(id);
+
+    if (!prefersReducedMotion) {
+      // Run content animation independently
       // Fade out with slide
       animate(
         bioContent,
         { 
           opacity: 0, 
-          transform: 'translateX(-20px)',
-          filter: 'blur(4px)'
+          transform: 'translateX(-12px)',
+          filter: 'blur(3px)'
         },
-        { duration: 0.25, easing: [0.22, 1, 0.36, 1] }
+        { duration: 0.15, easing: [0.22, 1, 0.36, 1] }
       ).finished.then(() => {
-        setActivePeriodId(id);
         // Fade in with slide from opposite direction
         animate(
           bioContent,
           { 
             opacity: [0, 1], 
-            transform: ['translateX(20px)', 'translateX(0)'],
-            filter: ['blur(4px)', 'blur(0px)']
+            transform: ['translateX(12px)', 'translateX(0)'],
+            filter: ['blur(3px)', 'blur(0px)']
           },
-          { duration: 0.4, easing: [0.22, 1, 0.36, 1] }
+          { duration: 0.25, easing: [0.22, 1, 0.36, 1] }
         );
       });
     }

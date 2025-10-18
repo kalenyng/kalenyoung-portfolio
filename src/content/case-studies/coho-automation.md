@@ -1,7 +1,7 @@
 ---
 title: 'COHO Document Automation'
 summary: 'A document processing prototype for COHO AI, designed to automate data extraction from PDFs using Supabase, FastAPI, and OpenAI models.'
-date: 2023-08-15
+date: 2025
 cover: '/images/coho-cover.jpg'
 tags: ['Backend', 'AI', 'Python']
 tech: ['Python', 'FastAPI', 'Supabase', 'OpenAI API', 'TypeScript']

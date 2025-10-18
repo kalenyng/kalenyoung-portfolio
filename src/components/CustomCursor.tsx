@@ -17,7 +17,7 @@ export default function CustomCursor() {
       cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
     };
 
-    // Check if hovering over clickable element
+    // Check if hovering over clickable element or nav
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const isClickable = 
@@ -26,6 +26,7 @@ export default function CustomCursor() {
         target.closest('a') !== null ||
         target.closest('button') !== null ||
         target.closest('[data-magnetic]') !== null ||
+        target.closest('header[data-nav]') !== null ||
         target.style.cursor === 'pointer' ||
         window.getComputedStyle(target).cursor === 'pointer';
 
