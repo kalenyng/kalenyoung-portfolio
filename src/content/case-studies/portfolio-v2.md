@@ -2,7 +2,7 @@
 title: 'Portfolio v2'
 summary: 'The second iteration of my personal portfolio — rebuilt from scratch to emphasize speed, motion, and storytelling using Astro and TypeScript.'
 date: 2025-02-01
-cover: '/images/portfolio-v2-cover.jpg'
+cover: '/images/portfolio-cover.jpg'
 tags: ['Front-End', 'Astro', 'Tailwind']
 tech: ['Astro', 'Tailwind CSS', 'TypeScript', 'Motion One', 'Vercel']
 repo: 'https://github.com/kalenyng/kalenyoung-portfolio'

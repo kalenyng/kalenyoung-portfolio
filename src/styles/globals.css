@@ -326,6 +326,19 @@
 }
 
 @layer utilities {
+  /* Logo theme adaptation */
+  .logo-theme {
+    transition: filter 0.3s ease;
+  }
+
+  [data-theme='light'] .logo-theme {
+    filter: brightness(0) saturate(100%);
+  }
+
+  [data-theme='dark'] .logo-theme {
+    filter: brightness(0) saturate(100%) invert(1);
+  }
+
   /* Custom scrollbar */
   .scrollbar-custom {
     scrollbar-width: thin;

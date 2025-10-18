@@ -121,7 +121,7 @@ export const projects: Project[] = [
       'Optimized Lighthouse scores across all metrics',
       'Deployed to Vercel with continuous integration via GitHub',
     ],
-    image: '/images/portfolio-v2-cover.jpg',
+    image: '/images/portfolio-cover.jpg',
     repo: 'https://github.com/kalenyng/kalenyoung-portfolio',
     caseStudy: 'portfolio-v2',
   },

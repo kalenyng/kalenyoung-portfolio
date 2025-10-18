@@ -8,7 +8,6 @@ import ProjectCard from '@/components/ProjectCard.astro';
 import SkillsGrid from '@/components/SkillsGrid.astro';
 import Timeline from '@/components/Timeline.astro';
 import BioTimeline from '@/components/BioTimeline';
-import Polaroid from '@/components/Polaroid.astro';
 import ContactPanel from '@/components/ContactPanel.astro';
 import { projects } from '@/data/projects';
 ---
@@ -93,16 +92,6 @@ import { projects } from '@/data/projects';
             {/* Dynamic bio content - controlled by timeline */}
             <div id="bio-dynamic-wrapper" data-stagger-item>
               {/* This gets populated by BioTimeline component */}
-            </div>
-
-            {/* Profile image */}
-            <div class="flex justify-center" data-stagger-item>
-              <Polaroid
-                src="/images/kalen-about.jpg"
-                alt="Kalen Young"
-                caption="Developer, designer, problem solver"
-                rotate={-2}
-              />
             </div>
           </div>
         </div>
