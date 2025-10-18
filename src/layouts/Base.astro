@@ -34,6 +34,7 @@ const socialImage = new URL(image, Astro.site);
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="image_src" href={socialImage} />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={article ? 'article' : 'website'} />
@@ -41,6 +42,11 @@ const socialImage = new URL(image, Astro.site);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1536" />
+    <meta property="og:image:height" content="1024" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content={title} />
+    <meta property="og:site_name" content="Kalen Young - Developer & Designer" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
@@ -48,6 +54,7 @@ const socialImage = new URL(image, Astro.site);
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={socialImage} />
+    <meta property="twitter:image:alt" content={title} />
 
     <!-- Preload fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
