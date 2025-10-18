@@ -8,34 +8,53 @@ export interface BioPeriod {
 
 export const bioPeriods: BioPeriod[] = [
   {
+    id: '2025',
+    year: '2025',
+    title: 'Refining & Expanding',
+    description: [
+      "Lately, I’ve been focused on refining my approach to development—writing cleaner, more considered code and exploring how architecture, performance, and design all come together in a well-built product.",
+      "It’s been a year of working on real applications, learning from the details, and growing more confident in building reliable, production-ready experiences."
+    ],
+    highlights: ['Full-stack development', 'Angular', 'Supabase', 'TypeScript'],
+  },
+  {
     id: '2024',
     year: '2024',
-    title: 'Full-Stack Development',
+    title: 'Building Confidence',
     description: [
-      "In 2024, I've been building production-level SaaS applications using Angular, Supabase, and modern TypeScript. Projects like Propza demonstrate my ability to handle authentication, real-time data, and complex state management.",
-      "My focus is on scalable architecture, reusable component libraries, and crafting intuitive UX patterns. I'm particularly interested in performance optimization and accessibility best practices."
+      "As my skills grew, I began to connect the pieces of front-end and back-end development—learning how data, logic, and design interact to create seamless user experiences.",
+      "This was when I started approaching projects with more intention, focusing on maintainability, accessibility, and the craft behind good interface design."
     ],
-    highlights: ['Angular 19', 'Supabase', 'Real-time apps', 'TypeScript'],
+    highlights: ['Angular', 'Supabase', 'Astro', 'Cloudinary'],
+  },
+  {
+    id: '2023',
+    year: '2023',
+    title: 'Hands-On Learning',
+    description: [
+      "2023 was all about putting knowledge into practice. I built small applications, experimented with frameworks, and learned how to structure ideas into real, working projects.",
+      "Through plenty of trial and error, I began to understand how to plan, test, and improve software in a way that balances creativity with functionality."
+    ],
+    highlights: ['UI/UX', 'APIs', 'Supabase', 'Practical skills'],
   },
   {
     id: '2022',
     year: '2022',
-    title: 'Career Transition',
+    title: 'Transition to Tech',
     description: [
-      "In 2022, I made the leap from hospitality into tech, teaching myself web development through hands-on projects and structured learning. This was a period of intense exploration—building everything from wedding websites to creative portfolios.",
-      "I immersed myself in modern frameworks (React, Angular, Astro), UI design principles, and TypeScript fundamentals. Every project was a learning opportunity to understand how great web applications are built."
+      "After several years in hospitality, I decided to pursue my long-standing interest in technology. I began teaching myself the fundamentals of web development—HTML, CSS, and JavaScript—while exploring the basics of modern frameworks.",
+      "It was the start of a new direction: one built on curiosity, persistence, and a desire to create experiences that people genuinely enjoy using."
     ],
-    highlights: ['Self-taught', 'React & Angular', 'UI/UX design', 'Side projects'],
+    highlights: ['Self-taught', 'HTML/CSS/JS', 'React & Angular', 'Career change'],
   },
   {
     id: '2015',
     year: '2015–2021',
-    title: 'Hospitality Management',
+    title: 'Hospitality & Operations',
     description: [
-      "Before becoming a developer, I spent six years in hospitality and events management, coordinating high-pressure operations and client experiences. I learned to manage teams, handle complex logistics, and solve problems creatively under tight deadlines.",
-      "These years shaped my approach to collaboration, attention to detail, and user empathy—skills that directly translate to building great software. Understanding people and their needs has been invaluable in my transition to tech."
+      "Before moving into development, I spent several years in hospitality and events—fast-paced environments that demanded teamwork, empathy, and clear communication.",
+      "That experience still shapes how I work today: staying organised under pressure, understanding people’s needs, and focusing on detail and delivery."
     ],
-    highlights: ['Team leadership', 'Client relations', 'Problem-solving', 'Operations'],
+    highlights: ['Team leadership', 'Client care', 'Organisation', 'Problem-solving'],
   },
 ];
-

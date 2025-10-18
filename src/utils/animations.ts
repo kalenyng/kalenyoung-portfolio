@@ -180,9 +180,14 @@ export const initAnimations = () => {
     }
   });
 
-  // Subtle hover effects
-  document.querySelectorAll('[data-magnetic]').forEach((btn) => {
-    subtleHover(btn);
+  // Subtle hover effects (skip buttons that have CSS hover animations)
+  document.querySelectorAll('[data-magnetic]').forEach((element) => {
+    // Skip if element has btn class (CSS handles hover)
+    if (!element.classList.contains('btn') && 
+        !element.classList.contains('btn-primary') && 
+        !element.classList.contains('btn-secondary')) {
+      subtleHover(element);
+    }
   });
 };
 

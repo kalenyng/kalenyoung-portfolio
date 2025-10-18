@@ -41,6 +41,7 @@ import { projects } from '@/data/projects';
               url={project.url}
               repo={project.repo}
               caseStudySlug={project.caseStudy}
+              isPrivate={project.isPrivate}
             />
           ))
         }
@@ -61,67 +62,69 @@ import { projects } from '@/data/projects';
     <Section
       id="about"
       title="About Me"
-      subtitle="From hospitality management to full-stack development."
+      subtitle="From hospitality to full-stack development."
       class="relative"
     >
-      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
-        <!-- Interactive Timeline (Left) -->
-        <div class="space-y-8">
-          <BioTimeline client:load />
+      <div class="space-y-12">
+        <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <!-- Interactive Timeline (Left) -->
+          <div class="space-y-8">
+            <BioTimeline client:load />
+          </div>
+
+          <!-- Static intro + Dynamic bio (Right) -->
+          <div class="space-y-8" data-stagger>
+            {/* Static introduction */}
+            <div class="space-y-6" data-stagger-item>
+              <p class="text-lg leading-relaxed" style="color: var(--text-secondary);">
+                I'm a <strong style="color: var(--text-primary);">self-taught developer</strong> with
+                a background in hospitality and events management. After years of coordinating
+                experiences and solving complex problems in high-pressure environments, I transitioned
+                into building digital products that are both functional and delightful.
+              </p>
+              <p class="text-lg leading-relaxed" style="color: var(--text-secondary);">
+                My focus is on <strong style="color: var(--text-primary);"
+                  >modern, accessible web applications</strong
+                > using TypeScript, Angular, React, and Astro. I prioritize user experience,
+                performance, and maintainable code architecture.
+              </p>
+            </div>
+
+            {/* Dynamic bio content - controlled by timeline */}
+            <div id="bio-dynamic-wrapper" data-stagger-item>
+              {/* This gets populated by BioTimeline component */}
+            </div>
+
+            {/* Profile image */}
+            <div class="flex justify-center" data-stagger-item>
+              <Polaroid
+                src="/images/kalen-about.jpg"
+                alt="Kalen Young"
+                caption="Developer, designer, problem solver"
+                rotate={-2}
+              />
+            </div>
+          </div>
         </div>
 
-        <!-- Static intro + Dynamic bio (Right) -->
-        <div class="space-y-8" data-stagger>
-          {/* Static introduction */}
-          <div class="space-y-6" data-stagger-item>
-            <p class="text-lg leading-relaxed" style="color: var(--text-secondary);">
-              I'm a <strong style="color: var(--text-primary);">self-taught developer</strong> with
-              a background in hospitality and events management. After years of coordinating
-              experiences and solving complex problems in high-pressure environments, I transitioned
-              into building digital products that are both functional and delightful.
-            </p>
-            <p class="text-lg leading-relaxed" style="color: var(--text-secondary);">
-              My focus is on <strong style="color: var(--text-primary);"
-                >modern, accessible web applications</strong
-              > using TypeScript, Angular, React, and Astro. I prioritize user experience,
-              performance, and maintainable code architecture.
-            </p>
-          </div>
-
-          {/* Dynamic bio content - controlled by timeline */}
-          <div id="bio-dynamic-wrapper" data-stagger-item>
-            {/* This gets populated by BioTimeline component */}
-          </div>
-
-          {/* Profile image */}
-          <div class="flex justify-center" data-stagger-item>
-            <Polaroid
-              src="/images/kalen-about.jpg"
-              alt="Kalen Young"
-              caption="Developer, designer, problem solver"
-              rotate={-2}
-            />
-          </div>
-
-          {/* Call to action */}
-          <div data-stagger-item>
-            <a href="/cv.pdf" class="btn-primary inline-flex" data-magnetic>
-              Download CV
-              <svg
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                ></path>
-              </svg>
-            </a>
-          </div>
+        {/* Call to action - Full width centered */}
+        <div class="flex justify-center" data-stagger-item>
+          <a href="/cv.pdf" class="btn-primary inline-flex" data-magnetic>
+            Download CV
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              ></path>
+            </svg>
+          </a>
         </div>
       </div>
     </Section>

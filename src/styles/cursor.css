@@ -1,13 +1,15 @@
 /* Custom Cursor Styles */
 
-/* Hide default cursor on desktop */
+/* Hide default cursor on desktop only */
 @media (min-width: 768px) {
+  *,
+  *::before,
+  *::after {
+    cursor: none !important;
+  }
+  
   body, html {
     cursor: none;
-  }
-
-  *, *::before, *::after {
-    cursor: none !important;
   }
 }
 
@@ -42,14 +44,24 @@
   height: 20px;
   transform: translate(-50%, -50%);
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  mix-blend-mode: difference;
 }
 
 .crosshair-horizontal,
 .crosshair-vertical {
   position: absolute;
-  background-color: white;
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Light mode cursor - black */
+[data-theme='light'] .crosshair-horizontal,
+[data-theme='light'] .crosshair-vertical {
+  background-color: #0a0e16;
+}
+
+/* Dark mode cursor - white */
+[data-theme='dark'] .crosshair-horizontal,
+[data-theme='dark'] .crosshair-vertical {
+  background-color: white;
 }
 
 .crosshair-horizontal {
@@ -72,15 +84,34 @@
 .pointer-dot {
   width: 10px;
   height: 10px;
-  border: 2px solid white;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   background-color: transparent;
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  mix-blend-mode: difference;
 }
 
-.custom-cursor.pointer .pointer-dot {
+/* Light mode dot - black */
+[data-theme='light'] .pointer-dot {
+  border: 2px solid #0a0e16;
+}
+
+/* Dark mode dot - white */
+[data-theme='dark'] .pointer-dot {
+  border: 2px solid white;
+}
+
+/* Pointer state - light mode */
+[data-theme='light'] .custom-cursor.pointer .pointer-dot {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(10, 14, 22, 0.08);
+  backdrop-filter: blur(6px);
+  border-color: rgba(10, 14, 22, 0.6);
+  box-shadow: 0 0 12px rgba(247, 108, 27, 0.3);
+}
+
+/* Pointer state - dark mode */
+[data-theme='dark'] .custom-cursor.pointer .pointer-dot {
   width: 40px;
   height: 40px;
   background-color: rgba(255, 255, 255, 0.08);
@@ -107,25 +138,29 @@
   transform: translate(-50%, -50%) scale(1.5);
 }
 
-/* Reduced motion: hide custom cursor */
+/* Reduced motion: hide custom cursor and restore default cursor */
 @media (prefers-reduced-motion: reduce) {
   .custom-cursor {
     display: none;
   }
   
-  body {
-    cursor: auto;
+  *,
+  *::before,
+  *::after {
+    cursor: auto !important;
   }
 }
 
-/* Mobile: hide custom cursor */
+/* Mobile: hide custom cursor and restore default cursor */
 @media (max-width: 767px) {
   .custom-cursor {
     display: none;
   }
   
-  body {
-    cursor: auto;
+  *,
+  *::before,
+  *::after {
+    cursor: auto !important;
   }
 }
 

@@ -6,7 +6,6 @@ cover: '/images/propza-cover.jpg'
 tags: ['SaaS', 'Full-Stack', 'Real-time']
 tech: ['Angular 19', 'Supabase', 'Tailwind CSS', 'TypeScript', 'Vercel']
 url: 'https://propza.vercel.app'
-repo: 'https://github.com/kalenyoung/propza'
 featured: true
 ---
 
@@ -44,24 +43,24 @@ The application follows Angular's modular architecture with lazy-loaded feature 
 3. **Styling**: Tailwind CSS with CSS custom properties for theming
 4. **Performance**: Standalone components, OnPush change detection, virtual scrolling for large lists
 
-### Code Highlights
+## Code Highlights
 
 ```typescript
-// Rent calculation service
-export class RentCalculationService {
-  calculateNextDueDate(lastPayment: Date, frequency: 'monthly' | 'weekly'): Date {
-    const next = new Date(lastPayment);
-    frequency === 'monthly'
-      ? next.setMonth(next.getMonth() + 1)
-      : next.setDate(next.getDate() + 7);
-    return next;
-  }
+// rent-calculation.service.ts
+calculateNextDueDate(lastPayment: Date, frequency: 'monthly' | 'weekly'): Date {
+  const next = new Date(lastPayment);
+  frequency === 'monthly'
+    ? next.setMonth(next.getMonth() + 1)
+    : next.setDate(next.getDate() + 7);
+  return next;
+}
 
-  isOverdue(dueDate: Date): boolean {
-    return new Date() > new Date(dueDate);
-  }
+isOverdue(dueDate: Date): boolean {
+  return new Date() > new Date(dueDate);
 }
 ```
+
+*Example of rent calculation logic for real-time property dashboards.*
 
 ## Results & Impact
 
@@ -77,16 +76,4 @@ export class RentCalculationService {
 2. **Theme tokens > hardcoded values**: CSS variables made dark mode trivial to implement
 3. **Real-time is a feature multiplier**: Users love seeing updates without refreshing
 4. **Start with types**: Generating TypeScript types from the database schema saved countless hours
-
-## What's Next
-
-- Push notifications for rent reminders
-- In-app messaging between landlords and tenants
-- Document storage for leases and invoices
-- Multi-property support for larger landlords
-- Stripe integration for direct payments
-
----
-
-*Built in 2024 as a production-ready SaaS application demonstrating full-stack capabilities with modern web technologies.*
 

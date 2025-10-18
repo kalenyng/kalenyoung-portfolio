@@ -60,8 +60,8 @@ const socialImage = new URL(image, Astro.site);
           const stored = localStorage.getItem('theme');
           if (stored) return stored;
         }
-        // Default to light theme
-        return 'light';
+        // Default to dark theme
+        return 'dark';
       })();
       document.documentElement.setAttribute('data-theme', theme);
     </script>

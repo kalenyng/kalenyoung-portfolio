@@ -12,6 +12,7 @@ const caseStudies = defineCollection({
     url: z.string().optional(),
     repo: z.string().optional(),
     featured: z.boolean().default(false),
+    isPrivate: z.boolean().default(false),
   }),
 });
 

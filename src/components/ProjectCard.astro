@@ -8,9 +8,10 @@ interface Props {
   url?: string;
   repo?: string;
   caseStudySlug?: string;
+  isPrivate?: boolean;
 }
 
-const { title, summary, tech, year, image, url, repo, caseStudySlug } = Astro.props;
+const { title, summary, tech, year, image, url, repo, caseStudySlug, isPrivate } = Astro.props;
 
 const primaryLink = caseStudySlug ? `/case-studies/${caseStudySlug}` : url || repo;
 ---
@@ -19,9 +20,9 @@ const primaryLink = caseStudySlug ? `/case-studies/${caseStudySlug}` : url || re
   class="card-hover group relative overflow-hidden"
   data-stagger-item
   data-tilt
-  data-tilt-max="4"
+  data-tilt-max="3"
   data-tilt-scale="1.01"
-  data-tilt-glare
+  style="transform-style: preserve-3d;"
 >
   <!-- Image -->
   <div class="aspect-video overflow-hidden rounded-t-2xl">
@@ -74,14 +75,63 @@ const primaryLink = caseStudySlug ? `/case-studies/${caseStudySlug}` : url || re
     <!-- Links -->
     <div class="flex flex-wrap gap-3 pt-2">
       {
-        primaryLink && (
+        caseStudySlug && (
           <a
-            href={primaryLink}
+            href={`/case-studies/${caseStudySlug}`}
             class="btn-primary text-sm"
             data-magnetic
-            {...(caseStudySlug ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
           >
-            {caseStudySlug ? 'View Case Study' : 'View Project'}
+            View Project
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+            </svg>
+          </a>
+        )
+      }
+      {
+        !caseStudySlug && isPrivate && url && (
+          <button
+            class="btn-primary text-sm cursor-not-allowed opacity-60"
+            disabled
+            title="This project is private and requires authentication"
+          >
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+            Private Project
+          </button>
+        )
+      }
+      {
+        !caseStudySlug && !isPrivate && url && (
+          <a
+            href={url}
+            class="btn-primary text-sm"
+            data-magnetic
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View Project
             <svg
               class="h-4 w-4"
               fill="none"
