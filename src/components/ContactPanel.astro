@@ -1,20 +1,16 @@
 ---
+import ContactForm from './ContactForm';
+
 const contacts = [
   {
-    label: 'Email Me',
-    href: 'mailto:hello@kalenyoung.co.uk',
-    icon: 'email',
-    description: "Let's discuss your project",
-  },
-  {
     label: 'GitHub',
-    href: 'https://github.com/kalenyoung',
+    href: 'https://github.com/kalenyng',
     icon: 'github',
     description: 'Check out my code',
   },
   {
     label: 'LinkedIn',
-    href: 'https://linkedin.com/in/kalenyoung',
+    href: 'https://linkedin.com/in/kalen-young',
     icon: 'linkedin',
     description: 'Connect professionally',
   },
@@ -40,12 +36,16 @@ const contacts = [
 
   <!-- Contact cards -->
   <div class="grid gap-6 sm:grid-cols-2" data-stagger>
+    {/* Contact Form Button */}
+    <ContactForm client:load />
+
+    {/* Other Contact Links */}
     {
       contacts.map((contact) => (
         <a
           href={contact.href}
-          target={contact.label === 'Email Me' ? undefined : '_blank'}
-          rel={contact.label === 'Email Me' ? undefined : 'noopener noreferrer'}
+          target="_blank"
+          rel="noopener noreferrer"
           class="card-hover group flex items-start gap-4"
           data-stagger-item
           data-magnetic
@@ -57,22 +57,6 @@ const contacts = [
             class="rounded-lg p-3 transition-colors group-hover:bg-ember"
             style="background-color: var(--bg-elevated);"
           >
-            {contact.icon === 'email' && (
-              <svg
-                class="h-6 w-6 transition-colors group-hover:text-white"
-                style="color: var(--text-primary);"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                />
-              </svg>
-            )}
             {contact.icon === 'github' && (
               <svg
                 class="h-6 w-6 transition-colors group-hover:text-white"
