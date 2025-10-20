@@ -103,14 +103,17 @@ export default function ContactForm() {
           >
             {/* Close button */}
             <button
-              onClick={() => setIsOpen(false)}
-              className="absolute right-4 top-4 rounded-lg p-2 transition-colors hover:bg-ember"
-              style={{ backgroundColor: 'var(--bg-elevated)' }}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsOpen(false);
+              }}
+              className="absolute right-4 top-4 z-10 rounded-lg p-2 transition-colors hover:bg-ember hover:text-white"
+              style={{ backgroundColor: 'var(--bg-elevated)', color: 'var(--text-primary)' }}
               aria-label="Close"
             >
               <svg
                 className="h-5 w-5"
-                style={{ color: 'var(--text-primary)' }}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
