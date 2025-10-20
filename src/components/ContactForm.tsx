@@ -135,7 +135,7 @@ export default function ContactForm() {
               </div>
 
               {/* Hidden field for Web3Forms */}
-              <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY" />
+              <input type="hidden" name="access_key" value="d90c2fc7-a0aa-45c9-95cd-b9e8152b926f" />
               <input type="hidden" name="subject" value="New Contact Form Submission from Portfolio" />
               <input type="hidden" name="from_name" value="Portfolio Contact Form" />
 

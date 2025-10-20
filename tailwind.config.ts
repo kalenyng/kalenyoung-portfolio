@@ -36,6 +36,7 @@ export default {
         'fade-in': 'fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards',
         'slide-up': 'slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards',
         'bounce': 'bounce 2s ease-in-out infinite',
+        'spin': 'spin 1s linear infinite',
       },
       keyframes: {
         fadeIn: {
@@ -49,6 +50,10 @@ export default {
         bounce: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
+        },
+        spin: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
         },
       },
     },
