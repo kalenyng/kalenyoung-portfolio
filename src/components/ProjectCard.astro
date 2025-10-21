@@ -9,9 +9,10 @@ interface Props {
   repo?: string;
   caseStudySlug?: string;
   isPrivate?: boolean;
+  inProgress?: boolean;
 }
 
-const { title, summary, tech, year, image, url, repo, caseStudySlug, isPrivate } = Astro.props;
+const { title, summary, tech, year, image, url, repo, caseStudySlug, isPrivate, inProgress } = Astro.props;
 
 // Determine primary navigation target for entire card
 // Priority: case study > public live site > repo (if available)
@@ -46,6 +47,11 @@ const primaryLink = caseStudySlug
           style="transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);"
           loading="lazy"
         />
+        {inProgress && (
+          <div class="absolute top-4 right-4 z-20 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/90 text-white backdrop-blur-sm">
+            In Progress
+          </div>
+        )}
       </div>
 
       <!-- Content -->

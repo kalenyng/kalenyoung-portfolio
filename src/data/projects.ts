@@ -10,6 +10,7 @@ export interface Project {
   repo?: string;
   caseStudy?: string;
   isPrivate?: boolean;
+  inProgress?: boolean;
 }
 
 export const projects: Project[] = [
@@ -30,6 +31,7 @@ export const projects: Project[] = [
     image: '/images/propza-cover.jpg',
     url: 'https://propza.vercel.app',
     caseStudy: 'propza',
+    inProgress: true,
   },
   {
     slug: 'eiran-ruth-wedding',
@@ -68,6 +70,7 @@ export const projects: Project[] = [
     url: 'https://winterscar-chronicles.vercel.app/',
     repo: 'https://github.com/kalenyng/winterscar-chronicles',
     caseStudy: 'winterscar',
+    inProgress: true,
   },
   {
     slug: 'safe-bookkeeping',
