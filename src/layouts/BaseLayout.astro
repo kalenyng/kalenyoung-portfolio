@@ -35,9 +35,13 @@ const { title, description, path, image, noindex } = Astro.props;
       html.preloader-seen #preloader {
         display: none;
       }
-      html.loading [data-nav-brand-scene] {
+      html.loading [data-nav-brand-scene]:not([data-nav-logo-state='ready']) {
         visibility: hidden;
         opacity: 0;
+      }
+      html.loading [data-nav-brand-scene][data-nav-logo-state='ready'] {
+        visibility: visible;
+        opacity: 1;
       }
       html.preloader-seen [data-nav-brand-scene][data-nav-logo-state='ready'] {
         visibility: visible;

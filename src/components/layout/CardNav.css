@@ -169,6 +169,12 @@ html.preloader-seen .nav-brand__logo-slot:has([data-nav-logo-state='ready']) .na
   transition: opacity 0.15s ease;
 }
 
+.nav-brand__scene[data-nav-logo-handoff='true'] {
+  opacity: 1;
+  visibility: visible;
+  transition: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nav-brand__scene[data-nav-logo-state='ready'] {
     transition: none;

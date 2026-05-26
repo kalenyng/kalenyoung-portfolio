@@ -32,10 +32,23 @@ async function waitForStableSlot(host: HTMLElement): Promise<void> {
   }
 }
 
-function mountHandle(handle: NavScrollLogoHandle, host: HTMLElement): void {
+function mountHandle(handle: NavScrollLogoHandle, host: HTMLElement, instant = false): void {
+  if (instant) {
+    host.dataset.navLogoHandoff = 'true';
+  }
+
   handle.reattach(host);
   handle.renderOnce();
   setState(host, 'ready');
+
+  if (instant) {
+    host.style.opacity = '1';
+    host.style.visibility = 'visible';
+    requestAnimationFrame(() => {
+      delete host.dataset.navLogoHandoff;
+    });
+  }
+
   window.dispatchEvent(new CustomEvent('nav-logo:ready', { detail: { handle } }));
 }
 
@@ -98,7 +111,7 @@ export function adoptNavLogoHandle(handle: NavScrollLogoHandle, host?: HTMLEleme
   const target = host ?? findHost();
   if (!target) return;
 
-  mountHandle(handle, target);
+  mountHandle(handle, target, true);
 }
 
 let controllerSetup = false;
@@ -108,6 +121,8 @@ export function setupNavLogoController(): void {
   controllerSetup = true;
 
   const run = () => {
+    const host = findHost();
+    if (host?.dataset.navLogoState === 'ready' && window.__navLogoHandle) return;
     void initNavLogoController();
   };
 

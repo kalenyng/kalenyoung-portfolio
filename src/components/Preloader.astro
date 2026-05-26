@@ -346,16 +346,15 @@
         }
 
         markPreloaderSeen();
+        revealPage({ fromPreloader: true, markSeenUi: true });
         dismissed = true;
         teardownScene = null;
         skipBtn?.setAttribute('hidden', '');
-        preloader.classList.add('is-handoff');
         window.dispatchEvent(
           new CustomEvent('preloader:handoff', {
             detail: { rotationY, promoted: true },
           })
         );
-        revealPage({ fromPreloader: true, markSeenUi: true });
         preloader.remove();
         signalLanded();
 
