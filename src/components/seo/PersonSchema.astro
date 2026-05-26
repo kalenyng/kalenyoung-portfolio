@@ -1,0 +1,15 @@
+---
+import { personSchemaLinks } from '@/lib/site-url';
+
+const site = Astro.site?.href.replace(/\/$/, '') ?? '';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Kalen Young',
+  url: site,
+  jobTitle: 'Frontend Developer',
+  sameAs: [personSchemaLinks.github, personSchemaLinks.linkedin],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

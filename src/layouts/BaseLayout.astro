@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import Seo from '../components/seo/Seo.astro';
+import PersonSchema from '../components/seo/PersonSchema.astro';
 import Preloader from '../components/Preloader.astro';
 import RevealObserver from '../components/motion/RevealObserver.astro';
 import ScrollDirector from '../components/motion/ScrollDirector.astro';
@@ -201,6 +202,7 @@ const isHome = path === '/';
       }
     </script>
     <Seo title={title} description={description} path={path} image={image} noindex={noindex} />
+    {isHome && <PersonSchema />}
     <ClientRouter />
     <slot name="head" />
   </head>
