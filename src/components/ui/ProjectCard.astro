@@ -1,0 +1,61 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import TiltedCard from '../effects/TiltedCard.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, tagline, role, year, tech } = project.data;
+const href = `/projects/${project.id}/`;
+const coverAlt = `${title} — case study cover`;
+---
+
+<TiltedCard rotateAmplitude={6} scaleOnHover={1.02} showTooltip={false} class="h-full">
+  <a
+    href={href}
+    class="group relative flex h-full flex-col border-2 border-surface-border bg-surface-raised motion-safe:hover:border-accent/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+  >
+    <div class="tilted-card-cover relative aspect-[16/10] overflow-hidden border-b-2 border-surface-border">
+      <img
+        src={project.data.cover}
+        alt={coverAlt}
+        width={960}
+        height={600}
+        class="h-full w-full object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    <div class="flex flex-1 flex-col gap-4 p-6 sm:p-7">
+      <div class="flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/45">
+        <span>{year}</span>
+        <span class="text-paper/25" aria-hidden="true">·</span>
+        <span class="text-paper/55">{role}</span>
+      </div>
+      <div class="space-y-2">
+        <h3 class="font-display text-xl font-bold uppercase tracking-tight text-paper motion-safe:group-hover:text-accent">
+          {title}
+        </h3>
+        <p class="text-sm leading-relaxed text-paper/55">{tagline}</p>
+      </div>
+      <ul class="mt-auto flex flex-wrap gap-2 pt-2" aria-label="Technologies">
+        {
+          tech.slice(0, 4).map((t) => (
+            <li>
+              <span class="border border-surface-border bg-surface px-2 py-0.5 font-mono text-[10px] text-paper/50">
+                {t}
+              </span>
+            </li>
+          ))
+        }
+        {tech.length > 4 && (
+          <li>
+            <span class="px-2 py-0.5 font-mono text-[10px] text-paper/35">+{tech.length - 4}</span>
+          </li>
+        )}
+      </ul>
+    </div>
+  </a>
+</TiltedCard>

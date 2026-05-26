@@ -1,0 +1,45 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'primary' | 'ghost' | 'outline';
+
+interface Props extends HTMLAttributes<'a'> {
+  variant?: Variant;
+  href?: string;
+  type?: 'button' | 'submit';
+}
+
+const {
+  variant = 'primary',
+  class: className,
+  href,
+  type = 'button',
+  ...rest
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 border-2 px-5 py-2.5 text-sm font-medium uppercase tracking-wide motion-safe:active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
+
+const variants: Record<Variant, string> = {
+  primary:
+    'border-accent bg-accent text-surface motion-safe:hover:border-paper motion-safe:hover:bg-paper motion-safe:hover:text-surface',
+  ghost:
+    'border-transparent text-paper/80 motion-safe:hover:border-surface-border motion-safe:hover:bg-surface-raised motion-safe:hover:text-paper',
+  outline:
+    'border-surface-border bg-transparent text-paper motion-safe:hover:border-accent motion-safe:hover:bg-accent motion-safe:hover:text-surface',
+};
+
+const classes = [base, variants[variant], className].filter(Boolean).join(' ');
+---
+
+{
+  href ? (
+    <a href={href} class={classes} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class={classes} {...rest}>
+      <slot />
+    </button>
+  )
+}

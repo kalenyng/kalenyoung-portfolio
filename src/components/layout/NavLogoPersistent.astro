@@ -1,0 +1,24 @@
+<div class="nav-brand__logo-slot">
+  <img
+    class="nav-brand__fallback"
+    src="/images/nav-logo-fallback.png"
+    alt=""
+    width="36"
+    height="36"
+    decoding="sync"
+    fetchpriority="high"
+    aria-hidden="true"
+  />
+  <div
+    class="nav-brand__scene"
+    data-nav-brand-scene
+    data-nav-logo-state="idle"
+    aria-hidden="true"
+  ></div>
+</div>
+
+<script>
+  import { setupNavLogoController } from '@/lib/nav-logo-controller';
+
+  setupNavLogoController();
+</script>

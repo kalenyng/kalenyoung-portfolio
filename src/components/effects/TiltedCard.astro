@@ -1,0 +1,50 @@
+---
+interface Props {
+  captionText?: string;
+  rotateAmplitude?: number;
+  scaleOnHover?: number;
+  showTooltip?: boolean;
+  class?: string;
+}
+
+const {
+  captionText = '',
+  rotateAmplitude = 6,
+  scaleOnHover = 1.03,
+  showTooltip = true,
+  class: className,
+} = Astro.props;
+---
+
+<figure
+  class:list={['tilted-card-figure', className]}
+  data-tilted-card
+  data-rotate-amplitude={rotateAmplitude}
+  data-scale-on-hover={scaleOnHover}
+  data-show-tooltip={showTooltip ? 'true' : 'false'}
+>
+  <div class="tilted-card-inner" data-tilted-inner>
+    <slot />
+  </div>
+  {
+    showTooltip && captionText && (
+      <figcaption class="tilted-card-caption" data-tilted-caption>
+        {captionText}
+      </figcaption>
+    )
+  }
+</figure>
+
+<script>
+  import { initAllTiltedCards } from '@/lib/tilted-card';
+
+  const boot = () => initAllTiltedCards();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
+  }
+
+  window.addEventListener('resize', boot, { passive: true });
+</script>

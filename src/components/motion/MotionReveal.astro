@@ -1,0 +1,15 @@
+---
+type RevealTag = 'div' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'aside';
+
+export interface Props {
+  class?: string;
+  delay?: number;
+  as?: RevealTag;
+}
+
+const { class: className, delay = 0, as: ElementTag = 'div' } = Astro.props;
+---
+
+<ElementTag class:list={[className]} data-motion-reveal data-motion-delay={delay}>
+  <slot />
+</ElementTag>

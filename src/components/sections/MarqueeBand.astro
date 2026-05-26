@@ -1,0 +1,44 @@
+---
+const rowA = [
+  { name: 'Angular', src: '/images/icons/tech/angular.svg' },
+  { name: 'TypeScript', src: '/images/icons/tech/typescript.svg' },
+  { name: 'Astro', src: '/images/icons/tech/astro.svg' },
+  { name: 'Supabase', src: '/images/icons/tech/supabase.svg' },
+  { name: 'PostgreSQL', src: '/images/icons/tech/postgresql.svg' },
+  { name: 'Playwright', src: '/images/icons/tech/playwright.svg' },
+  { name: '.NET', src: '/images/icons/tech/dotnet.svg' },
+  { name: 'Tailwind CSS', src: '/images/icons/tech/tailwindcss.svg' },
+  { name: 'Git', src: '/images/icons/tech/git.svg' },
+  { name: 'GitHub', src: '/images/icons/tech/github.svg' },
+  { name: 'Vercel', src: '/images/icons/tech/vercel.svg' },
+] as const;
+
+const repeat = <T,>(items: readonly T[], times = 2): T[] =>
+  Array.from({ length: times }, () => [...items]).flat();
+---
+
+<section
+  class="relative overflow-hidden border-b-2 border-surface-border bg-accent py-3 sm:py-4"
+  aria-label="Tools and technologies"
+>
+  <div class="marquee-row">
+    <div class="marquee-track marquee-track--a">
+      {
+        repeat(rowA, 3).map((entry) => (
+          <span class="marquee-chip marquee-chip--lg">
+            <img
+              class="marquee-logo marquee-logo--lg"
+              src={entry.src}
+              alt={`${entry.name} logo`}
+              width="24"
+              height="24"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="marquee-text marquee-text--lg">{entry.name}</span>
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</section>

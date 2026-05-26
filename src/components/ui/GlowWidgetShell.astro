@@ -1,0 +1,46 @@
+---
+import BorderGlow from '../effects/BorderGlow.jsx';
+import '../effects/BorderGlow.css';
+import { borderGlowTheme } from '../../lib/border-glow-theme';
+
+export interface Props {
+  class?: string;
+  featured?: boolean;
+  backgroundColor: string;
+}
+
+const { class: className, featured = false, backgroundColor } = Astro.props;
+
+const innerClass = featured ? 'relative h-full p-6 sm:p-7' : 'relative h-full p-5 sm:p-6';
+
+const glowProps = {
+  backgroundColor,
+  edgeSensitivity: borderGlowTheme.edgeSensitivity,
+  glowColor: borderGlowTheme.glowColor,
+  borderRadius: borderGlowTheme.borderRadius,
+  glowRadius: borderGlowTheme.glowRadius,
+  glowIntensity: borderGlowTheme.glowIntensity,
+  coneSpread: borderGlowTheme.coneSpread,
+  animated: borderGlowTheme.animated,
+  colors: [...borderGlowTheme.colors],
+  fillOpacity: borderGlowTheme.fillOpacity,
+  tilt: borderGlowTheme.tilt,
+  rotateAmplitude: borderGlowTheme.rotateAmplitude,
+  scaleOnHover: borderGlowTheme.scaleOnHover,
+};
+---
+
+<div
+  class:list={['h-full border-2 border-surface-border md:hidden', className]}
+  style={{ backgroundColor }}
+>
+  <div class={innerClass}>
+    <slot />
+  </div>
+</div>
+
+<BorderGlow client:media="(min-width: 769px)" className={`hidden md:block h-full ${className ?? ''}`} {...glowProps}>
+  <div class={innerClass}>
+    <slot />
+  </div>
+</BorderGlow>

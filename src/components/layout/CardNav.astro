@@ -1,0 +1,54 @@
+---
+import CardNavMenu from './CardNavMenu.jsx';
+import NavLogoPersistent from './NavLogoPersistent.astro';
+import './CardNav.css';
+import { cardNavItems, cardNavTheme } from '@/lib/card-nav-items';
+
+interface Props {
+  brandName?: string;
+  brandHref?: string;
+  items?: typeof cardNavItems;
+  className?: string;
+  baseColor?: string;
+  menuColor?: string;
+  buttonBgColor?: string;
+  buttonTextColor?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  ease?: string;
+}
+
+const {
+  brandName = 'Kalen Young',
+  brandHref = '/',
+  items = cardNavItems,
+  className = '',
+  baseColor = cardNavTheme.baseColor,
+  menuColor = cardNavTheme.menuColor,
+  buttonBgColor = cardNavTheme.buttonBgColor,
+  buttonTextColor = cardNavTheme.buttonTextColor,
+  ctaLabel = cardNavTheme.ctaLabel,
+  ctaHref = cardNavTheme.ctaHref,
+  ease = cardNavTheme.ease,
+} = Astro.props;
+---
+
+<CardNavMenu
+  client:load
+  items={items}
+  className={className}
+  ease={ease}
+  baseColor={baseColor}
+  menuColor={menuColor}
+  buttonBgColor={buttonBgColor}
+  buttonTextColor={buttonTextColor}
+  ctaLabel={ctaLabel}
+  ctaHref={ctaHref}
+>
+  <div slot="logo" class="logo-container">
+    <a href={brandHref} class="nav-brand" aria-label={`${brandName} — Home`}>
+      <NavLogoPersistent />
+      <span class="nav-brand__name">{brandName}</span>
+    </a>
+  </div>
+</CardNavMenu>

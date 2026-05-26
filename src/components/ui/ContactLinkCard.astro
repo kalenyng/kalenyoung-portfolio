@@ -1,0 +1,70 @@
+---
+import IconGithubMark from '../icons/IconGithubMark.astro';
+import IconLinkedinMark from '../icons/IconLinkedinMark.astro';
+import IconEmailOutline from '../icons/IconEmailOutline.astro';
+import IconDocumentDownload from '../icons/IconDocumentDownload.astro';
+
+export interface Props {
+  href: string;
+  title: string;
+  description: string;
+  meta?: string;
+  external?: boolean;
+  brand?: 'github' | 'linkedin' | 'email' | 'cv';
+}
+
+const { href, title, description, meta, external = false, brand } = Astro.props;
+
+const isPdf = href.split('?')[0]?.endsWith('.pdf') ?? false;
+const hasBrand = Boolean(brand);
+
+const base =
+  'group flex min-h-[7.5rem] border-b-2 border-surface-border bg-surface p-6 motion-safe:hover:bg-surface-raised motion-safe:hover:text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:min-h-[8rem] sm:p-7 odd:sm:border-r-2';
+
+const layout = hasBrand ? 'flex-row items-center gap-4 sm:gap-5' : 'flex-col gap-2.5';
+const body = hasBrand ? 'flex min-w-0 flex-1 flex-col gap-2' : 'flex flex-col gap-2.5';
+const iconClass = 'h-9 w-9 sm:h-10 sm:w-10';
+const iconWrap = 'flex shrink-0 items-center justify-center text-paper/70 motion-safe:group-hover:text-accent';
+---
+
+<a
+  href={href}
+  class:list={[base, layout]}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+  download={isPdf ? '' : undefined}
+>
+  {
+    brand === 'github' && (
+      <span class={iconWrap} aria-hidden="true">
+        <IconGithubMark class={iconClass} />
+      </span>
+    )
+  }
+  {
+    brand === 'linkedin' && (
+      <span class={iconWrap} aria-hidden="true">
+        <IconLinkedinMark class={iconClass} />
+      </span>
+    )
+  }
+  {
+    brand === 'email' && (
+      <span class={iconWrap} aria-hidden="true">
+        <IconEmailOutline class={iconClass} />
+      </span>
+    )
+  }
+  {
+    brand === 'cv' && (
+      <span class={iconWrap} aria-hidden="true">
+        <IconDocumentDownload class={iconClass} />
+      </span>
+    )
+  }
+  <span class={body}>
+    {meta && <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-paper/45">{meta}</span>}
+    <span class="font-display text-lg font-bold uppercase tracking-tight text-paper">{title}</span>
+    <span class="text-sm leading-snug text-paper/50 motion-safe:group-hover:text-paper/65">{description}</span>
+  </span>
+</a>

@@ -1,0 +1,167 @@
+---
+import Seo from '../components/seo/Seo.astro';
+import Preloader from '../components/Preloader.astro';
+import RevealObserver from '../components/motion/RevealObserver.astro';
+import ScrollDirector from '../components/motion/ScrollDirector.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description, path, image, noindex } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      var seenIntro = false;
+      try {
+        seenIntro = sessionStorage.getItem('portfolio-intro-v3') === '1';
+      } catch (e) {}
+      var skipIntro =
+        seenIntro || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (seenIntro) document.documentElement.classList.add('preloader-seen');
+      if (!skipIntro) document.documentElement.classList.add('loading');
+    </script>
+    <style is:inline>
+      html.preloader-seen #preloader {
+        display: none;
+      }
+      html.loading [data-nav-brand-scene] {
+        visibility: hidden;
+        opacity: 0;
+      }
+      html.preloader-seen [data-nav-brand-scene][data-nav-logo-state='ready'] {
+        visibility: visible;
+        opacity: 1;
+      }
+      html.loading body {
+        overflow: hidden;
+      }
+      #hero:not([data-hero-ready]) [data-hero-line],
+      #hero:not([data-hero-ready]) [data-hero-pop],
+      #hero:not([data-hero-ready]) [data-hero-badge],
+      #hero:not([data-hero-ready]) [data-hero-stat],
+      #hero:not([data-hero-ready]) [data-hero-link] {
+        opacity: 0;
+        visibility: hidden;
+      }
+      #preloader {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #121110;
+      }
+      html.loading #preloader {
+        display: block;
+      }
+      .nav-brand__logo-slot {
+        width: 2.25rem;
+        height: 2.25rem;
+        flex-shrink: 0;
+      }
+      .nav-brand {
+        flex-shrink: 0;
+        width: 11.5rem;
+      }
+      .nav-brand__name {
+        display: block;
+        flex: 0 0 8.5rem;
+        width: 8.5rem;
+        min-width: 8.5rem;
+        max-width: 8.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: 'Barlow Condensed', ui-sans-serif, system-ui, sans-serif;
+        font-size: 1.125rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+      }
+      .card-nav-cta-button {
+        min-width: 5.5rem;
+        text-align: center;
+      }
+      @media (max-width: 768px) {
+        .nav-brand__logo-slot {
+          width: 2rem;
+          height: 2rem;
+        }
+        .nav-brand {
+          width: 10.25rem;
+        }
+        .nav-brand__name {
+          flex-basis: 7.5rem;
+          width: 7.5rem;
+          min-width: 7.5rem;
+          max-width: 7.5rem;
+          font-size: 0.9375rem;
+        }
+      }
+    </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link
+      rel="preload"
+      href="/fonts/barlow-condensed-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <style is:inline>
+      @font-face {
+        font-family: 'Barlow Condensed';
+        font-style: normal;
+        font-weight: 700;
+        font-display: block;
+        src: url('/fonts/barlow-condensed-700.woff2') format('woff2');
+      }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="/images/icons/logo-new.svg" />
+    <script is:inline>
+      if (seenIntro) {
+        var fallback = document.createElement('link');
+        fallback.rel = 'preload';
+        fallback.as = 'image';
+        fallback.href = '/images/nav-logo-fallback.png';
+        document.head.appendChild(fallback);
+
+        var glb = document.createElement('link');
+        glb.rel = 'preload';
+        glb.as = 'fetch';
+        glb.href = '/logo-mark.glb';
+        glb.crossOrigin = 'anonymous';
+        document.head.appendChild(glb);
+      }
+    </script>
+    <Seo title={title} description={description} path={path} image={image} noindex={noindex} />
+    <slot name="head" />
+  </head>
+  <body class="relative">
+    <Preloader />
+    <noscript>
+      <style>
+        [data-motion-reveal],
+        [data-hero-line],
+        [data-hero-pop],
+        [data-hero-badge] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+    <slot />
+    <RevealObserver />
+    <ScrollDirector />
+  </body>
+</html>

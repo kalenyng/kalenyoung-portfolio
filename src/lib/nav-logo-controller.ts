@@ -1,0 +1,124 @@
+import type { NavScrollLogoHandle } from './nav-logo-scroll';
+
+declare global {
+  interface Window {
+    __navLogoHandle?: NavScrollLogoHandle;
+    __navLogoBoot?: Promise<NavScrollLogoHandle | null>;
+  }
+}
+
+const HOST_SELECTOR = '[data-nav-brand-scene]';
+
+function findHost(): HTMLElement | null {
+  return document.querySelector<HTMLElement>(HOST_SELECTOR);
+}
+
+function setState(host: HTMLElement, state: 'idle' | 'loading' | 'ready') {
+  host.dataset.navLogoState = state;
+  if (state === 'ready') {
+    document.documentElement.classList.add('nav-logo-ready');
+  }
+}
+
+async function waitForStableSlot(host: HTMLElement): Promise<void> {
+  for (let i = 0; i < 60; i++) {
+    const slot = host.parentElement?.classList.contains('nav-brand__logo-slot')
+      ? host.parentElement
+      : host;
+    const rect = slot.getBoundingClientRect();
+    if (rect.width >= 16 && rect.height >= 16) return;
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  }
+}
+
+function mountHandle(handle: NavScrollLogoHandle, host: HTMLElement): void {
+  handle.reattach(host);
+  handle.renderOnce();
+  requestAnimationFrame(() => {
+    handle.renderOnce();
+    setState(host, 'ready');
+    window.dispatchEvent(new CustomEvent('nav-logo:ready', { detail: { handle } }));
+  });
+}
+
+async function createStandalone(host: HTMLElement): Promise<NavScrollLogoHandle | null> {
+  if (window.__navLogoHandle) {
+    mountHandle(window.__navLogoHandle, host);
+    return window.__navLogoHandle;
+  }
+
+  if (window.__navLogoBoot) {
+    const handle = await window.__navLogoBoot;
+    if (handle) mountHandle(handle, host);
+    return handle;
+  }
+
+  setState(host, 'loading');
+  await waitForStableSlot(host);
+
+  window.__navLogoBoot = (async () => {
+    const canvas = document.createElement('canvas');
+    canvas.className = 'nav-brand__canvas';
+    host.appendChild(canvas);
+
+    const { createHeaderScene } = await import('./header-scene');
+    const handle = await createHeaderScene(canvas, host);
+    if (!handle) {
+      setState(host, 'idle');
+      return null;
+    }
+
+    window.__navLogoHandle = handle;
+    return handle;
+  })();
+
+  const handle = await window.__navLogoBoot;
+  if (handle) mountHandle(handle, host);
+  return handle;
+}
+
+/** Load GLB into the nav slot (intro already seen). */
+export async function initNavLogoController(): Promise<NavScrollLogoHandle | null> {
+  if (document.documentElement.classList.contains('loading')) return null;
+
+  const host = findHost();
+  if (!host) return null;
+
+  if (host.dataset.navLogoState === 'ready' && window.__navLogoHandle) {
+    mountHandle(window.__navLogoHandle, host);
+    return window.__navLogoHandle;
+  }
+
+  return createStandalone(host);
+}
+
+/** Preloader handoff — register promoted WebGL context. */
+export function adoptNavLogoHandle(handle: NavScrollLogoHandle, host?: HTMLElement): void {
+  window.__navLogoHandle = handle;
+  window.__navLogoBoot = Promise.resolve(handle);
+
+  const target = host ?? findHost();
+  if (!target) return;
+
+  mountHandle(handle, target);
+}
+
+let controllerSetup = false;
+
+export function setupNavLogoController(): void {
+  if (controllerSetup) return;
+  controllerSetup = true;
+
+  const run = () => {
+    void initNavLogoController();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run, { once: true });
+  } else {
+    run();
+  }
+
+  window.addEventListener('preloader:landed', run, { once: false });
+  window.addEventListener('preloader:handoff', run, { once: false });
+}

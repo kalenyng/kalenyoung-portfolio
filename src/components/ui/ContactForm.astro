@@ -1,0 +1,441 @@
+---
+interface Props {
+  mailtoEmail: string;
+}
+
+const { mailtoEmail } = Astro.props;
+const emailjsPublicKey = import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY ?? '';
+
+const label =
+  'mb-1.5 block font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-paper/45';
+---
+
+<form
+  id="contact-form"
+  class="flex flex-col"
+  data-contact-form
+  data-mailto-email={mailtoEmail}
+  data-emailjs-key={emailjsPublicKey}
+  novalidate
+>
+  <div class="contact-fields-shell" data-contact-fields>
+  <div class="contact-fields-inner">
+  <div class="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+    <div>
+      <label class={label} for="contact-name">Name</label>
+      <div class="field-wrap">
+        <input
+          id="contact-name"
+          name="name"
+          type="text"
+          autocomplete="name"
+          required
+          minlength="2"
+          maxlength="120"
+          placeholder="Your name"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label class={label} for="contact-email">Email</label>
+      <div class="field-wrap">
+        <input
+          id="contact-email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+          maxlength="254"
+          placeholder="you@company.com"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-5">
+    <label class={label} for="contact-message">Project details</label>
+    <div class="field-wrap">
+      <textarea
+        id="contact-message"
+        name="message"
+        required
+        maxlength="8000"
+        rows="4"
+        class="min-h-[104px] resize-y"
+        placeholder="Goals, stack, timeline, links — whatever helps me understand the work."
+      />
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    class="contact-submit-btn w-full border-2 border-accent px-5 py-3 text-sm font-medium uppercase tracking-wide motion-safe:active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none sm:w-auto sm:self-start"
+    data-contact-submit
+  >
+    <span class="contact-submit-label contact-submit-label--default" data-contact-submit-default>
+      Send message
+      <span aria-hidden="true">→</span>
+    </span>
+    <span
+      class="contact-submit-label contact-submit-label--loading"
+      data-contact-submit-loading
+      aria-hidden="true"
+    >
+      Loading
+      <span class="contact-submit-dots" aria-hidden="true">
+        <span>.</span><span>.</span><span>.</span>
+      </span>
+      <span class="h-5 w-5 shrink-0" data-contact-loader-host>
+        <canvas data-contact-loader-canvas class="block h-full w-full"></canvas>
+      </span>
+    </span>
+  </button>
+
+  <p class="mt-3 font-mono text-[10px] leading-relaxed text-paper/35">
+    {
+      emailjsPublicKey
+        ? 'I usually reply within two business days.'
+        : 'Opens your mail app with a draft until you add PUBLIC_EMAILJS_PUBLIC_KEY (see .env.example).'
+    }
+  </p>
+  </div>
+  </div>
+
+  <div
+    id="contact-form-status"
+    class="contact-form-status border-2 font-mono text-[12px] leading-relaxed"
+    role="status"
+    aria-live="polite"
+    data-contact-status
+  />
+</form>
+
+<style>
+  .contact-submit-btn {
+    display: inline-grid;
+    place-items: center;
+    background-color: var(--color-accent);
+    color: var(--color-surface);
+    border-color: var(--color-accent);
+    transition:
+      background-color 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      color 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.2s ease;
+  }
+
+  .contact-submit-btn:hover:not(:disabled),
+  .contact-submit-btn:active:not(:disabled),
+  .contact-submit-btn[data-loading] {
+    background-color: transparent;
+    color: var(--color-accent);
+  }
+
+  .contact-submit-btn[data-loading] {
+    pointer-events: none;
+  }
+
+  .contact-submit-label {
+    grid-area: 1 / 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .contact-submit-label--default {
+    opacity: 1;
+  }
+
+  .contact-submit-label--loading {
+    opacity: 0;
+  }
+
+  .contact-submit-btn[data-loading] .contact-submit-label--default {
+    opacity: 0;
+    transition-duration: 0.25s;
+  }
+
+  .contact-submit-btn[data-loading] .contact-submit-label--loading {
+    opacity: 1;
+    transition-duration: 0.45s;
+    transition-delay: 0.12s;
+  }
+
+  .contact-submit-dots {
+    display: inline-block;
+    width: 1.1em;
+    text-align: left;
+  }
+
+  .contact-submit-btn[data-loading] .contact-submit-dots span {
+    animation: contact-loading-dot 1.4s ease-in-out infinite;
+    opacity: 0;
+  }
+
+  .contact-submit-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .contact-submit-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes contact-loading-dot {
+    0%,
+    20% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    80%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-submit-label,
+    .contact-submit-btn {
+      transition: none;
+    }
+
+    .contact-submit-btn[data-loading] .contact-submit-dots span {
+      animation: none;
+      opacity: 1;
+    }
+
+    .contact-submit-label--loading,
+    .contact-submit-btn[data-loading] .contact-submit-label--default {
+      transition-delay: 0s;
+      transition-duration: 0s;
+    }
+
+    .contact-fields-shell,
+    .contact-form-status {
+      transition: none;
+    }
+  }
+
+  .contact-fields-shell {
+    display: grid;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition:
+      grid-template-rows 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .contact-fields-inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  form[data-submitted] .contact-fields-shell {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .contact-form-status {
+    margin-top: 0;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding-block: 0;
+    padding-inline: 0.75rem;
+    border-color: transparent;
+    background-color: transparent;
+    transform: translateY(0.5rem);
+    transition:
+      opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+      margin-top 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      padding-block 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 0.3s ease,
+      background-color 0.3s ease;
+  }
+
+  .contact-form-status[data-visible] {
+    margin-top: 1rem;
+    max-height: 12rem;
+    opacity: 1;
+    padding-block: 0.75rem;
+    transform: translateY(0);
+  }
+
+  .contact-form-status[data-kind='ok'][data-visible] {
+    border-color: var(--color-accent);
+    background-color: rgb(232 97 10 / 0.12);
+    color: var(--color-accent);
+  }
+
+  .contact-form-status[data-kind='err'][data-visible] {
+    border-color: rgb(220 38 38);
+    background-color: rgb(220 38 38 / 0.1);
+    color: rgb(254 202 202);
+  }
+</style>
+
+<script>
+  import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const statusEl = document.querySelector<HTMLDivElement>('[data-contact-status]');
+  const submitBtn = document.querySelector<HTMLButtonElement>('[data-contact-submit]');
+  const submitLoading = document.querySelector<HTMLElement>('[data-contact-submit-loading]');
+  const loaderHost = document.querySelector<HTMLElement>('[data-contact-loader-host]');
+  const loaderCanvas = document.querySelector<HTMLCanvasElement>('[data-contact-loader-canvas]');
+
+  const formatSubmitError = (err: unknown) => {
+    if (err instanceof EmailJSResponseStatus) {
+      return err.text || `EmailJS error (${err.status})`;
+    }
+    if (err instanceof Error && err.message) return err.message;
+    return 'Submission failed.';
+  };
+
+  if (form && statusEl && submitBtn && submitLoading && loaderHost && loaderCanvas) {
+    const emailjsKey = form.dataset.emailjsKey ?? '';
+    const mailtoEmail = form.dataset.mailtoEmail ?? '';
+    let spinnerHandle: Awaited<ReturnType<typeof import('@/lib/model-spinner-scene').createModelSpinnerScene>> = null;
+    let spinnerWarmup: Promise<void> | null = null;
+
+    const ensureSpinner = () => {
+      if (spinnerHandle || spinnerWarmup) return spinnerWarmup;
+
+      spinnerWarmup = (async () => {
+        const { createModelSpinnerScene } = await import('@/lib/model-spinner-scene');
+        if (spinnerHandle || !loaderCanvas.isConnected) return;
+        spinnerHandle = await createModelSpinnerScene(loaderCanvas, loaderHost);
+      })().finally(() => {
+        spinnerWarmup = null;
+      });
+
+      return spinnerWarmup;
+    };
+
+    submitBtn.addEventListener('pointerenter', () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      void ensureSpinner();
+    });
+
+    const showSubmitLoading = () => {
+      submitBtn.dataset.loading = 'true';
+      submitLoading.setAttribute('aria-hidden', 'false');
+      submitBtn.setAttribute('aria-busy', 'true');
+      form.setAttribute('aria-busy', 'true');
+
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced) return;
+
+      void ensureSpinner();
+    };
+
+    const hideSubmitLoading = () => {
+      delete submitBtn.dataset.loading;
+      submitLoading.setAttribute('aria-hidden', 'true');
+      submitBtn.removeAttribute('aria-busy');
+      form.removeAttribute('aria-busy');
+      spinnerHandle?.dispose();
+      spinnerHandle = null;
+    };
+
+    const showStatus = (message: string, kind: 'ok' | 'err', animate = false) => {
+      statusEl.textContent = message;
+      statusEl.dataset.kind = kind;
+
+      if (animate) {
+        requestAnimationFrame(() => {
+          statusEl.dataset.visible = 'true';
+        });
+      } else {
+        statusEl.dataset.visible = 'true';
+      }
+    };
+
+    const hideStatus = () => {
+      delete statusEl.dataset.visible;
+      delete statusEl.dataset.kind;
+      statusEl.textContent = '';
+    };
+
+    const waitForFieldsCollapse = (fields: HTMLElement) =>
+      new Promise<void>((resolve) => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) {
+          resolve();
+          return;
+        }
+
+        let done = false;
+        const finish = () => {
+          if (done) return;
+          done = true;
+          fields.removeEventListener('transitionend', onTransitionEnd);
+          resolve();
+        };
+
+        const onTransitionEnd = (event: TransitionEvent) => {
+          if (event.target !== fields) return;
+          finish();
+        };
+
+        fields.addEventListener('transitionend', onTransitionEnd);
+        window.setTimeout(finish, 650);
+      });
+
+    const collapseForm = async (message: string) => {
+      const fields = form.querySelector<HTMLElement>('[data-contact-fields]');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      form.dataset.submitted = 'true';
+
+      window.setTimeout(() => {
+        hideSubmitLoading();
+        form.reset();
+        showStatus(message, 'ok', !reduced);
+      }, reduced ? 0 : 220);
+
+      if (fields) await waitForFieldsCollapse(fields);
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideStatus();
+
+      if (!form.reportValidity()) return;
+      if (submitBtn.dataset.loading) return;
+
+      const fd = new FormData(form);
+      const name = String(fd.get('name') ?? '').trim();
+      const email = String(fd.get('email') ?? '').trim();
+      const message = String(fd.get('message') ?? '').trim();
+
+      try {
+        if (emailjsKey) {
+          showSubmitLoading();
+          const result = await emailjs.sendForm('service_pqe8ikv', 'template_usn4pg8', form, emailjsKey);
+          if (result.status !== 200) {
+            throw result;
+          }
+          await collapseForm('Sent. I will get back to you within a couple of business days.');
+        } else if (mailtoEmail) {
+          const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
+          const body = encodeURIComponent([`From: ${name} <${email}>`, '', message].join('\n'));
+          window.location.href = `mailto:${mailtoEmail}?subject=${subject}&body=${body}`;
+          showStatus('Your mail app should open with a draft. Send it when it looks right.', 'ok');
+        } else {
+          showStatus('Form is not configured.', 'err');
+        }
+      } catch (err) {
+        hideSubmitLoading();
+        showStatus(formatSubmitError(err), 'err');
+      }
+    });
+  }
+</script>

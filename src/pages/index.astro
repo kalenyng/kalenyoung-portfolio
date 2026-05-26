@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import Hero from '../components/sections/Hero.astro';
+import ProductionExperience from '../components/sections/ProductionExperience.astro';
+import FeaturedProjects from '../components/sections/FeaturedProjects.astro';
+import Strengths from '../components/sections/Strengths.astro';
+import Contact from '../components/sections/Contact.astro';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+const flagship = projects.find((p) => p.data.flagship);
+const secondaryOrder = ['personal-budget-tracker', 'simon-clark-fitness'] as const;
+const secondary = projects
+  .filter((p) => !p.data.flagship)
+  .sort((a, b) => {
+    const ia = secondaryOrder.indexOf(a.id as (typeof secondaryOrder)[number]);
+    const ib = secondaryOrder.indexOf(b.id as (typeof secondaryOrder)[number]);
+    if (ia === -1 && ib === -1) return b.data.year - a.data.year;
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+
+if (!flagship) {
+  throw new Error('Content collection must include one flagship project.');
+}
+
+const title = 'Kalen Young — Frontend developer';
+const description =
+  'Frontend developer available for freelance and remote work. Production Angular and TypeScript from COHO, client delivery since 2023. Based in Westville, Durban — dual UK / South African citizen.';
+---
+
+<BaseLayout {title} {description} path="/">
+  <main id="main">
+    <Hero />
+    <ProductionExperience />
+    <FeaturedProjects flagship={flagship} secondary={secondary} />
+    <Strengths />
+    <Contact />
+  </main>
+  <SiteFooter />
+</BaseLayout>

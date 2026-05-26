@@ -1,0 +1,18 @@
+---
+/**
+ * One glow-wrap per control: slot must be a single <input> or <textarea>
+ * (immediate child of this wrapper only — never wrap rows or multi-field groups).
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const wrapClass = 'glow-wrap glow-wrap--field w-full rounded-md';
+---
+
+<div data-glow class:list={[wrapClass, className]}>
+  <slot />
+  <span class="glow-wrap__edge-boost" aria-hidden="true"></span>
+</div>

@@ -1,0 +1,428 @@
+<div id="preloader" aria-busy="true" aria-live="polite" aria-label="Loading site">
+  <div class="preloader__stage" data-preloader-stage>
+    <div class="preloader__glow" data-preloader-glow></div>
+    <canvas id="preloader-canvas" aria-hidden="true"></canvas>
+  </div>
+  <div class="preloader__meta">
+    <p class="preloader__name" data-preloader-name>KALEN YOUNG</p>
+    <div class="preloader__progress" aria-hidden="true">
+      <div class="preloader__progress-fill" data-preloader-progress></div>
+    </div>
+  </div>
+  <button type="button" class="preloader__skip" data-preloader-skip hidden>
+    Skip intro
+  </button>
+</div>
+
+<style>
+  #preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--color-surface, #121110);
+    opacity: 1;
+    pointer-events: all;
+    will-change: opacity, background-color;
+  }
+
+  #preloader.is-exiting,
+  #preloader.is-flying {
+    pointer-events: none;
+  }
+
+  #preloader.is-flying {
+    background: transparent;
+  }
+
+  #preloader.is-handoff .preloader__stage {
+    opacity: 0;
+  }
+
+  .preloader__stage {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  #preloader-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .preloader__glow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 220px;
+    height: 220px;
+    transform: translate(-50%, -54%);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 50% 52%,
+      rgb(255 96 16 / 0.38) 0%,
+      rgb(255 96 16 / 0.12) 38%,
+      transparent 72%
+    );
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity, transform;
+  }
+
+  .preloader__meta {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    transform: translate(-50%, calc(-50% + 7.75rem));
+    pointer-events: none;
+  }
+
+  .preloader__name {
+    margin: 0;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    color: rgb(232 228 220 / 0.72);
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  .preloader__progress {
+    width: 90px;
+    height: 1px;
+    background: rgb(232 228 220 / 0.14);
+    overflow: hidden;
+  }
+
+  .preloader__progress-fill {
+    width: 100%;
+    height: 100%;
+    background: #e8610a;
+    transform: scaleX(0);
+    transform-origin: left center;
+    will-change: transform;
+  }
+
+  .preloader__skip {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 3;
+    border: 1px solid rgb(232 228 220 / 0.22);
+    background: rgb(18 17 16 / 0.72);
+    padding: 0.5rem 0.85rem;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(232 228 220 / 0.55);
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .preloader__skip:hover {
+    border-color: rgb(232 96 16 / 0.55);
+    background: rgb(18 17 16 / 0.9);
+    color: rgb(232 228 220 / 0.9);
+  }
+
+  .preloader__skip:focus-visible {
+    outline: 2px solid #e8610a;
+    outline-offset: 3px;
+  }
+
+  #preloader.is-exiting .preloader__skip,
+  #preloader.is-flying .preloader__skip,
+  #preloader.is-handoff .preloader__skip {
+    pointer-events: none;
+    opacity: 0;
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { createPreloaderScene } from '@/lib/preloader-scene';
+  import {
+    forwardFlatRotationY,
+    resolveNavFlightTransform,
+    snapModelToNavSlot,
+    waitForNavBrandTarget,
+  } from '@/lib/preloader-flight';
+  import { adoptNavLogoHandle } from '@/lib/nav-logo-controller';
+  import { promotePreloaderToNav } from '@/lib/promote-logo-to-nav';
+  import {
+    hasSeenPreloader,
+    markPreloaderSeen,
+    shouldShowPreloader,
+  } from '@/lib/preloader-session';
+  import type { NavScrollLogoHandle } from '@/lib/nav-logo-scroll';
+
+  declare global {
+    interface Window {
+      __navLogoHandle?: NavScrollLogoHandle;
+    }
+  }
+
+  const preloader = document.getElementById('preloader');
+  const stage = document.querySelector<HTMLElement>('[data-preloader-stage]');
+  const canvas = document.getElementById('preloader-canvas') as HTMLCanvasElement | null;
+  const glowEl = document.querySelector<HTMLElement>('[data-preloader-glow]');
+  const nameEl = document.querySelector<HTMLElement>('[data-preloader-name]');
+  const progressEl = document.querySelector<HTMLElement>('[data-preloader-progress]');
+  const skipBtn = document.querySelector<HTMLButtonElement>('[data-preloader-skip]');
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let teardownScene: (() => void) | null = null;
+  let dismissed = false;
+
+  const revealPage = (options?: { fromPreloader?: boolean; markSeenUi?: boolean }) => {
+    const { fromPreloader = false, markSeenUi = false } = options ?? {};
+    document.documentElement.classList.remove('loading');
+    if (markSeenUi) document.documentElement.classList.add('preloader-seen');
+    document.body.style.overflow = '';
+    window.dispatchEvent(
+      new CustomEvent('pagereveal', {
+        detail: fromPreloader ? { from: 'preloader' } : undefined,
+      })
+    );
+  };
+
+  const signalLanded = () => {
+    window.__preloaderFinished = true;
+    window.dispatchEvent(new CustomEvent('preloader:landed'));
+  };
+
+  /** @param rememberSession — only true after a finished intro or explicit "Skip intro" */
+  const dismissImmediately = (options?: { fromPreloader?: boolean; rememberSession?: boolean }) => {
+    const { fromPreloader = false, rememberSession = false } = options ?? {};
+    if (dismissed) return;
+    dismissed = true;
+    if (rememberSession) markPreloaderSeen();
+    teardownScene?.();
+    teardownScene = null;
+    skipBtn?.setAttribute('hidden', '');
+    preloader?.removeAttribute('aria-busy');
+    preloader?.remove();
+    revealPage({ fromPreloader, markSeenUi: rememberSession });
+    signalLanded();
+  };
+
+  const showSkipButton = () => {
+    if (dismissed || !skipBtn) return;
+    skipBtn.removeAttribute('hidden');
+  };
+
+  const scheduleSkipButton = () => {
+    const revealSkip = () => showSkipButton();
+
+    if (document.readyState === 'complete') {
+      revealSkip();
+    } else {
+      window.addEventListener('load', revealSkip, { once: true });
+    }
+
+    // Fallback if load hangs on slow networks
+    window.setTimeout(revealSkip, 4000);
+  };
+
+  const viewportSize = () => ({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  skipBtn?.addEventListener('click', () =>
+    dismissImmediately({ rememberSession: true })
+  );
+
+  const dismissWhenIntroSkipped = () => {
+    dismissImmediately({
+      rememberSession: hasSeenPreloader() || prefersReducedMotion,
+    });
+  };
+
+  if (!shouldShowPreloader()) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', dismissWhenIntroSkipped, { once: true });
+    } else {
+      dismissWhenIntroSkipped();
+    }
+  } else if (!preloader || !stage) {
+    dismissImmediately({ rememberSession: false });
+  } else if (!canvas || !glowEl || !nameEl || !progressEl) {
+    dismissImmediately({ rememberSession: false });
+  } else {
+    document.body.style.overflow = 'hidden';
+    scheduleSkipButton();
+
+    void (async () => {
+      const { width, height } = viewportSize();
+      const scene = await createPreloaderScene(canvas, width, height);
+      if (!scene || dismissed) {
+        if (!dismissed) dismissImmediately({ rememberSession: false });
+        return;
+      }
+
+      const { modelGroup, modelRoot, scene: threeScene, camera, renderer, renderFrame, resize, dispose } =
+        scene;
+      const spinSpeed = { value: 0.50 };
+      let rafId = 0;
+      let disposed = false;
+      let flying = false;
+
+      let flightTween: gsap.core.Timeline | null = null;
+      let introTween: gsap.core.Timeline | null = null;
+
+      teardownScene = () => {
+        disposed = true;
+        flying = false;
+        if (rafId) cancelAnimationFrame(rafId);
+        introTween?.kill();
+        flightTween?.kill();
+        window.removeEventListener('resize', onResize);
+        dispose();
+      };
+
+      const onResize = () => {
+        const { width: vw, height: vh } = viewportSize();
+        resize(vw, vh);
+
+        if (flying) {
+          snapModelToNavSlot(modelGroup, camera, vw, vh);
+          renderFrame();
+        }
+      };
+
+      window.addEventListener('resize', onResize, { passive: true });
+
+      const tick = () => {
+        if (disposed) return;
+        if (!flying) modelGroup.rotation.y += spinSpeed.value;
+        renderFrame();
+        rafId = requestAnimationFrame(tick);
+      };
+
+      rafId = requestAnimationFrame(tick);
+
+      let handoffDone = false;
+      let promoted = false;
+
+      const completeHandoff = (rotationY: number) => {
+        if (handoffDone || dismissed) return;
+        handoffDone = true;
+        flying = false;
+
+        if (rafId) cancelAnimationFrame(rafId);
+        flightTween?.kill();
+        introTween?.kill();
+        window.removeEventListener('resize', onResize);
+
+        const { width: vw, height: vh } = viewportSize();
+        resize(vw, vh);
+        snapModelToNavSlot(modelGroup, camera, vw, vh);
+        renderFrame();
+
+        const navHost = document.querySelector<HTMLElement>('[data-nav-brand-scene]');
+        if (navHost) {
+          const handle = promotePreloaderToNav(
+            { renderer, scene: threeScene, camera, modelGroup, modelRoot },
+            navHost,
+            rotationY
+          );
+          adoptNavLogoHandle(handle, navHost);
+          promoted = true;
+        }
+
+        markPreloaderSeen();
+        dismissed = true;
+        teardownScene = null;
+        skipBtn?.setAttribute('hidden', '');
+        preloader.classList.add('is-handoff');
+        window.dispatchEvent(
+          new CustomEvent('preloader:handoff', {
+            detail: { rotationY, promoted: true },
+          })
+        );
+        revealPage({ fromPreloader: true, markSeenUi: true });
+        preloader.remove();
+        signalLanded();
+
+        if (!promoted) dispose();
+      };
+
+      const runFlightToNav = async () => {
+        await waitForNavBrandTarget();
+        if (disposed || dismissed) return;
+
+        flying = true;
+        preloader.classList.add('is-flying');
+
+        const flatY = forwardFlatRotationY(modelGroup.rotation.y);
+        const flightDuration = 0.72;
+
+        const flightTarget = () => {
+          const { width: vw, height: vh } = viewportSize();
+          resize(vw, vh);
+          return resolveNavFlightTransform(camera, vw, vh);
+        };
+
+        flightTween = gsap
+          .timeline({ defaults: { ease: 'power3.inOut' } })
+          .to(
+            modelGroup.position,
+            {
+              x: () => flightTarget()?.world.x ?? modelGroup.position.x,
+              y: () => flightTarget()?.world.y ?? modelGroup.position.y,
+              z: 0,
+              duration: flightDuration,
+            },
+            0
+          )
+          .to(
+            modelGroup.rotation,
+            { y: flatY, duration: flightDuration, ease: 'none' },
+            0
+          )
+          .to(
+            modelGroup.scale,
+            {
+              x: () => flightTarget()?.scale ?? modelGroup.scale.x,
+              y: () => flightTarget()?.scale ?? modelGroup.scale.y,
+              z: () => flightTarget()?.scale ?? modelGroup.scale.z,
+              duration: flightDuration,
+            },
+            0
+          )
+          .to(glowEl, { opacity: 0, scale: 0.6, duration: 0.25, ease: 'power2.in' }, 0)
+          .add(() => completeHandoff(modelGroup.rotation.y));
+      };
+
+      introTween = gsap.timeline();
+
+      introTween
+        .to(modelGroup.position, { y: 0, duration: 1.05, ease: 'back.out(1.6)' }, 0)
+        .to(spinSpeed, { value: 0.009, duration: 1, ease: 'power2.out' }, 0)
+        .to(glowEl, { opacity: 1, duration: 0.7, ease: 'power2.out' }, 0.3)
+        .to(nameEl, { opacity: 1, duration: 0.5, ease: 'power2.out' }, 0.45)
+        .to(
+          progressEl,
+          { scaleX: 1, duration: 1.35, ease: 'power2.inOut', transformOrigin: 'left center' },
+          0.08
+        )
+        .to([nameEl, progressEl], { opacity: 0, duration: 0.15, ease: 'power2.in' }, 1.38)
+        .add(() => void runFlightToNav(), 1.42);
+    })();
+  }
+</script>

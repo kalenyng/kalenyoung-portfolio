@@ -1,0 +1,121 @@
+---
+import type { LineWavesOptions } from '@/lib/line-waves';
+
+interface Props extends LineWavesOptions {
+  class?: string;
+}
+
+const {
+  class: className,
+  speed = 0.3,
+  innerLineCount = 32,
+  outerLineCount = 36,
+  warpIntensity = 1,
+  rotation = -45,
+  edgeFadeWidth = 0,
+  colorCycleSpeed = 1,
+  brightness = 0.2,
+  color1 = '#ffffff',
+  color2 = '#ffffff',
+  color3 = '#ffffff',
+  enableMouseInteraction = true,
+  mouseInfluence = 2,
+} = Astro.props;
+---
+
+<div
+  class:list={['line-waves-container', className]}
+  data-line-waves
+  data-speed={speed}
+  data-inner-line-count={innerLineCount}
+  data-outer-line-count={outerLineCount}
+  data-warp-intensity={warpIntensity}
+  data-rotation={rotation}
+  data-edge-fade-width={edgeFadeWidth}
+  data-color-cycle-speed={colorCycleSpeed}
+  data-brightness={brightness}
+  data-color1={color1}
+  data-color2={color2}
+  data-color3={color3}
+  data-enable-mouse={enableMouseInteraction ? 'true' : 'false'}
+  data-mouse-influence={mouseInfluence}
+  aria-hidden="true"
+></div>
+
+<script>
+  const readOptions = (host: HTMLElement) => ({
+    speed: Number(host.dataset.speed),
+    innerLineCount: Number(host.dataset.innerLineCount),
+    outerLineCount: Number(host.dataset.outerLineCount),
+    warpIntensity: Number(host.dataset.warpIntensity),
+    rotation: Number(host.dataset.rotation),
+    edgeFadeWidth: Number(host.dataset.edgeFadeWidth),
+    colorCycleSpeed: Number(host.dataset.colorCycleSpeed),
+    brightness: Number(host.dataset.brightness),
+    color1: host.dataset.color1,
+    color2: host.dataset.color2,
+    color3: host.dataset.color3,
+    enableMouseInteraction: host.dataset.enableMouse === 'true',
+    mouseInfluence: Number(host.dataset.mouseInfluence),
+  });
+
+  const mobileOptions = (options: ReturnType<typeof readOptions>) => ({
+    ...options,
+    innerLineCount: Math.min(options.innerLineCount, 18),
+    outerLineCount: Math.min(options.outerLineCount, 20),
+    enableMouseInteraction: false,
+    speed: options.speed * 0.75,
+    brightness: options.brightness * 0.85,
+  });
+
+  const revealBackground = () => {
+    document.querySelector('[data-hero-bg]')?.classList.add('is-visible');
+  };
+
+  const boot = async () => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      revealBackground();
+      return;
+    }
+
+    const hosts = document.querySelectorAll<HTMLElement>('[data-line-waves]');
+    if (!hosts.length) {
+      revealBackground();
+      return;
+    }
+
+    const { createLineWaves } = await import('@/lib/line-waves');
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+    hosts.forEach((host) => {
+      const base = readOptions(host);
+      const options = isMobile ? mobileOptions(base) : base;
+      const handle = createLineWaves(host, options);
+      if (!handle) return;
+
+      window.addEventListener('pagehide', () => handle.dispose(), { once: true });
+    });
+
+  };
+
+  const scheduleBoot = () => {
+    const run = () => {
+      revealBackground();
+      void boot();
+    };
+
+    if (document.documentElement.classList.contains('loading')) {
+      window.addEventListener('pagereveal', run, { once: true });
+      return;
+    }
+
+    run();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', scheduleBoot, { once: true });
+  } else {
+    scheduleBoot();
+  }
+</script>

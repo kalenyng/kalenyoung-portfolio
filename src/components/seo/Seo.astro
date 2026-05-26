@@ -1,0 +1,51 @@
+---
+interface OpenGraph {
+  title?: string;
+  description?: string;
+  image?: URL | string;
+  type?: 'website' | 'article';
+}
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  image?: URL | string;
+  noindex?: boolean;
+  openGraph?: OpenGraph;
+}
+
+const canonical = new URL(Astro.props.path ?? Astro.url.pathname, Astro.site);
+const {
+  title,
+  description,
+  image,
+  noindex = false,
+  openGraph,
+} = Astro.props;
+
+const ogImage =
+  openGraph?.image ??
+  image ??
+  new URL('/images/og/og.png', Astro.site).toString();
+
+const pageTitle = title;
+---
+
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical.toString()} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+<meta property="og:site_name" content="Kalen Young" />
+<meta property="og:title" content={openGraph?.title ?? pageTitle} />
+<meta property="og:description" content={openGraph?.description ?? description} />
+<meta property="og:url" content={canonical.toString()} />
+<meta property="og:type" content={openGraph?.type ?? 'website'} />
+<meta property="og:image" content={typeof ogImage === 'string' ? ogImage : ogImage.toString()} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={openGraph?.title ?? pageTitle} />
+<meta name="twitter:description" content={openGraph?.description ?? description} />
+<meta
+  name="twitter:image"
+  content={typeof ogImage === 'string' ? ogImage : ogImage.toString()}
+/>

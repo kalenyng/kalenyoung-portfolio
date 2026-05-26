@@ -1,0 +1,82 @@
+---
+import ContactForm from '../ui/ContactForm.astro';
+import ContactLinkCard from '../ui/ContactLinkCard.astro';
+import MotionReveal from '../motion/MotionReveal.astro';
+
+const contactEmail = 'kalenyoung03@gmail.com';
+
+const links = {
+  github: 'https://github.com/kalenyng',
+  linkedin: 'https://www.linkedin.com/in/kalen-young',
+  cv: '/docs/kalen-young-fullstack.pdf',
+} as const;
+---
+
+<section id="contact" class="scroll-mt-[var(--site-header-height)] px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-28" aria-labelledby="contact-heading">
+  <div class="mx-auto max-w-[1400px]">
+    <div class="border-2 border-surface-border bg-surface-raised">
+      <div data-contact-banner class="border-b-2 border-surface-border bg-accent px-6 py-10 sm:px-10 lg:px-12">
+        <div class="space-y-4">
+          <p class="font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-surface/70">Contact</p>
+          <h2
+            id="contact-heading"
+            class="font-display max-w-2xl text-[clamp(2rem,5vw,3.5rem)] font-bold uppercase leading-[0.92] tracking-tight text-surface"
+          >
+            Send scope, stack, and timeline.
+          </h2>
+          <p class="max-w-xl text-base leading-relaxed text-surface/75">
+            I reply with next steps or a quick call if the fit is clear. Two business days, usually faster.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid gap-0 sm:grid-cols-2">
+        <MotionReveal delay={40}>
+          <ContactLinkCard
+            href={`mailto:${contactEmail}`}
+            meta="Email"
+            title={contactEmail}
+            description="Best for detailed briefs and attachments."
+            brand="email"
+          />
+        </MotionReveal>
+        <MotionReveal delay={60}>
+          <ContactLinkCard
+            href={links.github}
+            meta="GitHub"
+            title="Code and experiments"
+            description="Recent work and open-source contributions."
+            brand="github"
+            external
+          />
+        </MotionReveal>
+        <MotionReveal delay={80}>
+          <ContactLinkCard
+            href={links.linkedin}
+            meta="LinkedIn"
+            title="Profile"
+            description="Experience, recommendations, and context."
+            brand="linkedin"
+            external
+          />
+        </MotionReveal>
+        <MotionReveal delay={100}>
+          <ContactLinkCard
+            href={links.cv}
+            meta="CV"
+            title="Resume (PDF)"
+            description="Concise overview of experience and how I work with teams."
+            brand="cv"
+          />
+        </MotionReveal>
+      </div>
+
+      <div class="border-t-2 border-surface-border p-6 sm:p-10 lg:p-12">
+        <MotionReveal delay={120}>
+          <ContactForm mailtoEmail={contactEmail} />
+        </MotionReveal>
+
+      </div>
+    </div>
+  </div>
+</section>

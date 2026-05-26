@@ -1,0 +1,31 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={['header-scene', className]} data-header-scene aria-hidden="true">
+  <canvas data-header-canvas class="header-scene__canvas"></canvas>
+</div>
+
+<script>
+  const boot = async () => {
+    const host = document.querySelector<HTMLElement>('[data-header-scene]');
+    const canvas = document.querySelector<HTMLCanvasElement>('[data-header-canvas]');
+    if (!host || !canvas) return;
+
+    const { createHeaderScene } = await import('@/lib/header-scene');
+    const handle = await createHeaderScene(canvas, host);
+    if (!handle) return;
+
+    window.addEventListener('pagehide', () => handle.dispose(), { once: true });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    void boot();
+  }
+</script>

@@ -1,0 +1,306 @@
+@import "tailwindcss";
+
+@import "@fontsource/barlow-condensed/latin-700.css";
+@import "@fontsource/barlow-condensed/latin-800.css";
+@import "@fontsource/ibm-plex-sans/latin-400.css";
+@import "@fontsource/ibm-plex-sans/latin-500.css";
+@import "@fontsource-variable/jetbrains-mono/wght.css";
+
+@theme {
+  --font-display: "Barlow Condensed", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+
+  --color-surface: #121110;
+  --color-surface-raised: #1a1917;
+  --color-surface-border: #2e2c28;
+  --color-paper: #e8e4dc;
+  --color-accent: #e8610a;
+  --color-accent-muted: #c24e08;
+
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+
+  --site-header-height: calc(max(1.5rem, env(safe-area-inset-top, 0px)) + 64px + 1rem);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --site-header-height: calc(max(1rem, env(safe-area-inset-top, 0px)) + 64px + 0.75rem);
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--site-header-height);
+    color-scheme: dark;
+    cursor: default;
+  }
+
+  :where(
+    a[href],
+    button:not(:disabled),
+    [role='button']:not([aria-disabled='true']),
+    label[for],
+    summary,
+    select:not(:disabled),
+    input[type='checkbox'],
+    input[type='radio'],
+    input[type='file']
+  ) {
+    cursor: pointer;
+  }
+
+  :where(button:disabled, [aria-disabled='true']) {
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply min-h-dvh bg-surface font-sans text-[17px] leading-relaxed text-paper antialiased;
+  }
+
+  ::selection {
+    @apply bg-accent text-surface;
+  }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-accent;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(a, button, [role="button"]) {
+      transition-property: color, background-color, border-color, opacity, transform;
+      transition-duration: 120ms;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+}
+
+@layer components {
+  .site-header-offset {
+    padding-top: var(--site-header-height);
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .brutal-rule {
+    @apply h-px w-full bg-surface-border;
+  }
+
+  .brutal-rule-thick {
+    @apply h-0.5 w-full bg-surface-border;
+  }
+
+  .brutal-label {
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-accent;
+  }
+
+  .brutal-slab {
+    @apply border-2 border-surface-border bg-surface-raised;
+  }
+
+  .brutal-invert-hover {
+    @apply motion-safe:hover:border-accent motion-safe:hover:bg-accent motion-safe:hover:text-surface;
+  }
+
+  html.js [data-motion-reveal]:not([data-motion-done]) {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js [data-motion-reveal]:not([data-motion-done]) {
+      opacity: 1;
+      transform: none;
+    }
+
+    html.js #hero:not([data-hero-ready]) [data-hero-line],
+    html.js #hero:not([data-hero-ready]) [data-hero-pop],
+    html.js #hero:not([data-hero-ready]) [data-hero-badge],
+    html.js #hero:not([data-hero-ready]) [data-hero-stat],
+    html.js #hero:not([data-hero-ready]) [data-hero-link] {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  [data-motion-done] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .prose-case {
+    @apply max-w-2xl space-y-6 text-[17px] leading-relaxed text-paper/80;
+  }
+
+  .prose-case h2 {
+    @apply mt-14 font-display text-2xl font-bold uppercase tracking-tight text-paper first:mt-0;
+  }
+
+  .prose-case p {
+    @apply text-paper/70;
+  }
+
+  .prose-case ul {
+    @apply list-disc space-y-2 pl-5 text-paper/70;
+  }
+
+  form[data-contact-form] .field-wrap {
+    @apply border-2 border-surface-border bg-surface;
+  }
+
+  form[data-contact-form] .field-wrap:focus-within {
+    @apply border-accent;
+  }
+
+  form[data-contact-form] .field-wrap > :is(input, textarea) {
+    @apply w-full border-0 bg-transparent px-3 py-2.5 text-sm text-paper outline-none;
+    cursor: text;
+  }
+
+  form[data-contact-form] .field-wrap > :is(input, textarea)::placeholder {
+    @apply text-paper/35;
+  }
+
+  html.js #hero:not([data-hero-ready]) [data-hero-line],
+  html.js #hero:not([data-hero-ready]) [data-hero-pop],
+  html.js #hero:not([data-hero-ready]) [data-hero-badge],
+  html.js #hero:not([data-hero-ready]) [data-hero-stat],
+  html.js #hero:not([data-hero-ready]) [data-hero-link] {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  html.js [data-hero-line] {
+    will-change: transform, opacity;
+  }
+
+  .hero-bg {
+    @apply opacity-0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-bg {
+      transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+
+  .hero-bg.is-visible {
+    @apply opacity-100;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-bg {
+      @apply opacity-100;
+    }
+  }
+
+  .line-waves-container {
+    @apply pointer-events-none absolute inset-0 overflow-hidden;
+  }
+
+  .line-waves-container__canvas {
+    @apply block h-full w-full;
+  }
+
+  .tilted-card-figure {
+    @apply relative block h-full w-full;
+    perspective: 800px;
+  }
+
+  .tilted-card-inner {
+    @apply relative h-full w-full;
+    transform-style: preserve-3d;
+  }
+
+  .tilted-card-cover :where(img) {
+    @apply h-full w-full object-cover;
+    will-change: transform;
+  }
+
+  .project-cover--pan-right .project-cover-bg {
+    background-size: cover !important;
+    background-position: 40% center !important;
+  }
+
+  .tilted-card-caption {
+    @apply pointer-events-none absolute left-0 top-0 z-10 border-2 border-accent bg-accent px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-surface opacity-0;
+  }
+
+  @media (max-width: 767px) {
+    .tilted-card-caption {
+      @apply hidden;
+    }
+  }
+
+  /* Header Three.js mark */
+  .header-scene {
+    @apply h-9 w-9 shrink-0 overflow-hidden sm:h-10 sm:w-10;
+  }
+
+  .header-scene__canvas {
+    @apply block h-full w-full;
+  }
+
+  /* Kinetic marquee — logos + text */
+  .marquee-row {
+    @apply overflow-hidden whitespace-nowrap;
+  }
+
+  .marquee-track {
+    @apply inline-flex w-max items-center gap-4 sm:gap-6;
+  }
+
+  .marquee-chip {
+    @apply inline-flex shrink-0 items-center gap-3 border-2 border-surface/20 bg-surface/10 px-4 py-2.5 sm:gap-4 sm:px-5 sm:py-3;
+  }
+
+  .marquee-chip--lg {
+    @apply gap-2 px-3 py-1.5 sm:gap-2 sm:px-4 sm:py-2;
+  }
+
+  .marquee-text {
+    @apply font-display font-bold uppercase leading-none tracking-tight text-surface;
+  }
+
+  .marquee-text--lg {
+    @apply text-[clamp(1rem,2.5vw,1.75rem)] font-extrabold;
+  }
+
+  .marquee-logo {
+    @apply h-8 w-auto shrink-0 opacity-95 sm:h-9;
+  }
+
+  .marquee-logo--lg {
+    @apply h-5 w-auto sm:h-6;
+  }
+
+  .marquee-track--a {
+    animation: marquee-a 35s linear infinite;
+  }
+
+  @keyframes marquee-a {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track--a {
+      animation: none;
+    }
+  }
+}

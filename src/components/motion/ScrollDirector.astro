@@ -1,0 +1,93 @@
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+  const initWipes = () => {
+    gsap.utils.toArray<HTMLElement>('[data-scroll-wipe]').forEach((el) => {
+      gsap.fromTo(
+        el,
+        { clipPath: 'inset(0% 100% 0% 0%)', opacity: 0.35 },
+        {
+          clipPath: 'inset(0% 0% 0% 0%)',
+          opacity: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 82%',
+            end: 'top 42%',
+            scrub: 0.65,
+          },
+        }
+      );
+    });
+  };
+
+  const initSlams = () => {
+    gsap.utils.toArray<HTMLElement>('[data-scroll-slam]').forEach((el, i) => {
+      const fromX = i % 2 === 0 ? -96 : 96;
+      gsap.fromTo(
+        el,
+        { x: fromX, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.85,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 90%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      );
+    });
+  };
+
+  const initContactBanner = () => {
+    const banner = document.querySelector('[data-contact-banner]') as HTMLElement | null;
+    if (!banner) return;
+
+    gsap.fromTo(
+      banner,
+      { clipPath: 'inset(0% 100% 0% 0%)' },
+      {
+        clipPath: 'inset(0% 0% 0% 0%)',
+        ease: 'power4.inOut',
+        scrollTrigger: {
+          trigger: banner,
+          start: 'top 88%',
+          end: 'top 52%',
+          scrub: 0.5,
+        },
+      }
+    );
+  };
+
+  const init = () => {
+    if (reduced || isMobile) return;
+    initWipes();
+    initSlams();
+    initContactBanner();
+  };
+
+  const scheduleInit = () => {
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(init, { timeout: 3000 });
+    } else {
+      window.setTimeout(init, 1500);
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', scheduleInit, { once: true });
+  } else {
+    scheduleInit();
+  }
+
+  window.addEventListener('load', () => ScrollTrigger.refresh());
+</script>

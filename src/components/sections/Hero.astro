@@ -1,0 +1,146 @@
+---
+import Button from '../ui/Button.astro';
+import LineWaves from '../effects/LineWaves.astro';
+import HeroSequence from '../motion/HeroSequence.astro';
+import CardNav from '../layout/CardNav.astro';
+import IconGithubMark from '../icons/IconGithubMark.astro';
+import IconLinkedinMark from '../icons/IconLinkedinMark.astro';
+import IconEmailOutline from '../icons/IconEmailOutline.astro';
+import IconDocumentDownload from '../icons/IconDocumentDownload.astro';
+import { cardNavItems, cardNavTheme } from '@/lib/card-nav-items';
+
+const contactEmail = 'kalenyoung03@gmail.com';
+const githubUrl = 'https://github.com/kalenyng';
+const linkedinUrl = 'https://www.linkedin.com/in/kalen-young';
+const cvUrl = '/docs/kalen-young-fullstack.pdf';
+
+const inlineLinkClass =
+  'group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-paper/45 motion-safe:hover:bg-accent motion-safe:hover:text-surface motion-safe:hover:px-2 motion-safe:hover:-mx-2 focus-visible:text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent';
+
+const stats = [
+  { value: '3+', label: 'Years building for clients and teams' },
+  { value: '10+', label: 'Live projects shipped or in production' },
+  { value: 'UTC+2', label: 'Durban · UK-connected · remote-first' },
+] as const;
+---
+
+<section
+  id="hero"
+  class="relative flex min-h-0 flex-col overflow-hidden border-b-2 border-surface-border md:min-h-[100dvh]"
+  aria-labelledby="hero-heading"
+>
+  <a
+    href="#main"
+    class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[110] focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-surface"
+  >
+    Skip to content
+  </a>
+
+  <CardNav brandName="Kalen Young" brandHref="/" items={cardNavItems} {...cardNavTheme} />
+
+  <div class="hero-bg pointer-events-none absolute inset-0" data-hero-bg aria-hidden="true">
+    <LineWaves
+      speed={0.3}
+      innerLineCount={32}
+      outerLineCount={36}
+      warpIntensity={1.0}
+      rotation={-45}
+      edgeFadeWidth={0.0}
+      colorCycleSpeed={1.0}
+      brightness={0.2}
+      color1="#e8610a"
+      color2="#e8610a"
+      color3="#e8610a"
+      enableMouseInteraction={true}
+      mouseInfluence={2.0}
+    />
+    <div
+      class="hero-bg__scrim pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-surface/65 via-surface/50 to-surface/70 md:from-surface/75 md:via-surface/60 md:to-surface/80"
+      aria-hidden="true"
+    ></div>
+  </div>
+  <div class="site-header-offset relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-between px-4 pb-8 sm:px-6 sm:pb-12 lg:px-8 lg:pb-16">
+    <div class="flex flex-1 flex-col justify-center gap-12 sm:gap-16 lg:gap-20">
+      <div class="max-w-5xl space-y-8 sm:space-y-10 mb-14 sm:mb-20 md:mb-28">
+        <div class="overflow-hidden">
+          <span
+            data-hero-badge
+            class="brutal-label inline-block translate-y-6 border-2 border-accent bg-accent px-3 py-1.5 opacity-0 text-surface"
+          >
+            Available · freelance + remote
+          </span>
+        </div>
+
+        <h1
+          id="hero-heading"
+          class="font-display max-w-[12ch] text-[clamp(3.25rem,16vw,12rem)] font-extrabold uppercase leading-[0.85] tracking-tight text-paper sm:text-[clamp(4.5rem,18vw,12rem)]"
+        >
+          <span class="block overflow-hidden pb-1">
+            <span data-hero-line class="inline-block opacity-0">Frontend</span>
+          </span>
+          <span class="block overflow-hidden pb-1">
+            <span data-hero-line class="inline-block text-accent opacity-0">developer.</span>
+          </span>
+        </h1>
+
+        <div data-hero-pop class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap translate-y-7 opacity-0">
+          <Button href="/#contact" variant="primary" class="w-full sm:w-auto">Send a brief</Button>
+          <Button href="/#work" variant="outline" class="w-full sm:w-auto">Selected work</Button>
+          <Button href={cvUrl} variant="ghost" download class="w-full sm:w-auto">
+            <IconDocumentDownload class="h-4 w-4" />
+            CV (PDF)
+          </Button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-0 border-t-2 border-surface-border" aria-label="Highlights">
+        {
+          stats.map((item, i) => (
+            <div
+              data-hero-stat
+              class:list={[
+                'px-2 py-4 opacity-0 sm:px-6 sm:py-7',
+                i > 0 && 'border-l-2 border-surface-border sm:border-l-2',
+              ]}
+            >
+              <p class="font-display text-2xl font-bold tabular-nums tracking-tight text-paper sm:text-5xl lg:text-6xl">{item.value}</p>
+              <p class="mt-1.5 max-w-[16rem] text-xs leading-snug text-paper/50 sm:mt-2 sm:text-base">{item.label}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 border-t-2 border-surface-border pt-5 sm:mt-12 sm:gap-x-6 sm:pt-6">
+      <a
+        href={githubUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-hero-link
+        class:list={[inlineLinkClass, 'opacity-0']}
+        aria-label="GitHub profile (opens in a new tab)"
+      >
+        <IconGithubMark class="h-4 w-4" />
+        GitHub
+      </a>
+      <a
+        href={linkedinUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-hero-link
+        class:list={[inlineLinkClass, 'opacity-0']}
+        aria-label="LinkedIn profile (opens in a new tab)"
+      >
+        <IconLinkedinMark class="h-4 w-4" />
+        LinkedIn
+      </a>
+      <a href={`mailto:${contactEmail}`} data-hero-link class:list={[inlineLinkClass, 'opacity-0']}>
+        <IconEmailOutline class="h-4 w-4" />
+        <span class="sm:hidden">Email</span>
+        <span class="hidden sm:inline">{contactEmail}</span>
+      </a>
+    </div>
+  </div>
+
+  <HeroSequence />
+</section>

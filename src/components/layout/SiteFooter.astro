@@ -1,0 +1,38 @@
+---
+import BrandMark from '../ui/BrandMark.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t-2 border-surface-border bg-surface-raised">
+  <div class="mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-8">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-end">
+      <div class="space-y-6">
+        <div class="flex items-center gap-3">
+          <BrandMark />
+          <span class="font-display text-2xl font-bold uppercase tracking-tight text-paper">Kalen Young</span>
+        </div>
+        <p class="max-w-md text-sm leading-relaxed text-paper/50">
+          Astro, Tailwind, Motion One. Content in Markdown. Deployed on Vercel.
+        </p>
+      </div>
+      <div class="flex flex-col gap-4 border-t-2 border-surface-border pt-8 lg:border-t-0 lg:pt-0 lg:text-right">
+        <div class="flex flex-wrap gap-4 lg:justify-end">
+          <a
+            href="https://github.com/kalenyng"
+            class="font-mono text-[11px] uppercase tracking-[0.2em] text-paper/45 motion-safe:hover:text-accent"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://www.linkedin.com/in/kalen-young"
+            class="font-mono text-[11px] uppercase tracking-[0.2em] text-paper/45 motion-safe:hover:text-accent"
+          >
+            LinkedIn
+          </a>
+        </div>
+        <p class="font-mono text-[11px] text-paper/35">© {year} Kalen Young</p>
+      </div>
+    </div>
+  </div>
+</footer>

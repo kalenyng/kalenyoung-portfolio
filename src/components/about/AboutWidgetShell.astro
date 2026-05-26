@@ -1,0 +1,15 @@
+---
+import GlowWidgetShell from '../ui/GlowWidgetShell.astro';
+import { borderGlowAboutBg } from '../../lib/border-glow-theme';
+
+export interface Props {
+  class?: string;
+  featured?: boolean;
+}
+
+const { class: className, featured = false } = Astro.props;
+---
+
+<GlowWidgetShell class={className} {featured} backgroundColor={borderGlowAboutBg}>
+  <slot />
+</GlowWidgetShell>

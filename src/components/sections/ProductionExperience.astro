@@ -1,0 +1,48 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import GlowWidgetShell from '../ui/GlowWidgetShell.astro';
+import { borderGlowAboutBg } from '../../lib/border-glow-theme';
+
+const experiences = [
+  {
+    label: 'COHO',
+    period: '2025 · nine months',
+    body: 'Enterprise Angular and TypeScript codebase, C# .NET APIs, Playwright tests, agile rituals. Real forms, nested async lifecycles, edge cases in production data.',
+  },
+  {
+    label: 'Freelance',
+    period: 'Since 2023',
+    body: 'Scoped work. Invoiced clients. Delivered on time.',
+  },
+] as const;
+---
+
+<section
+  id="experience"
+  class="scroll-mt-[var(--site-header-height)] border-b-2 border-surface-border bg-surface-raised px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-28"
+  aria-labelledby="experience-heading"
+>
+  <div class="mx-auto max-w-[1400px] space-y-14">
+    <div data-scroll-wipe>
+      <SectionHeading eyebrow="Production experience" title="Real sprints, real delivery." id="experience-heading" />
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      {
+        experiences.map((item) => (
+          <div data-scroll-slam class="h-full">
+            <GlowWidgetShell class="h-full" backgroundColor={borderGlowAboutBg}>
+              <div class="flex h-full flex-col gap-4">
+                <div class="flex flex-wrap items-baseline justify-between gap-3">
+                  <p class="font-display text-2xl font-bold uppercase tracking-tight text-paper">{item.label}</p>
+                  <p class="font-mono text-[11px] uppercase tracking-[0.16em] text-paper/45">{item.period}</p>
+                </div>
+                <p class="text-[15px] leading-relaxed text-paper/70">{item.body}</p>
+              </div>
+            </GlowWidgetShell>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

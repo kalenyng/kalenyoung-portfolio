@@ -1,0 +1,123 @@
+<script>
+  import gsap from 'gsap';
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const markHeroReady = () => {
+    document.querySelector('#hero')?.setAttribute('data-hero-ready', '');
+  };
+
+  const showFinal = () => {
+    document.querySelectorAll('[data-hero-line]').forEach((el) => {
+      (el as HTMLElement).style.transform = 'none';
+      (el as HTMLElement).style.opacity = '1';
+      (el as HTMLElement).style.visibility = 'visible';
+    });
+    document.querySelectorAll('[data-hero-pop]').forEach((el) => {
+      (el as HTMLElement).style.opacity = '1';
+      (el as HTMLElement).style.transform = 'none';
+      (el as HTMLElement).style.visibility = 'visible';
+    });
+    document.querySelectorAll('[data-hero-stat]').forEach((el) => {
+      (el as HTMLElement).style.opacity = '1';
+      (el as HTMLElement).style.transform = 'none';
+      (el as HTMLElement).style.visibility = 'visible';
+    });
+    document.querySelectorAll('[data-hero-link]').forEach((el) => {
+      (el as HTMLElement).style.opacity = '1';
+      (el as HTMLElement).style.transform = 'none';
+      (el as HTMLElement).style.visibility = 'visible';
+    });
+    const badge = document.querySelector('[data-hero-badge]') as HTMLElement | null;
+    if (badge) {
+      badge.style.opacity = '1';
+      badge.style.transform = 'none';
+      badge.style.visibility = 'visible';
+    }
+    markHeroReady();
+  };
+
+  const runHandoff = () => {
+    const reveal = { visibility: 'visible' as const };
+
+    gsap.set('[data-hero-badge]', { y: 10, opacity: 0, visibility: 'hidden' });
+    gsap.set('[data-hero-line]', { yPercent: 18, opacity: 0, visibility: 'hidden' });
+    gsap.set('[data-hero-pop]', { y: 14, opacity: 0, visibility: 'hidden' });
+    gsap.set('[data-hero-stat]', { y: 16, opacity: 0, visibility: 'hidden' });
+    gsap.set('[data-hero-link]', { y: 8, opacity: 0, visibility: 'hidden' });
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'power2.out' },
+      onComplete: markHeroReady,
+    });
+
+    tl.to('[data-hero-badge]', { y: 0, opacity: 1, ...reveal, duration: 0.32 }, 0)
+      .to('[data-hero-line]', { yPercent: 0, opacity: 1, ...reveal, duration: 0.42, stagger: 0.05 }, 0.06)
+      .to('[data-hero-pop]', { y: 0, opacity: 1, ...reveal, duration: 0.36 }, 0.18)
+      .to('[data-hero-stat]', { y: 0, opacity: 1, ...reveal, duration: 0.34, stagger: 0.05 }, 0.24)
+      .to('[data-hero-link]', { y: 0, opacity: 1, ...reveal, duration: 0.28, stagger: 0.04 }, 0.34);
+  };
+
+  const runFull = () => {
+    const hero = document.querySelector('#hero');
+    if (!hero) {
+      showFinal();
+      return;
+    }
+
+    const lines = gsap.utils.toArray<HTMLElement>('[data-hero-line]');
+    const pops = gsap.utils.toArray<HTMLElement>('[data-hero-pop]');
+
+    gsap.set(lines, { yPercent: 115, opacity: 0, visibility: 'hidden' });
+    gsap.set(pops, { y: 28, opacity: 0, visibility: 'hidden' });
+    gsap.set('[data-hero-badge]', { y: 24, opacity: 0, visibility: 'hidden' });
+    gsap.set('[data-hero-stat]', { y: 40, opacity: 0, visibility: 'hidden' });
+    gsap.set('[data-hero-link]', { y: 16, opacity: 0, visibility: 'hidden' });
+
+    const reveal = { visibility: 'visible' as const };
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'power4.out' },
+      onComplete: markHeroReady,
+    });
+
+    tl.to('[data-hero-badge]', { y: 0, opacity: 1, ...reveal, duration: 0.45 }, 0.1)
+      .to(lines, { yPercent: 0, opacity: 1, ...reveal, duration: 0.72, stagger: 0.11 }, 0.22)
+      .to(pops, { y: 0, opacity: 1, ...reveal, duration: 0.55, stagger: 0.08 }, 0.55)
+      .to('[data-hero-stat]', { y: 0, opacity: 1, ...reveal, duration: 0.5, stagger: 0.09, ease: 'power3.out' }, 0.78)
+      .to('[data-hero-link]', { y: 0, opacity: 1, ...reveal, duration: 0.35, stagger: 0.06 }, 1.05);
+  };
+
+  const run = (event?: Event) => {
+    if (reduced) {
+      showFinal();
+      return;
+    }
+
+    const fromPreloader =
+      (event as CustomEvent<{ from?: string }> | undefined)?.detail?.from === 'preloader';
+
+    if (fromPreloader) {
+      runHandoff();
+      return;
+    }
+
+    runFull();
+  };
+
+  const scheduleRun = () => {
+    if (document.documentElement.classList.contains('loading')) {
+      window.addEventListener('pagereveal', run, { once: true });
+      return;
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => run(), { once: true });
+      return;
+    }
+
+    run();
+  };
+
+  scheduleRun();
+</script>

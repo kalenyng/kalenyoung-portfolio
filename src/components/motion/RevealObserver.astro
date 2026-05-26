@@ -1,0 +1,42 @@
+<script>
+  import { animate, inView } from '@motionone/dom';
+  import { MOTION_DURATION, MOTION_EASE } from '../../lib/motion';
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const markDone = (el: Element) => {
+    el.setAttribute('data-motion-done', '');
+  };
+
+  const bind = (el: Element) => {
+    if (reduced) {
+      markDone(el);
+      return;
+    }
+
+    inView(
+      el,
+      () => {
+        if (el.hasAttribute('data-motion-started')) return;
+        el.setAttribute('data-motion-started', '');
+        const delay = Number((el as HTMLElement).dataset.motionDelay ?? 0) / 1000;
+        void animate(
+          el,
+          { opacity: [0, 1], y: [8, 0] },
+          { duration: MOTION_DURATION, delay, easing: MOTION_EASE }
+        ).finished.then(() => markDone(el));
+      },
+      { amount: 0.2 }
+    );
+  };
+
+  const init = () => {
+    document.querySelectorAll('[data-motion-reveal]').forEach(bind);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+</script>

@@ -1,0 +1,58 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SectionHeading from '../ui/SectionHeading.astro';
+import FeaturedProject from '../ui/FeaturedProject.astro';
+import ProjectCard from '../ui/ProjectCard.astro';
+import Button from '../ui/Button.astro';
+
+interface Props {
+  flagship: CollectionEntry<'projects'>;
+  secondary: CollectionEntry<'projects'>[];
+}
+
+const { flagship, secondary } = Astro.props;
+const githubUrl = 'https://github.com/kalenyng';
+---
+
+<section
+  id="work"
+  class="scroll-mt-[var(--site-header-height)] border-b-2 border-surface-border bg-surface px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-28"
+  aria-labelledby="work-heading"
+>
+  <div class="mx-auto max-w-[1400px] space-y-16">
+    <div data-scroll-wipe>
+      <SectionHeading
+        eyebrow="Selected work"
+        title="From side projects to client delivery"
+        description="Freelance client projects delivered on time. Personal products I maintain and actively ship features to. Learning builds that prove I can carry product thinking end-to-end."
+        id="work-heading"
+      />
+    </div>
+
+    <div data-scroll-slam>
+      <FeaturedProject project={flagship} />
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+      {
+        secondary.map((project) => (
+          <div data-scroll-slam class="h-full">
+            <ProjectCard project={project} />
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="flex justify-center pt-2" data-scroll-slam>
+      <Button
+        href={githubUrl}
+        variant="outline"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="See more projects on GitHub (opens in a new tab)"
+      >
+        See more
+      </Button>
+    </div>
+  </div>
+</section>
