@@ -2,12 +2,10 @@
 import Button from '../ui/Button.astro';
 import LineWaves from '../effects/LineWaves.astro';
 import HeroSequence from '../motion/HeroSequence.astro';
-import CardNav from '../layout/CardNav.astro';
 import IconGithubMark from '../icons/IconGithubMark.astro';
 import IconLinkedinMark from '../icons/IconLinkedinMark.astro';
 import IconEmailOutline from '../icons/IconEmailOutline.astro';
 import IconDocumentDownload from '../icons/IconDocumentDownload.astro';
-import { cardNavItems, cardNavTheme } from '@/lib/card-nav-items';
 
 const contactEmail = 'kalenyoung03@gmail.com';
 const githubUrl = 'https://github.com/kalenyng';
@@ -26,6 +24,7 @@ const stats = [
 
 <section
   id="hero"
+  transition:animate="none"
   class="relative flex min-h-0 flex-col overflow-hidden border-b-2 border-surface-border md:min-h-[100dvh]"
   aria-labelledby="hero-heading"
 >
@@ -36,9 +35,12 @@ const stats = [
     Skip to content
   </a>
 
-  <CardNav brandName="Kalen Young" brandHref="/" items={cardNavItems} {...cardNavTheme} />
-
-  <div class="hero-bg pointer-events-none absolute inset-0" data-hero-bg aria-hidden="true">
+  <div
+    class="hero-bg pointer-events-none absolute inset-0 z-0"
+    data-hero-bg
+    transition:animate="none"
+    aria-hidden="true"
+  >
     <LineWaves
       speed={0.3}
       innerLineCount={32}

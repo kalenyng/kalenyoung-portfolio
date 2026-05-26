@@ -13,6 +13,11 @@ function loadGltf(): Promise<GLTF> {
   return gltfPromise;
 }
 
+/** Start fetching the GLB as early as possible (e.g. before the nav slot mounts). */
+export function preloadLogoModel(): Promise<void> {
+  return loadGltf().then(() => undefined).catch(() => undefined);
+}
+
 /** Cached parse; each caller gets a fresh clone for its own scene graph. */
 export async function cloneLogoModel(targetSize: number): Promise<Group | null> {
   try {

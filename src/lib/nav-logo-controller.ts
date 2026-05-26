@@ -1,4 +1,5 @@
 import type { NavScrollLogoHandle } from './nav-logo-scroll';
+import { preloadLogoModel } from './logo-gltf-cache';
 
 declare global {
   interface Window {
@@ -13,7 +14,7 @@ function findHost(): HTMLElement | null {
   return document.querySelector<HTMLElement>(HOST_SELECTOR);
 }
 
-function setState(host: HTMLElement, state: 'idle' | 'loading' | 'ready') {
+function setState(host: HTMLElement, state: 'idle' | 'loading' | 'ready' | 'failed') {
   host.dataset.navLogoState = state;
   if (state === 'ready') {
     document.documentElement.classList.add('nav-logo-ready');
@@ -34,11 +35,8 @@ async function waitForStableSlot(host: HTMLElement): Promise<void> {
 function mountHandle(handle: NavScrollLogoHandle, host: HTMLElement): void {
   handle.reattach(host);
   handle.renderOnce();
-  requestAnimationFrame(() => {
-    handle.renderOnce();
-    setState(host, 'ready');
-    window.dispatchEvent(new CustomEvent('nav-logo:ready', { detail: { handle } }));
-  });
+  setState(host, 'ready');
+  window.dispatchEvent(new CustomEvent('nav-logo:ready', { detail: { handle } }));
 }
 
 async function createStandalone(host: HTMLElement): Promise<NavScrollLogoHandle | null> {
@@ -64,7 +62,7 @@ async function createStandalone(host: HTMLElement): Promise<NavScrollLogoHandle 
     const { createHeaderScene } = await import('./header-scene');
     const handle = await createHeaderScene(canvas, host);
     if (!handle) {
-      setState(host, 'idle');
+      setState(host, 'failed');
       return null;
     }
 
@@ -113,12 +111,38 @@ export function setupNavLogoController(): void {
     void initNavLogoController();
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run, { once: true });
-  } else {
-    run();
+  if (document.documentElement.classList.contains('preloader-seen')) {
+    void preloadLogoModel();
+    void import('./header-scene');
   }
 
+  const onPageLoad = () => {
+    if (document.documentElement.classList.contains('loading')) return;
+
+    const host = findHost();
+    if (!host) return;
+
+    if (window.__navLogoHandle) {
+      mountHandle(window.__navLogoHandle, host);
+      window.__navLogoHandle.refresh();
+      return;
+    }
+
+    if (host.dataset.navLogoState === 'failed') {
+      host.dataset.navLogoState = 'idle';
+      window.__navLogoBoot = undefined;
+    }
+
+    void initNavLogoController();
+  };
+
+  run();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run, { once: true });
+  }
+
+  document.addEventListener('astro:page-load', onPageLoad);
   window.addEventListener('preloader:landed', run, { once: false });
   window.addEventListener('preloader:handoff', run, { once: false });
 }

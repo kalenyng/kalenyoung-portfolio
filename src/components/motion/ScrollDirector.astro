@@ -70,6 +70,7 @@
 
   const init = () => {
     if (reduced || isMobile) return;
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     initWipes();
     initSlams();
     initContactBanner();

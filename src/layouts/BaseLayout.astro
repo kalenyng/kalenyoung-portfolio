@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import Seo from '../components/seo/Seo.astro';
 import Preloader from '../components/Preloader.astro';
 import RevealObserver from '../components/motion/RevealObserver.astro';
@@ -91,6 +92,18 @@ const { title, description, path, image, noindex } = Astro.props;
         min-width: 5.5rem;
         text-align: center;
       }
+      html.loading .nav-brand__fallback {
+        opacity: 0;
+        visibility: hidden;
+      }
+      html.preloader-seen
+        .nav-brand__logo-slot:not(:has([data-nav-logo-state='ready'])):not(
+          :has([data-nav-logo-state='failed'])
+        )
+        .nav-brand__fallback {
+        opacity: 1;
+        visibility: visible;
+      }
       @media (max-width: 768px) {
         .nav-brand__logo-slot {
           width: 2rem;
@@ -145,6 +158,7 @@ const { title, description, path, image, noindex } = Astro.props;
       }
     </script>
     <Seo title={title} description={description} path={path} image={image} noindex={noindex} />
+    <ClientRouter />
     <slot name="head" />
   </head>
   <body class="relative">
@@ -163,5 +177,12 @@ const { title, description, path, image, noindex } = Astro.props;
     <slot />
     <RevealObserver />
     <ScrollDirector />
+    <script>
+      import { setupNavLogoController } from '@/lib/nav-logo-controller';
+      import { setupHeroLineWaves } from '@/lib/hero-line-waves-boot';
+
+      setupNavLogoController();
+      setupHeroLineWaves();
+    </script>
   </body>
 </html>

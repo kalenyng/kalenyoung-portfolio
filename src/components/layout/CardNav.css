@@ -4,7 +4,8 @@
   left: 50%;
   transform: translateX(-50%);
   width: min(calc(100% - 2.5rem), 800px);
-  z-index: 100;
+  z-index: var(--z-nav);
+  isolation: isolate;
   box-sizing: border-box;
 }
 
@@ -123,6 +124,8 @@
   object-fit: contain;
   pointer-events: none;
   z-index: 0;
+  opacity: 0;
+  visibility: hidden;
 }
 
 html.loading .nav-brand__fallback {
@@ -130,9 +133,23 @@ html.loading .nav-brand__fallback {
   visibility: hidden;
 }
 
+html.preloader-seen
+  .nav-brand__logo-slot:not(:has([data-nav-logo-state='ready'])):not(
+    :has([data-nav-logo-state='failed'])
+  )
+  .nav-brand__fallback {
+  opacity: 1;
+  visibility: visible;
+}
+
 html.preloader-seen .nav-brand__logo-slot:has([data-nav-logo-state='ready']) .nav-brand__fallback {
   opacity: 0;
   visibility: hidden;
+}
+
+.nav-brand__logo-slot:has([data-nav-logo-state='failed']) .nav-brand__fallback {
+  opacity: 1;
+  visibility: visible;
 }
 
 .nav-brand__scene {
@@ -149,6 +166,13 @@ html.preloader-seen .nav-brand__logo-slot:has([data-nav-logo-state='ready']) .na
   visibility: visible;
   opacity: 1;
   pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-brand__scene[data-nav-logo-state='ready'] {
+    transition: none;
+  }
 }
 
 .nav-brand__canvas {

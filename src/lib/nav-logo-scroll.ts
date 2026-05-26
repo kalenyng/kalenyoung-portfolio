@@ -19,8 +19,58 @@ export interface NavScrollLogoInput {
 export interface NavScrollLogoHandle {
   renderOnce: () => void;
   reattach: (host: HTMLElement) => void;
+  refresh: () => void;
   getCanvas: () => HTMLCanvasElement;
   dispose: () => void;
+}
+
+const ROTATION_STORAGE_KEY = 'portfolio-nav-logo-rotation-y';
+const TAU = Math.PI * 2;
+const LARGE_ROTATION_DELTA = 0.45;
+
+function readStoredRotationY(): number | null {
+  try {
+    const raw = sessionStorage.getItem(ROTATION_STORAGE_KEY);
+    if (raw == null) return null;
+    const value = Number(raw);
+    return Number.isFinite(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function storeRotationY(value: number): void {
+  try {
+    sessionStorage.setItem(ROTATION_STORAGE_KEY, String(value));
+  } catch {
+    /* ignore */
+  }
+}
+
+function shortestAngleDelta(from: number, to: number): number {
+  let delta = to - from;
+  delta = ((delta + Math.PI) % TAU + TAU) % TAU - Math.PI;
+  return delta;
+}
+
+function lerpAngle(from: number, to: number, t: number): number {
+  return from + shortestAngleDelta(from, to) * t;
+}
+
+function getScrollRotationRange(): number {
+  return window.location.pathname.startsWith('/projects/') ? Math.PI : TAU;
+}
+
+function targetRotationY(
+  baseRotationY: number,
+  scrollProgress: number,
+  scrollRotationRange = getScrollRotationRange()
+): number {
+  return baseRotationY + scrollProgress * scrollRotationRange;
+}
+
+function rotationSmoothing(delta: number): number {
+  return Math.abs(delta) > LARGE_ROTATION_DELTA ? 0.1 : 0.28;
 }
 
 export function attachNavScrollLoop(input: NavScrollLogoInput): NavScrollLogoHandle {
@@ -62,8 +112,21 @@ export function attachNavScrollLoop(input: NavScrollLogoInput): NavScrollLogoHan
     scrollProgress = Math.min(1, Math.max(0, -rect.top / scrollable));
   };
 
+  updateScroll();
+  let currentRotationY =
+    readStoredRotationY() ?? targetRotationY(baseRotationY, scrollProgress);
+
   const renderFrame = () => {
-    modelGroup.rotation.y = baseRotationY + scrollProgress * Math.PI * 2;
+    const targetY = targetRotationY(baseRotationY, scrollProgress);
+
+    if (reduced) {
+      currentRotationY = targetY;
+    } else {
+      const delta = shortestAngleDelta(currentRotationY, targetY);
+      currentRotationY = lerpAngle(currentRotationY, targetY, rotationSmoothing(delta));
+    }
+
+    modelGroup.rotation.y = currentRotationY;
     renderer.render(scene, camera);
   };
 
@@ -76,13 +139,24 @@ export function attachNavScrollLoop(input: NavScrollLogoInput): NavScrollLogoHan
     if (!reduced && !disposed) rafId = requestAnimationFrame(tick);
   };
 
+  const persistRotation = () => {
+    storeRotationY(currentRotationY);
+  };
+
+  const refresh = () => {
+    updateScroll();
+    resize();
+    renderFrame();
+  };
+
   resize();
-  updateScroll();
   renderFrame();
   if (!reduced) rafId = requestAnimationFrame(tick);
 
   window.addEventListener('scroll', updateScroll, { passive: true });
   window.addEventListener('resize', resize, { passive: true });
+  window.addEventListener('pagehide', persistRotation);
+  document.addEventListener('astro:page-load', refresh);
 
   const ro = new ResizeObserver(resize);
   ro.observe(host);
@@ -115,13 +189,17 @@ export function attachNavScrollLoop(input: NavScrollLogoInput): NavScrollLogoHan
       renderFrame();
     },
     getCanvas: () => renderer.domElement,
+    refresh,
     dispose: () => {
       if (disposed) return;
       disposed = true;
       if (rafId) cancelAnimationFrame(rafId);
       ro.disconnect();
+      persistRotation();
       window.removeEventListener('scroll', updateScroll);
       window.removeEventListener('resize', resize);
+      window.removeEventListener('pagehide', persistRotation);
+      document.removeEventListener('astro:page-load', refresh);
       modelRoot.traverse((obj) => {
         if (!(obj instanceof Mesh)) return;
         obj.geometry?.dispose();
