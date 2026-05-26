@@ -4,7 +4,10 @@ import Seo from '../components/seo/Seo.astro';
 import Preloader from '../components/Preloader.astro';
 import RevealObserver from '../components/motion/RevealObserver.astro';
 import ScrollDirector from '../components/motion/ScrollDirector.astro';
+import { isPreviewBuild } from '../lib/site-build';
 import '../styles/global.css';
+import ibmPlex400 from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2?url';
+import barlow800 from '@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -14,7 +17,10 @@ interface Props {
   noindex?: boolean;
 }
 
-const { title, description, path, image, noindex } = Astro.props;
+const { title, description, path, image, noindex: noindexProp } = Astro.props;
+const noindex = noindexProp ?? isPreviewBuild;
+const emailjsPublicKey = import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY ?? '';
+const isHome = path === '/';
 ---
 
 <!doctype html>
@@ -29,6 +35,7 @@ const { title, description, path, image, noindex } = Astro.props;
       var skipIntro =
         seenIntro || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (seenIntro) document.documentElement.classList.add('preloader-seen');
+      if (skipIntro) document.documentElement.classList.add('hero-static');
       if (!skipIntro) document.documentElement.classList.add('loading');
     </script>
     <style is:inline>
@@ -50,6 +57,14 @@ const { title, description, path, image, noindex } = Astro.props;
       html.loading body {
         overflow: hidden;
       }
+      @media (prefers-reduced-motion: reduce) {
+        html.loading #preloader {
+          display: none !important;
+        }
+        html.loading body {
+          overflow: auto;
+        }
+      }
       #hero:not([data-hero-ready]) [data-hero-line],
       #hero:not([data-hero-ready]) [data-hero-pop],
       #hero:not([data-hero-ready]) [data-hero-badge],
@@ -57,6 +72,19 @@ const { title, description, path, image, noindex } = Astro.props;
       #hero:not([data-hero-ready]) [data-hero-link] {
         opacity: 0;
         visibility: hidden;
+      }
+      html.hero-static #hero:not([data-hero-ready]) [data-hero-line],
+      html.hero-static #hero:not([data-hero-ready]) [data-hero-pop],
+      html.hero-static #hero:not([data-hero-ready]) [data-hero-badge],
+      html.hero-static #hero:not([data-hero-ready]) [data-hero-stat],
+      html.hero-static #hero:not([data-hero-ready]) [data-hero-link],
+      html.preloader-seen #hero:not([data-hero-ready]) [data-hero-line],
+      html.preloader-seen #hero:not([data-hero-ready]) [data-hero-pop],
+      html.preloader-seen #hero:not([data-hero-ready]) [data-hero-badge],
+      html.preloader-seen #hero:not([data-hero-ready]) [data-hero-stat],
+      html.preloader-seen #hero:not([data-hero-ready]) [data-hero-link] {
+        opacity: 1;
+        visibility: visible;
       }
       #preloader {
         display: none;
@@ -128,19 +156,30 @@ const { title, description, path, image, noindex } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <link
-      rel="preload"
-      href="/fonts/barlow-condensed-700.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <link rel="preload" href="/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={barlow800} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={ibmPlex400} as="font" type="font/woff2" crossorigin />
+    {
+      emailjsPublicKey && (
+        <link rel="preconnect" href="https://api.emailjs.com" crossorigin />
+      )
+    }
+    {
+      isHome && (
+        <link
+          rel="preload"
+          as="image"
+          href="/images/projects/propza-cover.webp"
+          type="image/webp"
+        />
+      )
+    }
     <style is:inline>
       @font-face {
         font-family: 'Barlow Condensed';
         font-style: normal;
         font-weight: 700;
-        font-display: block;
+        font-display: swap;
         src: url('/fonts/barlow-condensed-700.woff2') format('woff2');
       }
     </style>

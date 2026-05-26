@@ -169,6 +169,10 @@ export function createLineWaves(
   } = options;
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) {
+    container.hidden = true;
+    return null;
+  }
 
   let renderer: Renderer;
   try {
@@ -241,6 +245,7 @@ export function createLineWaves(
   const mesh = new Mesh(gl, { geometry, program });
   container.appendChild(gl.canvas);
   gl.canvas.classList.add('line-waves-container__canvas');
+  gl.canvas.setAttribute('aria-hidden', 'true');
 
   window.addEventListener('resize', resize);
   resize();

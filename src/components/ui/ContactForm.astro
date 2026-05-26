@@ -23,7 +23,7 @@ const label =
   <div class="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
     <div>
       <label class={label} for="contact-name">Name</label>
-      <div class="field-wrap">
+      <div class="field-wrap" data-field-wrap="name">
         <input
           id="contact-name"
           name="name"
@@ -33,13 +33,15 @@ const label =
           minlength="2"
           maxlength="120"
           placeholder="Your name"
+          aria-describedby="contact-name-error"
         />
       </div>
+      <p id="contact-name-error" class="field-error" data-field-error="name" hidden></p>
     </div>
 
     <div>
       <label class={label} for="contact-email">Email</label>
-      <div class="field-wrap">
+      <div class="field-wrap" data-field-wrap="email">
         <input
           id="contact-email"
           name="email"
@@ -48,8 +50,10 @@ const label =
           required
           maxlength="254"
           placeholder="you@company.com"
+          aria-describedby="contact-email-error"
         />
       </div>
+      <p id="contact-email-error" class="field-error" data-field-error="email" hidden></p>
     </div>
   </div>
 
@@ -69,7 +73,7 @@ const label =
 
   <div class="mb-5">
     <label class={label} for="contact-message">Project details</label>
-    <div class="field-wrap">
+    <div class="field-wrap" data-field-wrap="message">
       <textarea
         id="contact-message"
         name="message"
@@ -78,8 +82,11 @@ const label =
         rows="4"
         class="min-h-[104px] resize-y"
         placeholder="Goals, stack, timeline, links — whatever helps me understand the work."
+        autocomplete="off"
+        aria-describedby="contact-message-error"
       />
     </div>
+    <p id="contact-message-error" class="field-error" data-field-error="message" hidden></p>
   </div>
 
   <button
@@ -101,7 +108,7 @@ const label =
         <span>.</span><span>.</span><span>.</span>
       </span>
       <span class="h-5 w-5 shrink-0" data-contact-loader-host>
-        <canvas data-contact-loader-canvas class="block h-full w-full"></canvas>
+        <canvas data-contact-loader-canvas class="block h-full w-full" aria-hidden="true"></canvas>
       </span>
     </span>
   </button>
@@ -126,6 +133,23 @@ const label =
 </form>
 
 <style>
+  .field-error {
+    margin: 0.375rem 0 0;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #e8610a;
+  }
+
+  .field-error[hidden] {
+    display: none;
+  }
+
+  .field-wrap[data-invalid] :is(input, textarea) {
+    border-color: #e8610a;
+  }
+
   .contact-honeypot {
     position: absolute;
     left: -9999px;
@@ -363,9 +387,75 @@ const label =
     return 'Submission failed.';
   };
 
+  type FieldKey = 'name' | 'email' | 'message';
+
+  const fieldValidators: Record<FieldKey, (value: string) => string | null> = {
+    name: (value) => {
+      if (!value.trim()) return 'Enter your name.';
+      if (value.trim().length < 2) return 'Name must be at least 2 characters.';
+      return null;
+    },
+    email: (value) => {
+      if (!value.trim()) return 'Enter your email.';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return 'Enter a valid email address.';
+      return null;
+    },
+    message: (value) => {
+      if (!value.trim()) return 'Add a few details about your project.';
+      return null;
+    },
+  };
+
+  const setFieldError = (key: FieldKey, message: string | null) => {
+    if (!form) return;
+    const input = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`#contact-${key}`);
+    const wrap = form.querySelector<HTMLElement>(`[data-field-wrap="${key}"]`);
+    const errorEl = form.querySelector<HTMLElement>(`[data-field-error="${key}"]`);
+    if (!input || !wrap || !errorEl) return;
+
+    if (message) {
+      wrap.dataset.invalid = 'true';
+      input.setAttribute('aria-invalid', 'true');
+      errorEl.textContent = message;
+      errorEl.removeAttribute('hidden');
+    } else {
+      delete wrap.dataset.invalid;
+      input.removeAttribute('aria-invalid');
+      errorEl.textContent = '';
+      errorEl.setAttribute('hidden', '');
+    }
+  };
+
+  const validateField = (key: FieldKey): boolean => {
+    if (!form) return true;
+    const input = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`#contact-${key}`);
+    if (!input) return true;
+    const message = fieldValidators[key](input.value);
+    setFieldError(key, message);
+    return message === null;
+  };
+
+  const validateAllFields = (): boolean => {
+    const results = (['name', 'email', 'message'] as const).map((key) => validateField(key));
+    return results.every(Boolean);
+  };
+
   if (form && statusEl && submitBtn && submitLoading && loaderHost && loaderCanvas) {
     const emailjsKey = form.dataset.emailjsKey ?? '';
     const mailtoEmail = form.dataset.mailtoEmail ?? '';
+
+    (['name', 'email', 'message'] as const).forEach((key) => {
+      const input = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`#contact-${key}`);
+      if (!input) return;
+
+      input.addEventListener('blur', () => {
+        if (input.value.trim() || input.hasAttribute('aria-invalid')) validateField(key);
+      });
+
+      input.addEventListener('input', () => {
+        if (input.hasAttribute('aria-invalid')) validateField(key);
+      });
+    });
     let spinnerHandle: Awaited<ReturnType<typeof import('@/lib/model-spinner-scene').createModelSpinnerScene>> = null;
     let spinnerWarmup: Promise<void> | null = null;
 
@@ -471,7 +561,7 @@ const label =
       e.preventDefault();
       hideStatus();
 
-      if (!form.reportValidity()) return;
+      if (!validateAllFields()) return;
       if (submitBtn.dataset.loading) return;
 
       const fd = new FormData(form);

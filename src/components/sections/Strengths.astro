@@ -1,5 +1,23 @@
 ---
 import MotionReveal from '../motion/MotionReveal.astro';
+
+const steps = [
+  {
+    number: '01',
+    title: 'Scoped delivery',
+    body: 'Clear scope, milestones, and a finish line you can plan around — client work that ships on time.',
+  },
+  {
+    number: '02',
+    title: 'Production habits',
+    body: 'Real sprints, code review, and the details that make a product feel intentional in production.',
+  },
+  {
+    number: '03',
+    title: 'Honest scope',
+    body: 'Straight talk on what is feasible, what is not, and the next step — fewer surprises.',
+  },
+] as const;
 ---
 
 <section
@@ -8,24 +26,52 @@ import MotionReveal from '../motion/MotionReveal.astro';
   aria-labelledby="how-i-work-heading"
 >
   <div class="mx-auto max-w-[1400px]">
-    <MotionReveal class="max-w-2xl space-y-8" data-scroll-wipe>
-      <div class="space-y-5">
-        <p class="brutal-label">How I work</p>
-        <h2
-          id="how-i-work-heading"
-          class="font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold uppercase leading-[0.92] tracking-tight text-paper"
-        >
-          Built for people who are busy.
-        </h2>
-        <p class="max-w-xl text-[17px] leading-relaxed text-paper/75">
-          Service background taught me: real people interact with tools when they're tired or rushed. That shaped how I
-          think about shipping.
-        </p>
-        <p class="max-w-xl text-[17px] leading-relaxed text-paper/75">
-          What you get: scoped client work that ships on time. Production habits from real sprints. Honest conversations
-          about what's feasible and what's not. Fewer surprises, clearer next steps.
-        </p>
-      </div>
-    </MotionReveal>
+    <div class="grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-16">
+      <MotionReveal class="space-y-8" data-scroll-wipe>
+        <div class="space-y-5">
+          <p class="brutal-label">How I work</p>
+          <h2
+            id="how-i-work-heading"
+            class="font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold uppercase leading-[0.92] tracking-tight text-paper"
+          >
+            Built for people who are busy.
+          </h2>
+          <p class="max-w-xl text-[17px] leading-relaxed text-paper/75">
+            Service background taught me: real people interact with tools when they're tired or rushed. That shaped how I
+            think about shipping.
+          </p>
+          <p class="max-w-xl text-[17px] leading-relaxed text-paper/75">
+            What you get: scoped client work that ships on time. Production habits from real sprints. Honest conversations
+            about what's feasible and what's not. Fewer surprises, clearer next steps.
+          </p>
+        </div>
+      </MotionReveal>
+
+      <MotionReveal delay={80} data-scroll-wipe>
+        <ol class="space-y-0 border-2 border-surface-border bg-surface-raised" aria-label="How Kalen works with teams">
+          {
+            steps.map((step, i) => (
+              <li
+                class:list={[
+                  'flex gap-5 p-5 sm:gap-6 sm:p-6',
+                  i > 0 && 'border-t-2 border-surface-border',
+                ]}
+              >
+                <span
+                  class="font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-accent"
+                  aria-hidden="true"
+                >
+                  {step.number}
+                </span>
+                <div class="min-w-0 space-y-2">
+                  <h3 class="font-display text-lg font-bold uppercase tracking-tight text-paper">{step.title}</h3>
+                  <p class="text-[15px] leading-relaxed text-paper/65">{step.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </MotionReveal>
+    </div>
   </div>
 </section>

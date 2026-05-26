@@ -30,17 +30,27 @@ const glowProps = {
 };
 ---
 
-<div
-  class:list={['h-full border-2 border-surface-border md:hidden', className]}
-  style={{ backgroundColor }}
->
-  <div class={innerClass}>
-    <slot />
+<div class="h-full" data-glow-shell>
+  <div
+    data-glow-static
+    class:list={['h-full border-2 border-surface-border min-[769px]:hidden', className]}
+    style={{ backgroundColor }}
+  >
+    <div class={innerClass}>
+      <slot />
+    </div>
+  </div>
+
+  <div data-glow-enhanced class="hidden h-full min-[769px]:block">
+    <BorderGlow client:media="(min-width: 769px)" className={`h-full ${className ?? ''}`} {...glowProps}>
+      <div class={innerClass}>
+        <slot />
+      </div>
+    </BorderGlow>
   </div>
 </div>
 
-<BorderGlow client:media="(min-width: 769px)" className={`hidden md:block h-full ${className ?? ''}`} {...glowProps}>
-  <div class={innerClass}>
-    <slot />
-  </div>
-</BorderGlow>
+<script>
+  import { setupGlowWidgetA11y } from '@/lib/glow-widget-a11y';
+  setupGlowWidgetA11y();
+</script>

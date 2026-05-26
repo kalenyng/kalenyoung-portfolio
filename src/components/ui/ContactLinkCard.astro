@@ -16,6 +16,7 @@ export interface Props {
 const { href, title, description, meta, external = false, brand } = Astro.props;
 
 const isPdf = href.split('?')[0]?.endsWith('.pdf') ?? false;
+const opensNewTab = external || isPdf;
 const hasBrand = Boolean(brand);
 
 const base =
@@ -30,8 +31,8 @@ const iconWrap = 'flex shrink-0 items-center justify-center text-paper/70 motion
 <a
   href={href}
   class:list={[base, layout]}
-  target={external ? '_blank' : undefined}
-  rel={external ? 'noopener noreferrer' : undefined}
+  target={opensNewTab ? '_blank' : undefined}
+  rel={opensNewTab ? 'noopener noreferrer' : undefined}
   download={isPdf ? '' : undefined}
 >
   {

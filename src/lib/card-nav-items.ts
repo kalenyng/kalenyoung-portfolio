@@ -22,7 +22,12 @@ export const cardNavItems = [
     links: [
       { label: 'Email', href: 'mailto:kalenyoung03@gmail.com', ariaLabel: 'Email Kalen Young' },
       { label: 'LinkedIn', href: 'https://www.linkedin.com/in/kalen-young', ariaLabel: 'LinkedIn profile', external: true },
-      { label: 'CV', href: '/docs/kalen-young-fullstack.pdf', ariaLabel: 'Download CV' },
+      {
+        label: 'CV',
+        href: '/docs/kalen-young-fullstack.pdf',
+        ariaLabel: 'Download CV (opens in a new tab)',
+        external: true,
+      },
     ],
   },
 ] as const;

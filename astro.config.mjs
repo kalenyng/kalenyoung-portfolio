@@ -11,6 +11,9 @@ export default defineConfig({
   site: 'https://kalenyoung.dev',
 
   vite: {
+    define: {
+      __PREVIEW_BUILD__: JSON.stringify(process.env.VERCEL_ENV === 'preview'),
+    },
     plugins: [tailwindcss()],
     optimizeDeps: {
       exclude: ['sharp'],

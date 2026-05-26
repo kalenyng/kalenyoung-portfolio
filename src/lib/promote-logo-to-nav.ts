@@ -24,6 +24,7 @@ export function promotePreloaderToNav(
   navHost.querySelector('canvas')?.remove();
   navHost.appendChild(canvas);
   canvas.className = 'nav-brand__canvas';
+  canvas.setAttribute('aria-hidden', 'true');
   canvas.removeAttribute('id');
 
   const meshScale = modelRoot.scale.x;

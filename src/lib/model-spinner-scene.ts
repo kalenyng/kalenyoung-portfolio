@@ -23,6 +23,7 @@ export async function createModelSpinnerScene(
   host: HTMLElement
 ): Promise<ModelSpinnerHandle | null> {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  canvas.setAttribute('aria-hidden', 'true');
 
   let renderer: WebGLRenderer;
   try {

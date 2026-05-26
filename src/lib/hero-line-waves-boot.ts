@@ -60,14 +60,23 @@ export function setupHeroLineWaves(): void {
   bootSetup = true;
 
   const run = () => {
-    void bootHeroLineWaves();
+    const start = () => void bootHeroLineWaves();
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(start, { timeout: 2500 });
+    } else {
+      window.setTimeout(start, 1);
+    }
   };
+
+  const onReveal = () => run();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', run, { once: true });
   } else {
     run();
   }
+
+  window.addEventListener('pagereveal', onReveal, { once: true });
 
   document.addEventListener('astro:before-preparation', disposeHeroLineWaves);
   document.addEventListener('astro:page-load', run);

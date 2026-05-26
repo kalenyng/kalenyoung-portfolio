@@ -36,23 +36,26 @@ const githubUrl = 'https://github.com/kalenyng';
     <div class="grid gap-6 md:grid-cols-2">
       {
         secondary.map((project) => (
-          <div data-scroll-slam class="h-full">
+          <div class="h-full">
             <ProjectCard project={project} />
           </div>
         ))
       }
     </div>
 
-    <div class="flex justify-center pt-2" data-scroll-slam>
+    <div class="flex flex-col items-center gap-2 pt-2" data-scroll-slam>
       <Button
         href={githubUrl}
         variant="outline"
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="See more projects on GitHub (opens in a new tab)"
+        aria-label="See all work on GitHub (opens in a new tab)"
       >
-        See more
+        See all work on GitHub
       </Button>
+      <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/40">
+        Repos, experiments, and smaller builds
+      </p>
     </div>
   </div>
 </section>

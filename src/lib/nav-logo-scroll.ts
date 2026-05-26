@@ -168,6 +168,7 @@ export function attachNavScrollLoop(input: NavScrollLogoInput): NavScrollLogoHan
 
       const canvas = renderer.domElement;
       canvas.className = 'nav-brand__canvas';
+      canvas.setAttribute('aria-hidden', 'true');
 
       if (host === newHost && canvas.parentElement === newHost) {
         resize();

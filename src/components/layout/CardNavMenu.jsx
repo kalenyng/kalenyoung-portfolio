@@ -228,7 +228,12 @@ const CardNavMenu = ({
 
   return (
     <div ref={containerRef} className={`card-nav-container ${className}`}>
-      <nav ref={navRef} className={`card-nav ${isExpanded ? 'open' : ''}`} style={{ backgroundColor: baseColor }}>
+      <nav
+        ref={navRef}
+        className={`card-nav ${isExpanded ? 'open' : ''}`}
+        style={{ backgroundColor: baseColor }}
+        aria-label="Main navigation"
+      >
         <div className="card-nav-top">
           {logo}
 
@@ -254,7 +259,12 @@ const CardNavMenu = ({
           </button>
         </div>
 
-        <div id="card-nav-menu" className="card-nav-content" aria-hidden={!isExpanded}>
+        <div
+          id="card-nav-menu"
+          className="card-nav-content"
+          aria-hidden={!isExpanded}
+          inert={!isExpanded ? '' : undefined}
+        >
           {(items || []).slice(0, 3).map((item, idx) => (
             <div
               key={`${item.label}-${idx}`}

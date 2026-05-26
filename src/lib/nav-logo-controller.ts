@@ -70,6 +70,7 @@ async function createStandalone(host: HTMLElement): Promise<NavScrollLogoHandle 
   window.__navLogoBoot = (async () => {
     const canvas = document.createElement('canvas');
     canvas.className = 'nav-brand__canvas';
+    canvas.setAttribute('aria-hidden', 'true');
     host.appendChild(canvas);
 
     const { createHeaderScene } = await import('./header-scene');

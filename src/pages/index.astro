@@ -1,13 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
-import CardNav from '../components/layout/CardNav.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
 import Hero from '../components/sections/Hero.astro';
 import ProductionExperience from '../components/sections/ProductionExperience.astro';
 import FeaturedProjects from '../components/sections/FeaturedProjects.astro';
 import Strengths from '../components/sections/Strengths.astro';
 import Contact from '../components/sections/Contact.astro';
-import { cardNavItems, cardNavTheme } from '@/lib/card-nav-items';
 import { getCollection } from 'astro:content';
 
 const projects = await getCollection('projects');
@@ -34,8 +33,8 @@ const description =
 ---
 
 <BaseLayout {title} {description} path="/">
-  <CardNav brandName="Kalen Young" brandHref="/" items={cardNavItems} {...cardNavTheme} />
-  <main id="main">
+  <SiteHeader />
+  <main id="main" tabindex="-1">
     <Hero />
     <ProductionExperience />
     <FeaturedProjects flagship={flagship} secondary={secondary} />

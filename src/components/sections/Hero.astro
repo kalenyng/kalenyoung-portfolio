@@ -16,9 +16,17 @@ const inlineLinkClass =
   'group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-paper/45 motion-safe:hover:bg-accent motion-safe:hover:text-surface motion-safe:hover:px-2 motion-safe:hover:-mx-2 focus-visible:text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent';
 
 const stats = [
-  { value: '3+', label: 'Years building for clients and teams' },
-  { value: '10+', label: 'Live projects shipped or in production' },
-  { value: 'UTC+2', label: 'Durban · UK-connected · remote-first' },
+  {
+    value: '3+',
+    label: 'Years in client & team delivery',
+    detail: 'Freelance since 2023',
+  },
+  {
+    value: '10+',
+    label: 'Live projects shipped or in production',
+    detail: 'Includes client and personal builds',
+  },
+  { value: 'UTC+2', label: 'Durban · UK-connected · remote-first', detail: null },
 ] as const;
 ---
 
@@ -77,10 +85,11 @@ const stats = [
           id="hero-heading"
           class="font-display max-w-[12ch] text-[clamp(3.25rem,16vw,12rem)] font-extrabold uppercase leading-[0.85] tracking-tight text-paper sm:text-[clamp(4.5rem,18vw,12rem)]"
         >
-          <span class="block overflow-hidden pb-1">
+          <span class="sr-only">Frontend developer.</span>
+          <span class="block overflow-hidden pb-1" aria-hidden="true">
             <span data-hero-line class="inline-block opacity-0">Frontend</span>
           </span>
-          <span class="block overflow-hidden pb-1">
+          <span class="block overflow-hidden pb-1" aria-hidden="true">
             <span data-hero-line class="inline-block text-accent opacity-0">developer.</span>
           </span>
         </h1>
@@ -88,7 +97,14 @@ const stats = [
         <div data-hero-pop class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap translate-y-7 opacity-0">
           <Button href="/#contact" variant="primary" class="w-full sm:w-auto">Send a brief</Button>
           <Button href="/#work" variant="outline" class="w-full sm:w-auto">Selected work</Button>
-          <Button href={cvUrl} variant="ghost" download class="w-full sm:w-auto">
+          <Button
+            href={cvUrl}
+            variant="ghost"
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full sm:w-auto"
+          >
             <IconDocumentDownload class="h-4 w-4" />
             CV (PDF)
           </Button>
@@ -107,6 +123,11 @@ const stats = [
             >
               <p class="font-display text-2xl font-bold tabular-nums tracking-tight text-paper sm:text-5xl lg:text-6xl">{item.value}</p>
               <p class="mt-1.5 max-w-[16rem] text-xs leading-snug text-paper/50 sm:mt-2 sm:text-base">{item.label}</p>
+              {
+                item.detail && (
+                  <p class="mt-1 max-w-[16rem] text-[10px] leading-snug text-paper/35 sm:text-xs">{item.detail}</p>
+                )
+              }
             </div>
           ))
         }

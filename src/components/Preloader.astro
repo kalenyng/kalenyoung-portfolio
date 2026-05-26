@@ -149,6 +149,12 @@
     pointer-events: none;
     opacity: 0;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    #preloader {
+      display: none !important;
+    }
+  }
 </style>
 
 <script>
@@ -162,6 +168,7 @@
   } from '@/lib/preloader-flight';
   import { adoptNavLogoHandle } from '@/lib/nav-logo-controller';
   import { promotePreloaderToNav } from '@/lib/promote-logo-to-nav';
+  import { prefersReducedMotion } from '@/lib/motion-prefs';
   import {
     hasSeenPreloader,
     markPreloaderSeen,
@@ -183,7 +190,7 @@
   const progressEl = document.querySelector<HTMLElement>('[data-preloader-progress]');
   const skipBtn = document.querySelector<HTMLButtonElement>('[data-preloader-skip]');
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reducedMotion = prefersReducedMotion();
 
   let teardownScene: (() => void) | null = null;
   let dismissed = false;
@@ -228,14 +235,11 @@
   const scheduleSkipButton = () => {
     const revealSkip = () => showSkipButton();
 
-    if (document.readyState === 'complete') {
-      revealSkip();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', revealSkip, { once: true });
     } else {
-      window.addEventListener('load', revealSkip, { once: true });
+      revealSkip();
     }
-
-    // Fallback if load hangs on slow networks
-    window.setTimeout(revealSkip, 4000);
   };
 
   const viewportSize = () => ({
@@ -249,7 +253,7 @@
 
   const dismissWhenIntroSkipped = () => {
     dismissImmediately({
-      rememberSession: hasSeenPreloader() || prefersReducedMotion,
+      rememberSession: hasSeenPreloader() || reducedMotion,
     });
   };
 
@@ -315,6 +319,11 @@
       };
 
       rafId = requestAnimationFrame(tick);
+
+      if (reducedMotion) {
+        dismissImmediately({ rememberSession: true });
+        return;
+      }
 
       let handoffDone = false;
       let promoted = false;

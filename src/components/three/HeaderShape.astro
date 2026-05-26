@@ -7,7 +7,7 @@ const { class: className } = Astro.props;
 ---
 
 <div class:list={['header-scene', className]} data-header-scene aria-hidden="true">
-  <canvas data-header-canvas class="header-scene__canvas"></canvas>
+  <canvas data-header-canvas class="header-scene__canvas" aria-hidden="true"></canvas>
 </div>
 
 <script>

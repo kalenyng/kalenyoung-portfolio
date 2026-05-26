@@ -119,8 +119,19 @@
     runOnce();
   };
 
+  const shouldShowHeroImmediately = () =>
+    reduced ||
+    document.documentElement.classList.contains('hero-static') ||
+    document.documentElement.classList.contains('preloader-seen');
+
   const scheduleRun = () => {
     if (!document.querySelector('#hero')) return;
+
+    if (shouldShowHeroImmediately()) {
+      showFinal();
+      document.addEventListener('astro:page-load', onClientNavHero);
+      return;
+    }
 
     if (shouldWaitForPreloader()) {
       window.addEventListener(
