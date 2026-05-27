@@ -30,17 +30,18 @@
   right: 0;
   height: 60px;
   z-index: 2;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem 0.55rem 1rem;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem 0.55rem;
 }
 
 .hamburger-menu {
-  grid-column: 1;
-  grid-row: 1;
-  justify-self: start;
+  position: relative;
+  z-index: 2;
+  flex: 0 0 2.25rem;
+  width: 2.25rem;
   height: auto;
   min-height: 2.25rem;
   display: flex;
@@ -51,7 +52,7 @@
   gap: 6px;
   border: none;
   background: transparent;
-  padding: 0 0.25rem;
+  padding: 0;
   font: inherit;
   color: inherit;
 }
@@ -80,14 +81,17 @@
 }
 
 .logo-container {
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 0;
-  width: 100%;
+  width: 11.5rem;
+  max-width: calc(100% - 8.5rem);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .nav-brand {
@@ -99,6 +103,7 @@
   text-decoration: none;
   color: #e8e4dc;
   transition: opacity 0.2s ease;
+  pointer-events: auto;
 }
 
 .nav-brand:hover {
@@ -115,43 +120,6 @@
   contain: layout paint style;
 }
 
-.nav-brand__fallback {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0;
-  visibility: hidden;
-}
-
-html.loading .nav-brand__fallback {
-  opacity: 0;
-  visibility: hidden;
-}
-
-html.preloader-seen
-  .nav-brand__logo-slot:not(:has([data-nav-logo-state='ready'])):not(
-    :has([data-nav-logo-state='failed'])
-  )
-  .nav-brand__fallback {
-  opacity: 1;
-  visibility: visible;
-}
-
-html.preloader-seen .nav-brand__logo-slot:has([data-nav-logo-state='ready']) .nav-brand__fallback {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.nav-brand__logo-slot:has([data-nav-logo-state='failed']) .nav-brand__fallback {
-  opacity: 1;
-  visibility: visible;
-}
-
 .nav-brand__scene {
   position: absolute;
   inset: 0;
@@ -159,26 +127,17 @@ html.preloader-seen .nav-brand__logo-slot:has([data-nav-logo-state='ready']) .na
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  z-index: 1;
 }
 
 .nav-brand__scene[data-nav-logo-state='ready'] {
   visibility: visible;
   opacity: 1;
   pointer-events: none;
-  transition: opacity 0.15s ease;
 }
 
 .nav-brand__scene[data-nav-logo-handoff='true'] {
   opacity: 1;
   visibility: visible;
-  transition: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nav-brand__scene[data-nav-logo-state='ready'] {
-    transition: none;
-  }
 }
 
 .nav-brand__canvas {
@@ -189,7 +148,7 @@ html.preloader-seen .nav-brand__logo-slot:has([data-nav-logo-state='ready']) .na
 }
 
 .nav-brand__name {
-  flex: 0 0 8.5rem;
+  flex: 1 1 8.5rem;
   width: 8.5rem;
   min-width: 8.5rem;
   max-width: 8.5rem;
@@ -204,9 +163,9 @@ html.preloader-seen .nav-brand__logo-slot:has([data-nav-logo-state='ready']) .na
 }
 
 .card-nav-cta-button {
-  grid-column: 3;
-  grid-row: 1;
-  justify-self: end;
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -312,39 +271,42 @@ html.preloader-seen .nav-brand__logo-slot:has([data-nav-logo-state='ready']) .na
   }
 
   .card-nav-top {
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    gap: 0.5rem;
-    padding: 0.5rem 0.65rem;
+    gap: 0.35rem;
+    padding: 0.5rem 0.5rem 0.55rem;
   }
 
   .logo-container {
-    grid-column: 1;
-    justify-self: start;
+    width: 10.25rem;
+    max-width: calc(100% - 7.75rem);
   }
 
   .card-nav-cta-button {
-    grid-column: 2;
-    justify-self: end;
-    padding: 0.4rem 0.55rem;
+    min-width: 4.75rem;
+    padding: 0.4rem 0.5rem;
     font-size: 9px;
     letter-spacing: 0.12em;
   }
 
   .hamburger-menu {
-    grid-column: 3;
-    justify-self: end;
+    flex-basis: 2rem;
+    width: 2rem;
+  }
+
+  .hamburger-line {
+    width: 26px;
   }
 
   .nav-brand {
     width: 10.25rem;
+    gap: 0.5rem;
   }
 
   .nav-brand__name {
-    flex-basis: 7.5rem;
-    width: 7.5rem;
-    min-width: 7.5rem;
-    max-width: 7.5rem;
-    font-size: 0.9375rem;
+    flex: 1 1 6.75rem;
+    width: 6.75rem;
+    min-width: 6.75rem;
+    max-width: 6.75rem;
+    font-size: 0.875rem;
   }
 
   .nav-brand__logo-slot {

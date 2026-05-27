@@ -24,28 +24,8 @@ export interface NavScrollLogoHandle {
   dispose: () => void;
 }
 
-const ROTATION_STORAGE_KEY = 'portfolio-nav-logo-rotation-y';
 const TAU = Math.PI * 2;
 const LARGE_ROTATION_DELTA = 0.45;
-
-function readStoredRotationY(): number | null {
-  try {
-    const raw = sessionStorage.getItem(ROTATION_STORAGE_KEY);
-    if (raw == null) return null;
-    const value = Number(raw);
-    return Number.isFinite(value) ? value : null;
-  } catch {
-    return null;
-  }
-}
-
-function storeRotationY(value: number): void {
-  try {
-    sessionStorage.setItem(ROTATION_STORAGE_KEY, String(value));
-  } catch {
-    /* ignore */
-  }
-}
 
 function shortestAngleDelta(from: number, to: number): number {
   let delta = to - from;
@@ -113,8 +93,7 @@ export function attachNavScrollLoop(input: NavScrollLogoInput): NavScrollLogoHan
   };
 
   updateScroll();
-  let currentRotationY =
-    readStoredRotationY() ?? targetRotationY(baseRotationY, scrollProgress);
+  let currentRotationY = targetRotationY(baseRotationY, scrollProgress);
 
   const renderFrame = () => {
     const targetY = targetRotationY(baseRotationY, scrollProgress);
@@ -139,10 +118,6 @@ export function attachNavScrollLoop(input: NavScrollLogoInput): NavScrollLogoHan
     if (!reduced && !disposed) rafId = requestAnimationFrame(tick);
   };
 
-  const persistRotation = () => {
-    storeRotationY(currentRotationY);
-  };
-
   const refresh = () => {
     updateScroll();
     resize();
@@ -155,7 +130,6 @@ export function attachNavScrollLoop(input: NavScrollLogoInput): NavScrollLogoHan
 
   window.addEventListener('scroll', updateScroll, { passive: true });
   window.addEventListener('resize', resize, { passive: true });
-  window.addEventListener('pagehide', persistRotation);
   document.addEventListener('astro:page-load', refresh);
 
   const ro = new ResizeObserver(resize);
@@ -196,10 +170,8 @@ export function attachNavScrollLoop(input: NavScrollLogoInput): NavScrollLogoHan
       disposed = true;
       if (rafId) cancelAnimationFrame(rafId);
       ro.disconnect();
-      persistRotation();
       window.removeEventListener('scroll', updateScroll);
       window.removeEventListener('resize', resize);
-      window.removeEventListener('pagehide', persistRotation);
       document.removeEventListener('astro:page-load', refresh);
       modelRoot.traverse((obj) => {
         if (!(obj instanceof Mesh)) return;

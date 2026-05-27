@@ -235,16 +235,6 @@ const CardNavMenu = ({
         aria-label="Main navigation"
       >
         <div className="card-nav-top">
-          {logo}
-
-          <a
-            href={ctaHref}
-            className="card-nav-cta-button"
-            style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
-          >
-            {ctaLabel}
-          </a>
-
           <button
             type="button"
             className={`hamburger-menu ${isHamburgerOpen ? 'open' : ''}`}
@@ -257,6 +247,16 @@ const CardNavMenu = ({
             <div className="hamburger-line" />
             <div className="hamburger-line" />
           </button>
+
+          {logo}
+
+          <a
+            href={ctaHref}
+            className="card-nav-cta-button"
+            style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+          >
+            {ctaLabel}
+          </a>
         </div>
 
         <div

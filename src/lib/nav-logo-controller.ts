@@ -40,6 +40,7 @@ function mountHandle(handle: NavScrollLogoHandle, host: HTMLElement, instant = f
   handle.reattach(host);
   handle.renderOnce();
   setState(host, 'ready');
+  window.dispatchEvent(new CustomEvent('nav-logo:ready', { detail: { handle } }));
 
   if (instant) {
     host.style.opacity = '1';
@@ -48,8 +49,6 @@ function mountHandle(handle: NavScrollLogoHandle, host: HTMLElement, instant = f
       delete host.dataset.navLogoHandoff;
     });
   }
-
-  window.dispatchEvent(new CustomEvent('nav-logo:ready', { detail: { handle } }));
 }
 
 async function createStandalone(host: HTMLElement): Promise<NavScrollLogoHandle | null> {
@@ -120,6 +119,12 @@ let controllerSetup = false;
 export function setupNavLogoController(): void {
   if (controllerSetup) return;
   controllerSetup = true;
+
+  try {
+    sessionStorage.removeItem('portfolio-nav-logo-rotation-y');
+  } catch {
+    /* ignore */
+  }
 
   const run = () => {
     const host = findHost();

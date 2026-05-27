@@ -125,18 +125,6 @@ const isHome = path === '/';
         min-width: 5.5rem;
         text-align: center;
       }
-      html.loading .nav-brand__fallback {
-        opacity: 0;
-        visibility: hidden;
-      }
-      html.preloader-seen
-        .nav-brand__logo-slot:not(:has([data-nav-logo-state='ready'])):not(
-          :has([data-nav-logo-state='failed'])
-        )
-        .nav-brand__fallback {
-        opacity: 1;
-        visibility: visible;
-      }
       @media (max-width: 768px) {
         .nav-brand__logo-slot {
           width: 2rem;
@@ -146,11 +134,11 @@ const isHome = path === '/';
           width: 10.25rem;
         }
         .nav-brand__name {
-          flex-basis: 7.5rem;
-          width: 7.5rem;
-          min-width: 7.5rem;
-          max-width: 7.5rem;
-          font-size: 0.9375rem;
+          flex: 1 1 6.75rem;
+          width: 6.75rem;
+          min-width: 6.75rem;
+          max-width: 6.75rem;
+          font-size: 0.875rem;
         }
       }
     </style>
@@ -187,12 +175,6 @@ const isHome = path === '/';
     <link rel="icon" type="image/svg+xml" href="/images/icons/logo-new.svg" />
     <script is:inline>
       if (seenIntro) {
-        var fallback = document.createElement('link');
-        fallback.rel = 'preload';
-        fallback.as = 'image';
-        fallback.href = '/images/nav-logo-fallback.png';
-        document.head.appendChild(fallback);
-
         var glb = document.createElement('link');
         glb.rel = 'preload';
         glb.as = 'fetch';
