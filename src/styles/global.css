@@ -153,11 +153,11 @@
   }
 
   .prose-case {
-    @apply max-w-2xl space-y-6 text-[17px] leading-relaxed text-paper/80;
+    @apply max-w-4xl space-y-4 text-[17px] leading-relaxed text-paper/80;
   }
 
   .prose-case h2 {
-    @apply mt-14 font-display text-2xl font-bold uppercase tracking-tight text-paper first:mt-0;
+    @apply mt-10 font-display text-2xl font-bold uppercase tracking-tight text-accent first:mt-0;
   }
 
   .prose-case p {
@@ -166,6 +166,30 @@
 
   .prose-case ul {
     @apply list-disc space-y-2 pl-5 text-paper/70;
+  }
+
+  .prose-case code {
+    @apply border border-surface-border bg-surface-raised px-1.5 py-0.5 font-mono text-[0.8em] text-paper/85;
+  }
+
+  .prose-case .callout {
+    @apply border-l-2 border-accent pl-4 text-paper/60;
+  }
+
+  .prose-case .stat-row {
+    @apply my-6 grid grid-cols-3 gap-px border border-surface-border bg-surface-border;
+  }
+
+  .prose-case .stat-row > div {
+    @apply flex flex-col gap-1 bg-surface-raised px-5 py-4;
+  }
+
+  .prose-case .stat-row .stat-number {
+    @apply font-display text-4xl font-bold leading-none text-accent;
+  }
+
+  .prose-case .stat-row .stat-label {
+    @apply font-mono text-[11px] uppercase tracking-[0.15em] text-paper/45;
   }
 
   form[data-contact-form] .field-wrap {

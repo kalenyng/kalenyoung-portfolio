@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEO Audit — kalenyoung.co.uk — 29 May 2026</title>
+  <style>
+    :root {
+      --bg: #0f0e0d;
+      --surface: #1a1917;
+      --surface2: #232220;
+      --border: #2e2c2a;
+      --accent: #e8610a;
+      --accent-dim: rgba(232,97,10,0.12);
+      --text: #f0ece6;
+      --text-muted: #8a857e;
+      --text-dim: #5a5650;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --radius: 10px;
+      --radius-sm: 6px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Layout */
+    .wrapper { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+    .section:last-of-type { border-bottom: none; }
+
+    /* Header */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 0;
+    }
+    .header-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+    .header-title { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+    .header-domain { font-size: 28px; font-weight: 700; color: var(--text); }
+    .header-meta { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .header-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-dim); border: 1px solid var(--accent); border-radius: 99px; padding: 4px 12px; font-size: 12px; color: var(--accent); font-weight: 600; white-space: nowrap; }
+
+    /* Score card */
+    .score-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .score-circle {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent) 0% 53%, var(--surface2) 53% 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .score-circle::before {
+      content: '';
+      width: 88px; height: 88px;
+      background: var(--surface);
+      border-radius: 50%;
+      position: absolute;
+    }
+    .score-number { position: relative; z-index: 1; font-size: 30px; font-weight: 800; color: var(--text); }
+    .score-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; text-align: center; position: relative; z-index: 1; }
+    .score-circle-inner { display: flex; flex-direction: column; align-items: center; }
+    .score-bars { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .score-bar-row { display: grid; grid-template-columns: 160px 1fr 56px; gap: 12px; align-items: center; }
+    .score-bar-label { font-size: 13px; color: var(--text-muted); }
+    .score-bar-track { background: var(--surface2); border-radius: 99px; height: 7px; overflow: hidden; }
+    .score-bar-fill { height: 100%; border-radius: 99px; background: var(--accent); transition: width 0.3s; }
+    .score-bar-value { font-size: 13px; font-weight: 600; color: var(--text); text-align: right; }
+
+    /* Priority badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+    .badge-critical { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+    .badge-high { background: rgba(234,179,8,0.12); color: #eab308; border: 1px solid rgba(234,179,8,0.3); }
+    .badge-medium { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+    .badge-low { background: rgba(107,114,128,0.12); color: #9ca3af; border: 1px solid rgba(107,114,128,0.25); }
+    .badge-pass { background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+
+    /* Findings */
+    .finding {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .finding-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .finding-header:hover { background: rgba(255,255,255,0.03); }
+    .finding-title { font-size: 15px; font-weight: 600; flex: 1; }
+    .finding-chevron { color: var(--text-dim); font-size: 13px; padding-top: 2px; transition: transform 0.2s; flex-shrink: 0; }
+    .finding.open .finding-chevron { transform: rotate(180deg); }
+    .finding-body { padding: 0 20px 20px; border-top: 1px solid var(--border); display: none; }
+    .finding.open .finding-body { display: block; }
+    .finding-body p { color: var(--text-muted); margin-top: 14px; font-size: 14px; }
+    .finding-body strong { color: var(--text); }
+    .finding-meta { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+    .finding-meta-row { font-size: 13px; }
+    .finding-meta-row .label { color: var(--text-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 2px; }
+    .finding-meta-row .value { color: var(--text-muted); }
+    .finding-meta-row .value code { background: var(--surface2); border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; font-size: 12px; color: var(--accent); font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+
+    /* Code blocks */
+    pre {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 12px;
+      color: #c9d1d9;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    }
+    code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 12px; }
+
+    /* Section headings */
+    h2 { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
+    h3 { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 12px; margin-top: 24px; }
+    h3:first-child { margin-top: 0; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; margin-top: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--surface2); }
+    th { padding: 10px 14px; text-align: left; color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-muted); vertical-align: top; }
+    td:first-child { color: var(--text); font-weight: 500; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) { background: rgba(255,255,255,0.015); }
+    td code { background: var(--surface2); border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; color: var(--accent); font-size: 11px; }
+
+    /* Sprint plan */
+    .sprint { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; }
+    .sprint-header { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .sprint-num { background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+    .sprint-title { font-size: 15px; font-weight: 600; }
+    .sprint-est { font-size: 12px; color: var(--text-dim); margin-left: auto; }
+    .sprint-body { padding: 14px 20px; }
+    .task-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .task-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--text-muted); }
+    .task-list li::before { content: '□'; color: var(--text-dim); flex-shrink: 0; margin-top: 1px; }
+    .task-list li code { color: var(--accent); font-size: 11px; }
+
+    /* Strengths */
+    .strength-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 16px; }
+    .strength-card { background: var(--surface); border: 1px solid rgba(34,197,94,0.2); border-radius: var(--radius-sm); padding: 14px 16px; }
+    .strength-card-title { font-size: 14px; font-weight: 600; color: var(--green); margin-bottom: 4px; }
+    .strength-card-body { font-size: 13px; color: var(--text-muted); }
+
+    /* Nav sidebar */
+    .layout { display: grid; grid-template-columns: 220px 1fr; gap: 32px; max-width: 1180px; margin: 0 auto; padding: 40px 24px; }
+    .sidebar { position: sticky; top: 24px; align-self: start; }
+    .sidebar nav { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .sidebar-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 10px; font-weight: 600; }
+    .sidebar nav a { display: block; font-size: 13px; color: var(--text-muted); padding: 5px 8px; border-radius: 4px; margin-bottom: 2px; }
+    .sidebar nav a:hover { background: var(--surface2); color: var(--text); text-decoration: none; }
+    .sidebar nav a.active { color: var(--accent); background: var(--accent-dim); }
+    .sidebar .score-mini { margin-top: 16px; text-align: center; }
+    .sidebar .score-mini .num { font-size: 36px; font-weight: 800; color: var(--accent); }
+    .sidebar .score-mini .lbl { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.07em; }
+    .main-content { min-width: 0; }
+
+    /* Utility */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+    .mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+    .text-muted { color: var(--text-muted); }
+    .text-dim { color: var(--text-dim); }
+    .tag { display: inline-block; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-size: 11px; color: var(--text-muted); margin: 2px; }
+    .alert { background: var(--accent-dim); border: 1px solid rgba(232,97,10,0.3); border-radius: var(--radius-sm); padding: 12px 16px; font-size: 13px; color: var(--text-muted); margin-top: 16px; }
+    .alert strong { color: var(--accent); }
+    .footer { border-top: 1px solid var(--border); padding: 32px 0; text-align: center; font-size: 13px; color: var(--text-dim); }
+    .footer a { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .score-card { grid-template-columns: 1fr; }
+      .score-bar-row { grid-template-columns: 120px 1fr 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="wrapper">
+    <div class="header-inner">
+      <div>
+        <div class="header-title">SEO Audit Report</div>
+        <div class="header-domain">kalenyoung.co.uk</div>
+        <div class="header-meta">Kalen Young — Freelance Frontend Developer · Durban, South Africa · 29 May 2026</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+        <div class="header-badge">Personal Portfolio</div>
+        <div class="header-badge" style="border-color:var(--border);color:var(--text-muted);background:var(--surface2);">Astro SSG · Vercel</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="score-mini">
+      <div class="num">53</div>
+      <div class="lbl">Health Score</div>
+    </div>
+    <nav style="margin-top:16px;">
+      <div class="sidebar-title">Contents</div>
+      <a href="#score">Health Score</a>
+      <a href="#critical">Critical (3)</a>
+      <a href="#high">High (8)</a>
+      <a href="#medium">Medium (12)</a>
+      <a href="#low">Low (10)</a>
+      <a href="#strengths">Strengths</a>
+      <a href="#plan">Action Plan</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+
+    <!-- Score -->
+    <section class="section" id="score">
+      <h2>SEO Health Score</h2>
+      <div class="score-card">
+        <div class="score-circle">
+          <div class="score-circle-inner">
+            <span class="score-number">53</span>
+            <span class="score-label">/ 100</span>
+          </div>
+        </div>
+        <div class="score-bars">
+          <div class="score-bar-row">
+            <span class="score-bar-label">Technical SEO <span class="text-dim" style="font-size:11px;">(22%)</span></span>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:61%"></div></div>
+            <span class="score-bar-value">61</span>
+          </div>
+          <div class="score-bar-row">
+            <span class="score-bar-label">Content Quality <span class="text-dim" style="font-size:11px;">(23%)</span></span>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:58%"></div></div>
+            <span class="score-bar-value">58</span>
+          </div>
+          <div class="score-bar-row">
+            <span class="score-bar-label">On-Page SEO <span class="text-dim" style="font-size:11px;">(20%)</span></span>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:52%"></div></div>
+            <span class="score-bar-value">52</span>
+          </div>
+          <div class="score-bar-row">
+            <span class="score-bar-label">Schema <span class="text-dim" style="font-size:11px;">(10%)</span></span>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:40%"></div></div>
+            <span class="score-bar-value">40</span>
+          </div>
+          <div class="score-bar-row">
+            <span class="score-bar-label">Performance <span class="text-dim" style="font-size:11px;">(10%)</span></span>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:45%"></div></div>
+            <span class="score-bar-value">45</span>
+          </div>
+          <div class="score-bar-row">
+            <span class="score-bar-label">AI Search Ready <span class="text-dim" style="font-size:11px;">(10%)</span></span>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:44%"></div></div>
+            <span class="score-bar-value">44</span>
+          </div>
+          <div class="score-bar-row">
+            <span class="score-bar-label">Images <span class="text-dim" style="font-size:11px;">(5%)</span></span>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:60%"></div></div>
+            <span class="score-bar-value">60</span>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:16px;font-size:14px;color:var(--text-muted);">
+        The architecture is <strong>excellent</strong> — Astro SSG delivers complete HTML to all crawlers and the codebase is well-structured. The gaps are almost entirely content signals and schema depth, not structural problems. Sprint 1 alone (&lt;2 hours) would meaningfully improve click-through rate and AI citability.
+      </p>
+    </section>
+
+    <!-- Critical -->
+    <section class="section" id="critical">
+      <h2>Critical Findings</h2>
+
+      <!-- C1 -->
+      <div class="finding open">
+        <div class="finding-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="badge badge-critical">Critical</span>
+          <span class="finding-title">C1 — Stack missing from H1 and above-fold headings</span>
+          <span class="finding-chevron">▼</span>
+        </div>
+        <div class="finding-body">
+          <p>The H1 is <strong>"Frontend developer."</strong> with no stack qualifier. Angular and TypeScript — the primary differentiators — appear only in body copy two scrolls down. A Google crawler and a 3-second human scanner both miss the specialisation.</p>
+          <div class="finding-meta">
+            <div class="finding-meta-row"><span class="label">Fix</span><span class="value">Change badge text to <code>"Available · Angular · TypeScript · remote-first"</code>. Update <code>&lt;title&gt;</code> to <code>"Kalen Young — Angular &amp; TypeScript Frontend Developer"</code>.</span></div>
+            <div class="finding-meta-row"><span class="label">Files</span><span class="value"><code>src/components/sections/Hero.astro</code> · <code>src/pages/index.astro:30</code></span></div>
+            <div class="finding-meta-row"><span class="label">Falsifiability</span><span class="value">Rankings for "Angular TypeScript freelance developer" remain absent after 90 days.</span></div>
+            <div class="finding-meta-row"><span class="label">Leading indicator</span><span class="value">Track branded impressions in GSC within 30 days of the title change.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C2 -->
+      <div class="finding open">
+        <div class="finding-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="badge badge-critical">Critical</span>
+          <span class="finding-title">C2 — All four pages below content threshold</span>
+          <span class="finding-chevron">▼</span>
+        </div>
+        <div class="finding-body">
+          <div class="table-wrap" style="margin-top:0;">
+            <table>
+              <thead><tr><th>Page</th><th>Est. Words</th><th>Threshold</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>/</td><td>~350</td><td>500</td><td><span class="badge badge-high">Below</span></td></tr>
+                <tr><td>/projects/propza/</td><td>~220</td><td>800</td><td><span class="badge badge-critical">Critical</span></td></tr>
+                <tr><td>/projects/personal-budget-tracker/</td><td>~120</td><td>800</td><td><span class="badge badge-critical">Critical</span></td></tr>
+                <tr><td>/projects/simon-clark-fitness/</td><td>~180</td><td>800</td><td><span class="badge badge-critical">Critical</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The Propza flagship page actively undermines trust with <strong>"learning build"</strong> framing. This is the first project a hiring founder evaluates — and "learning" signals junior rather than confident.</p>
+          <div class="finding-meta">
+            <div class="finding-meta-row"><span class="label">Immediate fix</span><span class="value">Remove "learning build" language from Propza. Replace tagline with: <em>"Angular + Supabase product UI — auth flows, domain data, operator-grade form handling and empty states."</em></span></div>
+            <div class="finding-meta-row"><span class="label">Content fix</span><span class="value">Expand each case study to 600–800 words: challenges, technical decisions, measurable outcomes, project timeline.</span></div>
+            <div class="finding-meta-row"><span class="label">Files</span><span class="value"><code>src/content/projects/propza.md</code> · <code>src/content/projects/personal-budget-tracker.md</code> · <code>src/content/projects/simon-clark-fitness.md</code></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C3 -->
+      <div class="finding open">
+        <div class="finding-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="badge badge-critical">Critical</span>
+          <span class="finding-title">C3 — Zero social proof or third-party trust signals</span>
+          <span class="finding-chevron">▼</span>
+        </div>
+        <div class="finding-body">
+          <p>Simon Clark Fitness is the only real client project and it has no testimonial quote, no live URL, and no verifiable outcome. The entire site rests on first-person assertion. For hire-intent commercial queries, third-party trust signals are both ranking factors and conversion factors.</p>
+          <div class="finding-meta">
+            <div class="finding-meta-row"><span class="label">Fix</span><span class="value">Add one attributed quote from Simon Clark. Even 20 words with name + role is sufficient. Add the live URL for the Simon Clark Fitness site to the case study.</span></div>
+            <div class="finding-meta-row"><span class="label">Files</span><span class="value"><code>src/content/projects/simon-clark-fitness.md</code> · new <code>Testimonials.astro</code> component</span></div>
+            <div class="finding-meta-row"><span class="label">Falsifiability</span><span class="value">Contact form conversion rate stays below 2% = social proof alone didn't close the gap.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- High -->
+    <section class="section" id="high">
+      <h2>High Priority Findings</h2>
+
+      <div class="finding">
+        <div class="finding-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="badge badge-high">High</span>
+          <span class="finding-title">H1 — Meta description over-length (246 chars, truncated at ~155)</span>
+          <span class="finding-chevron">▼</span>
+        </div>
+        <div class="finding-body">
+          <p>The homepage meta description is 246 characters. Google truncates at ~155. The citizenship and location signal — "dual UK / South African citizen" — gets cut, losing a key differentiator.</p>
+          <div class="finding-meta">
+            <div class="finding-meta-row"><span class="label">Suggested replacement</span><span class="value"><em>"Freelance frontend developer, Angular and TypeScript. Remote-first, UK-connected. Production experience at COHO. Available for scoped delivery."</em> (153 chars)</span></div>
+            <div class="finding-meta-row"><span class="label">File</span><span class="value"><code>src/pages/index.astro:32</code></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="badge badge-high">High</span>
+          <span class="finding-title">H2 — No security headers (vercel.json missing entirely)</span>
+          <span class="finding-chevron">▼</span>
+        </div>
+        <div class="finding-body">
+          <p>No <code>Content-Security-Policy</code>, no <code>X-Frame-Options</code>, no <code>X-Content-Type-Options</code>, no HSTS declaration, no <code>Referrer-Policy</code>. HTTPS transport is correct (Vercel handles it) but all response-header security signals are absent.</p>
+          <div class="finding-meta">
+            <div class="finding-meta-row"><span class="label">Fix</span><span class="value">Create <code>vercel.json</code> at repo root:</span></div>
+          </div>
+<pre>{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+      ]
+    }
+  ]
+}</pre>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="badge badge-high">High</span>
+          <span class="finding-title">H3 — LCP deferred by preloader (~1.4–2s delay)</span>
+          <span class="finding-chevron">▼</span>
+        </div>
+        <div class="finding-body">
+          <p>On first visit, the preloader hides all <code>[data-hero-line]</code> elements with <code>opacity: 0; visibility: hidden</code> and only reveals them after the Three.js <code>.glb</code> model loads + GSAP animation completes (~1.4–2s). This pushes LCP into the "Needs Improvement" or "Poor" band.</p>
+          <div class="finding-meta">
+            <div class="finding-meta-row"><span class="label">Fix (quick)</span><span class="value">Add <code>fetchpriority="high"</code> to the Propza cover preload link in <code>BaseLayout.astro:159</code>.</span></div>
+            <div class="finding-meta-row"><span class="label">Fix (proper)</span><span class="value">Cap the preloader minimum display at 800ms so the page reveals faster even before the animation fully plays.</span></div>
+            <div class="finding-meta-row"><span class="label">Files</span><span class="value"><code>src/components/Preloader.astro</code> · <code>src/layouts/BaseLayout.astro:157-165</code></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="badge badge-high">High</span>
+          <span class="finding-title">H4 — No llms.txt (AI crawler guidance file)</span>
+          <span class="finding-chevron">▼</span>
+        </div>
+        <div class="finding-body">
+          <p>All AI crawlers (GPTBot, ClaudeBot, PerplexityBot) are allowed but there is no <code>llms.txt</code> to give them a curated, machine-readable summary. Without it, AI systems must reconstruct your identity from thin page content.</p>
+          <div class="finding-meta">
+            <div class="finding-meta-row"><span class="label">Fix</span><span class="value">Create <code>/public/llms.txt</code>:</span></div>
+          </div>
+<pre># Kalen Young — Frontend Developer
+
+> Kalen Young is a freelance frontend developer based in Westville, Durban,
+South Africa (UTC+2). Dual UK / South African citizen. Available for remote
+and UK-connected freelance engagements. Freelancing since 2023.
+
+## About
+Production Angular and TypeScript experience at COHO (2025, nine months).
+10+ live projects shipped. Core stack: Angular, TypeScript, Astro, Supabase,
+PostgreSQL, C# .NET, Playwright, Tailwind CSS.
+
+## Pages
+- https://kalenyoung.co.uk — Homepage and contact
+- https://kalenyoung.co.uk/projects/propza/ — Propza: Angular + Supabase SaaS
+- https://kalenyoung.co.uk/projects/personal-budget-tracker/ — Budget Tracker
+- https://kalenyoung.co.uk/projects/simon-clark-fitness/ — Simon Clark Fitness
+
+## Contact
+Email: kalenyoung03@gmail.com
+GitHub: https://github.com/kalenyng
+LinkedIn: https://www.linkedin.com/in/kalen-young</pre>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="badge badge-high">High</span>
+          <span class="finding-title">H5 — Schema sparse: no project schemas, Person schema incomplete</span>
+          <span class="finding-chevron">▼</span>
+        </div>
+        <div class="finding-body">
+          <p>Project pages have zero structured data. The Person schema on the homepage is missing <code>email</code>, <code>description</code>, <code>knowsAbout</code>, <code>workLocation</code>, and <code>image</code>. No <code>WebSite</code> schema, no <code>BreadcrumbList</code>, no <code>CreativeWork</code> for case studies.</p>
+          <div class="finding-meta">
+            <div class="finding-meta-row"><span class="label">Fix 1</span><span class="value">Expand <code>PersonSchema.astro</code> — add <code>email</code>, <code>description</code>, <code>knowsAbout</code>, <code>workLocation</code>, <code>nationality</code>, wrap in <code>ProfilePage</code> + <code>WebSite</code> graph.</span></div>
+            <div class="finding-meta-row"><span class="label">Fix 2</span><span class="value">Create <code>src/components/seo/ProjectSchema.astro</code> with <code>BreadcrumbList</code> + <code>CreativeWork</code> per case study. Wire into <code>[slug].astro</code>.</span></div>
+            <div class="finding-meta-row"><span class="label">Files</span><span class="value"><code>src/components/seo/PersonSchema.astro</code> · new <code>src/components/seo/ProjectSchema.astro</code> · <code>src/pages/projects/[slug].astro</code></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="badge badge-high">High</span>
+          <span class="finding-title">H6 — Three competing CTAs in hero dilute conversion</span>
+          <span class="finding-chevron">▼</span>
+        </div>
+        <div class="finding-body">
+          <p>"Send a brief" + "Selected work" + "CV (PDF)" are visual peers in the hero. "Selected work" belongs in the consideration stage (nav), not alongside a hire-intent primary CTA. Standard conversion optimisation recommends one dominant CTA + one secondary.</p>
+          <div class="finding-meta">
+            <div class="finding-meta-row"><span class="label">Fix</span><span class="value">Remove "Selected work" from the hero button row. It remains accessible from the nav "Work" dropdown.</span></div>
+            <div class="finding-meta-row"><span class="label">File</span><span class="value"><code>src/components/sections/Hero.astro</code></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="badge badge-high">High</span>
+          <span class="finding-title">H7 — No About / bio page (QRG raters expect one)</span>
+          <span class="finding-chevron">▼</span>
+        </div>
+        <div class="finding-body">
+          <p>Google QRG raters expect a dedicated, crawlable About page for service provider sites. The CV is PDF-only — its content is invisible to crawlers and contributes zero keyword signals.</p>
+          <div class="finding-meta">
+            <div class="finding-meta-row"><span class="label">Fix</span><span class="value">Create <code>src/pages/about.astro</code> (500+ words): full name, location, employment history with dates, tech stack detail, engagement model, professional photo with descriptive alt text. Add to sitemap.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="badge badge-high">High</span>
+          <span class="finding-title">H8 — Propza cover is a CSS background-image (not indexable)</span>
+          <span class="finding-chevron">▼</span>
+        </div>
+        <div class="finding-body">
+          <p>When <code>panCoverRight === true</code> (Propza page only), the cover renders as a CSS <code>background-image</code> on a <code>&lt;div&gt;</code>. Google does not index CSS backgrounds — zero Google Images indexing and no LCP candidate credit for this page.</p>
+          <div class="finding-meta">
+            <div class="finding-meta-row"><span class="label">Fix</span><span class="value">Replace with <code>&lt;img&gt;</code> element using <code>object-position: right center</code> and <code>object-fit: cover</code>.</span></div>
+            <div class="finding-meta-row"><span class="label">File</span><span class="value"><code>src/pages/projects/[slug].astro:69-74</code></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Medium -->
+    <section class="section" id="medium">
+      <h2>Medium Priority Findings</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Finding</th><th>File</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>M1</td><td><code>lastmod</code> missing from sitemap</td><td><code>astro.config.mjs</code></td><td>Add <code>sitemap({ lastmod: new Date() })</code></td></tr>
+            <tr><td>M2</td><td><code>og:locale</code> absent (site targets UK clients)</td><td><code>src/components/seo/Seo.astro</code></td><td>Add <code>&lt;meta property="og:locale" content="en_GB" /&gt;</code></td></tr>
+            <tr><td>M3</td><td><code>&lt;html lang="en"&gt;</code> imprecise for UK targeting</td><td><code>BaseLayout.astro:28</code></td><td>Change to <code>lang="en-GB"</code></td></tr>
+            <tr><td>M4</td><td>Meta robots lacks <code>max-image-preview:large</code></td><td><code>Seo.astro</code></td><td>Add <code>index, follow, max-image-preview:large, max-snippet:-1</code></td></tr>
+            <tr><td>M5</td><td>Button touch targets ~34px (below 48px min)</td><td><code>Button.astro</code></td><td>Change <code>py-2.5</code> → <code>py-3.5</code></td></tr>
+            <tr><td>M6</td><td>Hero social links have no tap padding</td><td><code>Hero.astro</code></td><td>Add <code>p-2</code> to icon link wrappers</td></tr>
+            <tr><td>M7</td><td>Generic project alt text ("X — case study cover")</td><td><code>FeaturedProject.astro</code>, <code>ProjectCard.astro</code></td><td>Describe actual image content per project</td></tr>
+            <tr><td>M8</td><td>No headshot / human face on any page</td><td>New component</td><td>Add professional photo to "How I work" section</td></tr>
+            <tr><td>M9</td><td><code>font-display: swap</code> risks CLS at large H1 sizes</td><td><code>BaseLayout.astro:167-174</code></td><td>Consider <code>font-display: optional</code> for display font</td></tr>
+            <tr><td>M10</td><td>Gmail contact email for UK-targeted freelancer</td><td>Contact section</td><td>Register and display <code>kalen@kalenyoung.co.uk</code></td></tr>
+            <tr><td>M11</td><td>No privacy policy (UK GDPR required for contact form)</td><td>New page</td><td>Create <code>/privacy</code> covering EmailJS data handling</td></tr>
+            <tr><td>M12</td><td><code>liveUrl</code> and <code>repoUrl</code> empty on all projects</td><td><code>src/content/projects/*.md</code></td><td>Add GitHub repo URLs and live URLs where available</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Low -->
+    <section class="section" id="low">
+      <h2>Low Priority Findings</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Finding</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>L1</td><td>No custom 404 page</td><td>Create <code>src/pages/404.astro</code></td></tr>
+            <tr><td>L2</td><td>No IndexNow implementation</td><td>Generate key at indexnow.org, drop in <code>/public/</code></td></tr>
+            <tr><td>L3</td><td><code>fetchpriority="high"</code> missing on LCP preload <code>&lt;link&gt;</code></td><td>Add to <code>BaseLayout.astro:159</code></td></tr>
+            <tr><td>L4</td><td>No <code>twitter:creator</code> meta tag</td><td>Add to <code>Seo.astro</code> if handle exists</td></tr>
+            <tr><td>L5</td><td>CV filename says "fullstack" but title says "Frontend"</td><td>Rename to <code>kalen-young-cv.pdf</code></td></tr>
+            <tr><td>L6</td><td>"Service background" in How I work is opaque</td><td>Name the industry (e.g. hospitality)</td></tr>
+            <tr><td>L7</td><td>Availability badge is perpetual (no date qualifier)</td><td>Change to "Available from June 2026" — update monthly</td></tr>
+            <tr><td>L8</td><td>Response time ("2 business days") is hidden below form</td><td>Surface unconditionally above the form</td></tr>
+            <tr><td>L9</td><td>No <code>&lt;time datetime&gt;</code> on experience dates</td><td>Wrap "2025 · nine months" in <code>&lt;time&gt;</code> elements</td></tr>
+            <tr><td>L10</td><td>Footer uses stack credits instead of entity reinforcement</td><td>Consider "Kalen Young · Frontend Developer · Durban, ZA"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Strengths -->
+    <section class="section" id="strengths">
+      <h2>Strengths — Don't Break These</h2>
+      <div class="strength-grid">
+        <div class="strength-card">
+          <div class="strength-card-title">Astro SSG Architecture</div>
+          <div class="strength-card-body">Complete HTML on every response. All crawlers see full content. Zero JS rendering gate for indexable copy.</div>
+        </div>
+        <div class="strength-card">
+          <div class="strength-card-title">prefers-reduced-motion</div>
+          <div class="strength-card-body">All animations disabled for users who prefer it. Marquee stops, hero reveals instantly, scroll-reveal disabled. Exemplary a11y.</div>
+        </div>
+        <div class="strength-card">
+          <div class="strength-card-title">Clean robots.txt</div>
+          <div class="strength-card-body">Allows all crawlers, references sitemap correctly, generated programmatically — immune to typos.</div>
+        </div>
+        <div class="strength-card">
+          <div class="strength-card-title">WebP images + preload</div>
+          <div class="strength-card-body"><code>loading="eager"</code> + <code>fetchpriority="high"</code> on the flagship Propza cover. Correct LCP optimisation pattern.</div>
+        </div>
+        <div class="strength-card">
+          <div class="strength-card-title">EmailJS honeypot</div>
+          <div class="strength-card-body">Spam protection on the contact form without CAPTCHA friction.</div>
+        </div>
+        <div class="strength-card">
+          <div class="strength-card-title">&lt;noscript&gt; fallback</div>
+          <div class="strength-card-body">Animation-hidden elements are revealed for non-JS crawlers. No cloaking risk.</div>
+        </div>
+        <div class="strength-card">
+          <div class="strength-card-title">Canonical URLs</div>
+          <div class="strength-card-body">Emitted on every page via <code>Seo.astro</code> using the hardcoded production URL. Correct and consistent.</div>
+        </div>
+        <div class="strength-card">
+          <div class="strength-card-title">Nav logo CLS fix</div>
+          <div class="strength-card-body">The Three.js nav logo layout shift on reload was fixed in commit <code>fdb9642</code>. Pre-sized slot prevents the shift.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SXO Persona Scores -->
+    <section class="section">
+      <h2>SXO — Persona Scores</h2>
+      <p class="text-muted" style="margin-bottom:16px;font-size:14px;">How well the site serves each type of visitor arriving from search.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Persona</th><th>Score</th><th>Biggest Gap</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Startup Founder / PM hiring freelance dev</td>
+              <td><span class="badge badge-critical">11/20</span></td>
+              <td>No testimonials, stack buried below fold, CTA wording assumes "brief" is understood</td>
+            </tr>
+            <tr>
+              <td>Agency looking for contract frontend dev</td>
+              <td><span class="badge badge-high">13/20</span></td>
+              <td>No contract references, CTA language mismatch ("Send a brief" vs "discuss rates")</td>
+            </tr>
+            <tr>
+              <td>Recruiter evaluating candidates</td>
+              <td><span class="badge badge-medium">16/20</span></td>
+              <td>CV surfaced correctly; years of experience stat below fold on mobile</td>
+            </tr>
+            <tr>
+              <td>Branded search ("Kalen Young")</td>
+              <td><span class="badge badge-pass">18/20</span></td>
+              <td>Well-handled. Person schema + social sameAs + title all correct.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Action Plan -->
+    <section class="section" id="plan">
+      <h2>Action Plan</h2>
+
+      <div class="sprint">
+        <div class="sprint-header">
+          <span class="sprint-num">Sprint 1</span>
+          <span class="sprint-title">Quick wins — no content writing</span>
+          <span class="sprint-est">~2 hours</span>
+        </div>
+        <div class="sprint-body">
+          <ul class="task-list">
+            <li>Hero badge → <code>"Available · Angular · TypeScript · remote-first"</code> — <code>Hero.astro</code></li>
+            <li>Title → <code>"Kalen Young — Angular &amp; TypeScript Frontend Developer"</code> — <code>index.astro:30</code></li>
+            <li>Meta description → trim to 153 chars — <code>index.astro:32</code></li>
+            <li>Create <code>/public/llms.txt</code> (see H4 above)</li>
+            <li>Add <code>fetchpriority="high"</code> to Propza cover preload link — <code>BaseLayout.astro:159</code></li>
+            <li>Add <code>og:locale</code> and <code>meta robots max-image-preview</code> — <code>Seo.astro</code></li>
+            <li>Add <code>lastmod: new Date()</code> to sitemap plugin — <code>astro.config.mjs</code></li>
+            <li>Create <code>vercel.json</code> with security headers</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sprint">
+        <div class="sprint-header">
+          <span class="sprint-num">Sprint 2</span>
+          <span class="sprint-title">Schema overhaul</span>
+          <span class="sprint-est">~3 hours</span>
+        </div>
+        <div class="sprint-body">
+          <ul class="task-list">
+            <li>Expand <code>PersonSchema.astro</code> with full entity fields (email, description, knowsAbout, workLocation, nationality)</li>
+            <li>Add <code>WebSite</code> + <code>ProfilePage</code> wrapper on homepage</li>
+            <li>Create <code>src/components/seo/ProjectSchema.astro</code> with <code>BreadcrumbList</code> + <code>CreativeWork</code></li>
+            <li>Wire <code>ProjectSchema</code> into <code>[slug].astro</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sprint">
+        <div class="sprint-header">
+          <span class="sprint-num">Sprint 3</span>
+          <span class="sprint-title">Content &amp; trust signals</span>
+          <span class="sprint-est">~6 hours</span>
+        </div>
+        <div class="sprint-body">
+          <ul class="task-list">
+            <li>Get one testimonial quote from Simon Clark — add to site</li>
+            <li>Add Simon Clark live URL to case study — <code>simon-clark-fitness.md</code></li>
+            <li>Reframe Propza tagline (remove "learning build") — <code>propza.md</code></li>
+            <li>Expand Propza case study to 600+ words</li>
+            <li>Expand Budget Tracker case study to 600+ words</li>
+            <li>Expand Simon Clark case study to 600+ words</li>
+            <li>Add 150-word citation-optimised About prose block to homepage</li>
+            <li>Create <code>src/pages/about.astro</code> (500+ words)</li>
+            <li>Create <code>src/pages/privacy.astro</code> (UK GDPR for contact form)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sprint">
+        <div class="sprint-header">
+          <span class="sprint-num">Sprint 4</span>
+          <span class="sprint-title">Performance &amp; UX fixes</span>
+          <span class="sprint-est">~2 hours</span>
+        </div>
+        <div class="sprint-body">
+          <ul class="task-list">
+            <li>Fix Propza CSS background image → <code>&lt;img&gt;</code> element — <code>[slug].astro:69-74</code></li>
+            <li>Cap preloader minimum duration to reduce LCP deferral — <code>Preloader.astro</code></li>
+            <li>Button touch targets: <code>py-2.5</code> → <code>py-3.5</code> — <code>Button.astro</code></li>
+            <li>Hero social link tap padding: add <code>p-2</code> to icon link wrappers</li>
+            <li>Remove "Selected work" from hero CTA row</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sprint">
+        <div class="sprint-header">
+          <span class="sprint-num">Sprint 5</span>
+          <span class="sprint-title">Polish &amp; backlog</span>
+          <span class="sprint-est">~2 hours</span>
+        </div>
+        <div class="sprint-body">
+          <ul class="task-list">
+            <li>Custom 404 page — <code>src/pages/404.astro</code></li>
+            <li>IndexNow key — drop <code>[key].txt</code> in <code>/public/</code></li>
+            <li>Domain email: register <code>kalen@kalenyoung.co.uk</code></li>
+            <li>CV rename: <code>kalen-young-fullstack.pdf</code> → <code>kalen-young-cv.pdf</code></li>
+            <li>Date-qualify availability badge: "Available from June 2026 · remote-first"</li>
+            <li>Surface response time above form (unconditionally)</li>
+            <li>Add <code>&lt;time datetime&gt;</code> wrappers to experience dates</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="footer">
+  <div class="wrapper">
+    <p>SEO Audit · <strong>kalenyoung.co.uk</strong> · 29 May 2026 · 8 specialist agents · Technical · Content · Schema · Sitemap · Performance · Visual · GEO · SXO</p>
+    <p style="margin-top:8px;">Built by agricidaniel — <a href="https://www.skool.com/ai-marketing-hub">AI Marketing Hub (Free)</a> · <a href="https://www.skool.com/ai-marketing-hub-pro">AI Marketing Hub (Pro)</a></p>
+  </div>
+</div>
+
+<script>
+  // Auto-open findings on first load for critical items
+  document.querySelectorAll('.finding').forEach(el => {
+    el.querySelector('.finding-header').addEventListener('click', () => {
+      el.classList.toggle('open');
+    });
+  });
+</script>
+</body>
+</html>

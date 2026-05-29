@@ -23,6 +23,20 @@ const pageTitle = `${title} — Case study`;
 const description = tagline;
 const coverAlt = `${title} — case study cover`;
 const ogImage = new URL(project.data.cover, Astro.site).href;
+
+const projectLinks: Record<string, { live?: string; architectureMap?: string }> = {
+  'propza': {
+    live: 'https://propza.vercel.app/',
+    architectureMap: 'https://propza-fq5i.vercel.app/propza-architecture.html',
+  },
+  'personal-budget-tracker': {
+    live: 'https://budget-app-neon-psi.vercel.app/',
+  },
+  'simon-clark-fitness': {
+    live: 'https://simonclarkfitness.co.uk/',
+  },
+};
+const links = projectLinks[project.id];
 const panCoverRight = project.id === 'propza';
 ---
 
@@ -58,6 +72,16 @@ const panCoverRight = project.id === 'propza';
               ))
             }
           </ul>
+          {links && (
+            <div class="flex flex-wrap gap-6 font-mono text-[11px] uppercase tracking-[0.2em]">
+              {links.architectureMap && (
+                <a href={links.architectureMap} target="_blank" rel="noopener" class="text-paper/45 motion-safe:hover:text-accent">View architecture map →</a>
+              )}
+              {links.live && (
+                <a href={links.live} target="_blank" rel="noopener" class="text-paper/45 motion-safe:hover:text-accent">View live project →</a>
+              )}
+            </div>
+          )}
         </div>
         <div
           class:list={[
@@ -88,19 +112,31 @@ const panCoverRight = project.id === 'propza';
         </div>
       </header>
 
-      <div class="prose-case mx-auto mt-16 max-w-2xl lg:mt-20">
+      <div class="prose-case mx-auto mt-16 max-w-4xl lg:mt-20">
         <Content />
       </div>
 
       <nav class="mt-20 border-t-2 border-surface-border pt-10 font-mono text-[11px] uppercase tracking-[0.2em]" aria-label="Case study">
-        <a
-          href="/#work"
-          data-umami-event="nav-click"
-          data-umami-event-target="work"
-          class="text-paper/45 motion-safe:hover:text-accent"
-        >
-          ← Back to work
-        </a>
+        <div class="flex flex-wrap items-center justify-between gap-6">
+          <a
+            href="/#work"
+            data-umami-event="nav-click"
+            data-umami-event-target="work"
+            class="text-paper/45 motion-safe:hover:text-accent"
+          >
+            ← Back to work
+          </a>
+          {links && (
+            <div class="flex flex-wrap gap-6">
+              {links.architectureMap && (
+                <a href={links.architectureMap} target="_blank" rel="noopener" class="text-paper/45 motion-safe:hover:text-accent">View architecture map →</a>
+              )}
+              {links.live && (
+                <a href={links.live} target="_blank" rel="noopener" class="text-paper/45 motion-safe:hover:text-accent">View live project →</a>
+              )}
+            </div>
+          )}
+        </div>
       </nav>
     </article>
   </main>
