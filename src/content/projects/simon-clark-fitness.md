@@ -11,6 +11,7 @@ tech:
   - CSS
   - TypeScript
 cover: /images/projects/simon-clark-cover.webp
+coverAlt: Simon Clark Fitness website homepage showing personal trainer services for clients over 50 in Berkshire
 ---
 
 Simon is a personal trainer based in Berkshire, working primarily with clients over 50. He had no website. Bookings came through word of mouth, and there was no way for someone searching locally to find him, understand what he offers, or get in touch.

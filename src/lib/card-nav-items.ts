@@ -49,7 +49,7 @@ export const cardNavItems = [
     links: [
       {
         label: 'Email',
-        href: 'mailto:kalenyoung03@gmail.com',
+        href: 'mailto:kalen@kalenyoung.co.uk',
         ariaLabel: 'Email Kalen Young',
         umamiEvent: 'contact-click',
       },

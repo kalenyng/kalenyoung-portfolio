@@ -98,11 +98,5 @@
     }
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', scheduleInit, { once: true });
-  } else {
-    scheduleInit();
-  }
-
-  window.addEventListener('load', () => ScrollTrigger.refresh());
+  document.addEventListener('astro:page-load', scheduleInit);
 </script>

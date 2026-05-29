@@ -34,9 +34,5 @@
     document.querySelectorAll('[data-motion-reveal]').forEach(bind);
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init, { once: true });
-  } else {
-    init();
-  }
+  document.addEventListener('astro:page-load', init);
 </script>

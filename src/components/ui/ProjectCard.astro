@@ -9,7 +9,7 @@ interface Props {
 const { project } = Astro.props;
 const { title, tagline, role, year, tech } = project.data;
 const href = `/projects/${project.id}/`;
-const coverAlt = `${title} — case study cover`;
+const coverAlt = project.data.coverAlt ?? `${title} — case study cover`;
 ---
 
 <TiltedCard rotateAmplitude={6} scaleOnHover={1.02} showTooltip={false} class="h-full">

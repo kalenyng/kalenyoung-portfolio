@@ -22,7 +22,7 @@ const { Content } = await render(project);
 const { title, tagline, role, year, tech } = project.data;
 const pageTitle = `${title} — Case study`;
 const description = tagline;
-const coverAlt = `${title} — case study cover`;
+const coverAlt = project.data.coverAlt ?? `${title} — case study cover`;
 const ogImage = new URL(project.data.cover, Astro.site).href;
 
 const projectLinks: Record<string, { live?: string; architectureMap?: string }> = {
@@ -59,7 +59,7 @@ const panCoverRight = project.id === 'propza';
         data-umami-event="nav-click"
         data-umami-event-target="work"
         class="mb-10 inline-block font-mono text-[11px] uppercase tracking-[0.2em] text-paper/45 motion-safe:hover:text-accent"
-      >← Work</a>
+      >← Back</a>
       <header class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
         <div class="space-y-6">
           <p class="brutal-label">Case study</p>
@@ -127,7 +127,7 @@ const panCoverRight = project.id === 'propza';
             data-umami-event-target="work"
             class="text-paper/45 motion-safe:hover:text-accent"
           >
-            ← Back to work
+            ← Back
           </a>
           {links && (
             <div class="flex flex-wrap gap-6">

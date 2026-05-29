@@ -11,6 +11,7 @@ tech:
   - PostgreSQL
   - TypeScript
 cover: /images/projects/budget-app-cover.webp
+coverAlt: Personal budget tracker app showing transaction history and monthly spending breakdown, built with Astro and Supabase
 ---
 
 This one exists because I needed it. I track my monthly finances with it, which means every rough edge surfaces fast and every missing feature is genuinely annoying. That's a different forcing function than building a demo.

@@ -14,6 +14,7 @@ const projects = defineCollection({
       flagship: z.boolean().default(false),
       tech: z.array(z.string()),
       cover: z.string().startsWith('/'),
+      coverAlt: z.string().optional(),
       coverPosition: z.string().optional(),
       liveUrl: z.url().optional(),
       repoUrl: z.url().optional(),

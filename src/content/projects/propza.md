@@ -11,6 +11,7 @@ tech:
   - Supabase
   - PostgreSQL
 cover: /images/projects/propza-cover.webp
+coverAlt: Propza dashboard showing property list and rent payment history, built in Angular
 ---
 
 Propza is a property-management SaaS UI built end-to-end in Angular and Supabase. The brief was self-imposed and product-shaped: real domain, real auth, real data model, real empty states — the kind of surface area that separates a prototype from something a team could ship.

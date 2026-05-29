@@ -22,7 +22,7 @@ Kalen Young is a frontend developer specialising in Angular and TypeScript. He h
 
 ## Contact
 
-- Email: kalenyoung03@gmail.com
+- Email: kalen@kalenyoung.co.uk
 - GitHub: https://github.com/kalenyng
 - LinkedIn: https://www.linkedin.com/in/kalen-young
 - Site: https://kalenyoung.co.uk

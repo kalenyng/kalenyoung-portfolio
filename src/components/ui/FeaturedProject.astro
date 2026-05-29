@@ -9,7 +9,7 @@ interface Props {
 const { project } = Astro.props;
 const { title, tagline, role, year, tech } = project.data;
 const href = `/projects/${project.id}/`;
-const coverAlt = `${title} — case study cover`;
+const coverAlt = project.data.coverAlt ?? `${title} — case study cover`;
 const isFlagship = project.data.flagship === true;
 
 const buttonClass =

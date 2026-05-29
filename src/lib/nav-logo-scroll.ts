@@ -58,7 +58,8 @@ function lerpAngle(from: number, to: number, t: number): number {
 }
 
 function getScrollRotationRange(): number {
-  return window.location.pathname.startsWith('/projects/') ? Math.PI : TAU;
+  const halfRotationPages = ['/projects/', '/privacy/'];
+  return halfRotationPages.some(p => window.location.pathname.startsWith(p)) ? Math.PI : TAU;
 }
 
 function targetRotationY(
