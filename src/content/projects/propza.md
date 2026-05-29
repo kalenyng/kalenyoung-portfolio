@@ -1,6 +1,6 @@
 ---
 title: Propza
-tagline: Angular + Supabase property-management SaaS. The learning build I use to show I can ship product UIs.
+tagline: Angular + Supabase product UI — auth flows, domain data, operator-grade form handling and empty states.
 role: Product UI · Angular
 year: 2025
 featured: true
@@ -13,7 +13,7 @@ tech:
 cover: /images/projects/propza-cover.webp
 ---
 
-Most demo projects prove you can follow a tutorial. Propza was built to prove something more specific: that I can carry a product-shaped UI end-to-end, make real product decisions, and leave a codebase in a state someone else could work in.
+Propza is a property-management SaaS UI built end-to-end in Angular and Supabase. The brief was self-imposed and product-shaped: real domain, real auth, real data model, real empty states — the kind of surface area that separates a prototype from something a team could ship.
 
 The domain is property management. South African landlords, ZAR, one owner with multiple properties, each property with a tenant and a running payment ledger. Simple enough to scope, complex enough to surface real problems.
 
