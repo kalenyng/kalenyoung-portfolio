@@ -52,5 +52,5 @@ const glowProps = {
 
 <script>
   import { setupGlowWidgetA11y } from '@/lib/glow-widget-a11y';
-  setupGlowWidgetA11y();
+  document.addEventListener('astro:page-load', () => setupGlowWidgetA11y());
 </script>

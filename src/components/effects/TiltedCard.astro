@@ -38,13 +38,6 @@ const {
 <script>
   import { initAllTiltedCards } from '@/lib/tilted-card';
 
-  const boot = () => initAllTiltedCards();
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot, { once: true });
-  } else {
-    boot();
-  }
-
-  window.addEventListener('resize', boot, { passive: true });
+  document.addEventListener('astro:page-load', () => initAllTiltedCards());
+  window.addEventListener('resize', () => initAllTiltedCards(), { passive: true });
 </script>
