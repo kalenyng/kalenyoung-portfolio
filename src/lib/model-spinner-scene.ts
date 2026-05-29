@@ -12,7 +12,7 @@ import {
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const MODEL_URL = '/logo-mark.glb';
-const TARGET_SIZE = 1.65;
+const DEFAULT_TARGET_SIZE = 1.65;
 
 export interface ModelSpinnerHandle {
   dispose: () => void;
@@ -20,7 +20,8 @@ export interface ModelSpinnerHandle {
 
 export async function createModelSpinnerScene(
   canvas: HTMLCanvasElement,
-  host: HTMLElement
+  host: HTMLElement,
+  targetSize = DEFAULT_TARGET_SIZE
 ): Promise<ModelSpinnerHandle | null> {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   canvas.setAttribute('aria-hidden', 'true');
@@ -99,7 +100,7 @@ export async function createModelSpinnerScene(
     gltf.scene.position.sub(center);
 
     const maxDim = Math.max(size.x, size.y, size.z);
-    gltf.scene.scale.setScalar(TARGET_SIZE / maxDim);
+    gltf.scene.scale.setScalar(targetSize / maxDim);
 
     modelGroup.add(gltf.scene);
     loadedScene = gltf.scene;

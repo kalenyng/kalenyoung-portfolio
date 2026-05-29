@@ -47,7 +47,7 @@ import Button from '../components/ui/Button.astro';
     if (!host || !canvas) return;
 
     const { createModelSpinnerScene } = await import('@/lib/model-spinner-scene');
-    const handle = await createModelSpinnerScene(canvas, host);
+    const handle = await createModelSpinnerScene(canvas, host, 1.2);
     if (!handle) return;
 
     window.addEventListener('pagehide', () => handle.dispose(), { once: true });
