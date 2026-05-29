@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteHeader from '../../components/layout/SiteHeader.astro';
 import SiteFooter from '../../components/layout/SiteFooter.astro';
+import ProjectSchema from '../../components/seo/ProjectSchema.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -41,6 +42,15 @@ const panCoverRight = project.id === 'propza';
 ---
 
 <BaseLayout title={pageTitle} {description} path={`/projects/${project.id}/`} image={ogImage}>
+  <ProjectSchema
+    slot="head"
+    title={title}
+    description={tagline}
+    url={new URL(`/projects/${project.id}/`, Astro.site).href}
+    image={ogImage}
+    tech={tech}
+    year={year}
+  />
   <SiteHeader />
   <main id="main" tabindex="-1" class="site-header-offset border-b-2 border-surface-border">
     <article class="mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
@@ -89,32 +99,19 @@ const panCoverRight = project.id === 'propza';
             </div>
           )}
         </div>
-        <div
-          class:list={[
-            'overflow-hidden border-2 border-surface-border bg-surface-raised',
-            panCoverRight && 'project-cover--pan-right aspect-[16/10]',
-          ]}
-        >
-          {
-            panCoverRight ? (
-              <div
-                class="project-cover-bg h-full w-full bg-cover bg-no-repeat"
-                style={`background-image: url('${project.data.cover}');`}
-                role="img"
-                aria-label={coverAlt}
-              />
-            ) : (
-              <img
-                src={project.data.cover}
-                alt={coverAlt}
-                width={1200}
-                height={750}
-                class="aspect-[16/10] w-full object-cover"
-                loading="eager"
-                decoding="async"
-              />
-            )
-          }
+        <div class="overflow-hidden border-2 border-surface-border bg-surface-raised aspect-[16/10]">
+          <img
+            src={project.data.cover}
+            alt={coverAlt}
+            width={1200}
+            height={750}
+            class:list={[
+              'h-full w-full object-cover',
+              panCoverRight && 'project-cover--pan-right',
+            ]}
+            loading="eager"
+            decoding="async"
+          />
         </div>
       </header>
 

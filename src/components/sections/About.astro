@@ -1,0 +1,100 @@
+---
+import MotionReveal from '../motion/MotionReveal.astro';
+
+const deliverables = [
+  {
+    number: '01',
+    title: 'Scoped delivery',
+    body: 'Clear scope, milestones, and a finish line you can plan around — client work that ships on time.',
+  },
+  {
+    number: '02',
+    title: 'Production habits',
+    body: 'Real sprints, code review, and the details that make a product feel intentional in production.',
+  },
+  {
+    number: '03',
+    title: 'Honest scope',
+    body: 'Straight talk on what is feasible, what is not, and the next step — fewer surprises.',
+  },
+] as const;
+---
+
+<section
+  id="about"
+  class="scroll-mt-[var(--site-header-height)] border-b-2 border-surface-border px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-28"
+  aria-labelledby="about-heading"
+>
+  <div class="mx-auto max-w-[1400px]">
+    <div class="grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-20">
+
+      <MotionReveal class="space-y-6" data-scroll-wipe>
+        <div class="space-y-5">
+          <p class="brutal-label">About</p>
+          <h2
+            id="about-heading"
+            class="font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold uppercase leading-[0.92] tracking-tight text-paper"
+          >
+            Based in Durban.<br />Built for UK teams.
+          </h2>
+        </div>
+        <div class="space-y-4 text-[17px] leading-relaxed text-paper/75">
+          <p>
+            I'm Kalen Young, a frontend and full-stack developer based in Durban, South Africa. My stack is Angular, React, TypeScript, C#/.NET, and Supabase, with Tailwind doing most of the visual heavy lifting.
+          </p>
+          <p>
+            My strongest recent work is a production role with <strong class="text-paper">COHO</strong>, a UK property tech company, where code I wrote shipped into their live codebase.
+          </p>
+          <p>
+            I grew up in England and live in Durban now, holding dual UK/South African citizenship and working comfortably with UK teams remotely. I'm currently looking for junior frontend or full-stack roles with UK-based companies.
+          </p>
+          <p>
+            Outside of code I ride motorbikes, ski when the mountains cooperate, and make music.
+          </p>
+        </div>
+        <dl class="grid grid-cols-3 gap-0 border-t-2 border-surface-border pt-6 font-mono text-[11px] uppercase tracking-[0.15em]">
+          <div>
+            <dt class="text-paper/30">Citizenship</dt>
+            <dd class="mt-1 text-paper/70">UK · ZA</dd>
+          </div>
+          <div class="border-l-2 border-surface-border pl-4">
+            <dt class="text-paper/30">Location</dt>
+            <dd class="mt-1 text-paper/70">Durban · UTC+2</dd>
+          </div>
+          <div class="border-l-2 border-surface-border pl-4">
+            <dt class="text-paper/30">Status</dt>
+            <dd class="mt-1 text-paper/70">Open to roles</dd>
+          </div>
+        </dl>
+      </MotionReveal>
+
+      <MotionReveal delay={80} class="space-y-5" data-scroll-wipe>
+        <p class="brutal-label">What you get</p>
+        <ol class="space-y-0 border-2 border-surface-border bg-surface-raised" aria-label="What working with Kalen looks like">
+          {
+            deliverables.map((item, i) => (
+              <li
+                class:list={[
+                  'flex gap-5 p-5 sm:gap-6 sm:p-6',
+                  i > 0 && 'border-t-2 border-surface-border',
+                ]}
+              >
+                <span
+                  class="font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-accent"
+                  aria-hidden="true"
+                >
+                  {item.number}
+                </span>
+                <div class="min-w-0 space-y-2">
+                  <h3 class="font-display text-lg font-bold uppercase tracking-tight text-paper">{item.title}</h3>
+                  <p class="text-[15px] leading-relaxed text-paper/65">{item.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </MotionReveal>
+
+    </div>
+  </div>
+</section>

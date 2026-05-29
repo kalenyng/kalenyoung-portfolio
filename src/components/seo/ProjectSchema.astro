@@ -1,0 +1,63 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  url: string;
+  image: string;
+  tech: string[];
+  year: number;
+}
+
+const { title, description, url, image, tech, year } = Astro.props;
+const site = Astro.site?.href.replace(/\/$/, '') ?? '';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: site,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Projects',
+          item: `${site}/#work`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: title,
+          item: url,
+        },
+      ],
+    },
+    {
+      '@type': 'CreativeWork',
+      name: title,
+      description,
+      url,
+      image,
+      dateCreated: String(year),
+      keywords: tech.join(', '),
+      author: {
+        '@type': 'Person',
+        '@id': `${site}/#person`,
+        name: 'Kalen Young',
+      },
+      creator: {
+        '@type': 'Person',
+        '@id': `${site}/#person`,
+        name: 'Kalen Young',
+      },
+    },
+  ],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

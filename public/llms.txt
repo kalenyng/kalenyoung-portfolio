@@ -1,0 +1,28 @@
+# Kalen Young — Frontend Developer
+
+> Angular & TypeScript frontend developer available for freelance and remote work. Production experience at COHO (UK proptech). Dual UK / South African citizen based in Durban.
+
+## About
+
+Kalen Young is a frontend developer specialising in Angular and TypeScript. He holds dual UK and South African citizenship and works remotely with UK-based teams. His production experience includes shipping code into the live codebase at COHO, a UK property technology company. He has been delivering client projects since 2023.
+
+## Stack
+
+- Angular, TypeScript, React
+- Supabase, PostgreSQL
+- Astro, Tailwind CSS
+- C# / .NET
+- Git, Vercel, Playwright
+
+## Projects
+
+- [Propza](https://kalenyoung.co.uk/projects/propza/) — Angular + Supabase property-management SaaS. Auth flows, domain data, operator-grade form handling and empty states.
+- [Personal Budget Tracker](https://kalenyoung.co.uk/projects/personal-budget-tracker/) — Full-stack budget tracking application.
+- [Simon Clark Fitness](https://kalenyoung.co.uk/projects/simon-clark-fitness/) — Astro marketing site for a personal trainer. Delivered on time, live in production at simonclarkfitness.co.uk.
+
+## Contact
+
+- Email: kalenyoung03@gmail.com
+- GitHub: https://github.com/kalenyng
+- LinkedIn: https://www.linkedin.com/in/kalen-young
+- Site: https://kalenyoung.co.uk

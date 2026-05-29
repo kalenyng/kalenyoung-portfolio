@@ -275,9 +275,22 @@
     will-change: transform;
   }
 
-  .project-cover--pan-right .project-cover-bg {
-    background-size: cover !important;
-    background-position: 40% center !important;
+  @keyframes cover-pan-right {
+    from { object-position: 20% center; }
+    to   { object-position: 70% center; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    img.project-cover--pan-right {
+      object-position: 20% center;
+      animation: cover-pan-right 12s ease-in-out infinite alternate;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    img.project-cover--pan-right {
+      object-position: 40% center;
+    }
   }
 
   .tilted-card-caption {
