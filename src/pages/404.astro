@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import Button from '../components/ui/Button.astro';
+---
+
+<BaseLayout
+  title="404 — Page not found · Kalen Young"
+  description="This page doesn't exist."
+  noindex={true}
+>
+  <SiteHeader />
+  <main
+    id="main"
+    tabindex="-1"
+    style="min-height: calc(100dvh - var(--site-header-height));"
+    class="site-header-offset flex flex-col items-center justify-center gap-6 px-4 py-24 text-center"
+  >
+    <div
+      data-404-canvas-host
+      class="h-32 w-32 sm:h-40 sm:w-40"
+      aria-hidden="true"
+    >
+      <canvas data-404-canvas class="h-full w-full" aria-hidden="true"></canvas>
+    </div>
+
+    <p class="brutal-label text-accent">404</p>
+
+    <h1 class="font-display text-4xl font-extrabold uppercase leading-none tracking-tight text-paper sm:text-6xl">
+      Page not found.
+    </h1>
+
+    <p class="max-w-sm text-sm leading-relaxed text-paper/50">
+      That URL doesn't exist. Head back home or check the link you followed.
+    </p>
+
+    <Button href="/" variant="primary">Back to home</Button>
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
+<script>
+  const boot = async () => {
+    const host = document.querySelector<HTMLElement>('[data-404-canvas-host]');
+    const canvas = document.querySelector<HTMLCanvasElement>('[data-404-canvas]');
+    if (!host || !canvas) return;
+
+    const { createModelSpinnerScene } = await import('@/lib/model-spinner-scene');
+    const handle = await createModelSpinnerScene(canvas, host);
+    if (!handle) return;
+
+    window.addEventListener('pagehide', () => handle.dispose(), { once: true });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    void boot();
+  }
+</script>
