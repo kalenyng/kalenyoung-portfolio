@@ -89,6 +89,8 @@ const label =
     <p id="contact-message-error" class="field-error" data-field-error="message" hidden></p>
   </div>
 
+  <input type="hidden" name="time" data-contact-time />
+
   <button
     type="submit"
     class="contact-submit-btn w-full border-2 border-accent px-5 py-3 text-sm font-medium uppercase tracking-wide motion-safe:active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none sm:w-auto sm:self-start"
@@ -578,6 +580,13 @@ const label =
 
       try {
         if (emailjsKey) {
+          const timeInput = form.querySelector<HTMLInputElement>('[data-contact-time]');
+          if (timeInput) {
+            timeInput.value = new Date().toLocaleString('en-GB', {
+              dateStyle: 'long',
+              timeStyle: 'short',
+            });
+          }
           showSubmitLoading();
           const result = await emailjs.sendForm('service_pqe8ikv', 'template_usn4pg8', form, emailjsKey);
           if (result.status !== 200) {
