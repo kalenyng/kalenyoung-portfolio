@@ -241,6 +241,7 @@ const CardNavMenu = ({
             href={ctaHref}
             className="card-nav-cta-button"
             style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
+            data-umami-event="contact-click"
           >
             {ctaLabel}
           </a>
@@ -282,6 +283,9 @@ const CardNavMenu = ({
                     aria-label={lnk.ariaLabel}
                     target={lnk.external ? '_blank' : undefined}
                     rel={lnk.external ? 'noopener noreferrer' : undefined}
+                    data-umami-event={lnk.umamiEvent}
+                    data-umami-event-platform={lnk.umamiPlatform}
+                    data-umami-event-target={lnk.umamiTarget}
                     onClick={(event) => handleNavLinkClick(event, lnk.href)}
                   >
                     <GoArrowUpRight className="nav-card-link-icon" aria-hidden="true" />

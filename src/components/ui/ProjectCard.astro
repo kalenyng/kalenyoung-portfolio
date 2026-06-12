@@ -15,6 +15,8 @@ const coverAlt = `${title} — case study cover`;
 <TiltedCard rotateAmplitude={6} scaleOnHover={1.02} showTooltip={false} class="h-full">
   <a
     href={href}
+    data-umami-event="project-click"
+    data-umami-event-project={project.id}
     class="group relative flex h-full flex-col border-2 border-surface-border bg-surface-raised motion-safe:hover:border-accent/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
   >
     <div class="tilted-card-cover relative aspect-[16/10] overflow-hidden border-b-2 border-surface-border">

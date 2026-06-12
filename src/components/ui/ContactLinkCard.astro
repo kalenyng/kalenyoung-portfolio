@@ -26,10 +26,16 @@ const layout = hasBrand ? 'flex-row items-center gap-4 sm:gap-5' : 'flex-col gap
 const body = hasBrand ? 'flex min-w-0 flex-1 flex-col gap-2' : 'flex flex-col gap-2.5';
 const iconClass = 'h-9 w-9 sm:h-10 sm:w-10';
 const iconWrap = 'flex shrink-0 items-center justify-center text-paper/70 motion-safe:group-hover:text-accent';
+
+const umamiEvent =
+  brand === 'cv' ? 'cv-download' : brand === 'email' ? 'contact-click' : brand ? 'social-click' : undefined;
+const umamiPlatform = brand === 'github' || brand === 'linkedin' ? brand : undefined;
 ---
 
 <a
   href={href}
+  data-umami-event={umamiEvent}
+  data-umami-event-platform={umamiPlatform}
   class:list={[base, layout]}
   target={opensNewTab ? '_blank' : undefined}
   rel={opensNewTab ? 'noopener noreferrer' : undefined}

@@ -95,8 +95,18 @@ const stats = [
         </h1>
 
         <div data-hero-pop class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap translate-y-7 opacity-0">
-          <Button href="/#contact" variant="primary" class="w-full sm:w-auto">Send a brief</Button>
-          <Button href="/#work" variant="outline" class="w-full sm:w-auto">Selected work</Button>
+          <Button href="/#contact" variant="primary" class="w-full sm:w-auto" data-umami-event="contact-click">
+            Send a brief
+          </Button>
+          <Button
+            href="/#work"
+            variant="outline"
+            class="w-full sm:w-auto"
+            data-umami-event="nav-click"
+            data-umami-event-target="work"
+          >
+            Selected work
+          </Button>
           <Button
             href={cvUrl}
             variant="ghost"
@@ -104,6 +114,7 @@ const stats = [
             target="_blank"
             rel="noopener noreferrer"
             class="w-full sm:w-auto"
+            data-umami-event="cv-download"
           >
             <IconDocumentDownload class="h-4 w-4" />
             CV (PDF)
@@ -140,6 +151,8 @@ const stats = [
         target="_blank"
         rel="noopener noreferrer"
         data-hero-link
+        data-umami-event="social-click"
+        data-umami-event-platform="github"
         class:list={[inlineLinkClass, 'opacity-0']}
         aria-label="GitHub profile (opens in a new tab)"
       >
@@ -151,13 +164,20 @@ const stats = [
         target="_blank"
         rel="noopener noreferrer"
         data-hero-link
+        data-umami-event="social-click"
+        data-umami-event-platform="linkedin"
         class:list={[inlineLinkClass, 'opacity-0']}
         aria-label="LinkedIn profile (opens in a new tab)"
       >
         <IconLinkedinMark class="h-4 w-4" />
         LinkedIn
       </a>
-      <a href={`mailto:${contactEmail}`} data-hero-link class:list={[inlineLinkClass, 'opacity-0']}>
+      <a
+        href={`mailto:${contactEmail}`}
+        data-hero-link
+        data-umami-event="contact-click"
+        class:list={[inlineLinkClass, 'opacity-0']}
+      >
         <IconEmailOutline class="h-4 w-4" />
         <span class="sm:hidden">Email</span>
         <span class="hidden sm:inline">{contactEmail}</span>

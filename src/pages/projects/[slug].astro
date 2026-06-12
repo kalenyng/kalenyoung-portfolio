@@ -93,7 +93,14 @@ const panCoverRight = project.id === 'propza';
       </div>
 
       <nav class="mt-20 border-t-2 border-surface-border pt-10 font-mono text-[11px] uppercase tracking-[0.2em]" aria-label="Case study">
-        <a href="/#work" class="text-paper/45 motion-safe:hover:text-accent">← Back to work</a>
+        <a
+          href="/#work"
+          data-umami-event="nav-click"
+          data-umami-event-target="work"
+          class="text-paper/45 motion-safe:hover:text-accent"
+        >
+          ← Back to work
+        </a>
       </nav>
     </article>
   </main>
